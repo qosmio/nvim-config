@@ -30,8 +30,8 @@ M.setup_lsp = function(attach, capabilities)
   local map           = vim.api.nvim_buf_set_keymap
 
   lsp_installer.settings({
-    log = vim.log.levels.DEBUG,
-    ui  = {
+    -- log_level = vim.log.levels.DEBUG,
+    ui        = {
       icons = {server_installed   = '﫟', server_pending     = '', server_uninstalled = '✗'}
     }
   })

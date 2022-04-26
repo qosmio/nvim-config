@@ -1,6 +1,6 @@
 return {
   setup_lsp = function()
-    require('custom.plugins.lsp.semantic_tokens')
+    -- require('custom.plugins.lsp.semantic_tokens')
     require('custom.plugins.lsp.settings')
     require('custom.plugins.lsp.installers')
     require('custom.plugins.lsp.handlers')

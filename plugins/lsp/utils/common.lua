@@ -35,11 +35,11 @@ M.set_default_formatter_for_filetypes = function(language_server_name, filetypes
   end)
 end
 
-M.sem_token_attach = function(client)
-  if client.resolved_capabilities.semantic_tokens_full then
-    autocmds.SemanticTokensAU()
-  end
-end
+-- M.sem_token_attach = function(client)
+--   if client.resolved_capabilities.semantic_tokens_full then
+--     autocmds.SemanticTokensAU()
+--   end
+-- end
 
 M.on_attach = function(client, bufnr)
   local function buf_set_option(...)
@@ -54,9 +54,9 @@ M.on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
   end
 
-  if client.resolved_capabilities.semantic_tokens_full then
-    autocmds.SemanticTokensAU()
-  end
+  -- if client.resolved_capabilities.semantic_tokens_full then
+  --   autocmds.SemanticTokensAU()
+  -- end
 
   if client.resolved_capabilities.document_highlight then
     autocmds.DocumentHighlightAU()

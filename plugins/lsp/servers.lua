@@ -17,10 +17,12 @@ function mt:__index(k)
 end
 configs = setmetatable(configs, mt)
 
+-- local exclude       = {'ltex'}
+
 lsp_installer.on_server_ready(function(server)
-  if vim.tbl_contains(exclude, server.name) then
-    return
-  end
+  -- if vim.tbl_contains(exclude, server.name) then
+  --   return
+  -- end
   local opts = configs[server.name]
   server:setup(opts)
 end)

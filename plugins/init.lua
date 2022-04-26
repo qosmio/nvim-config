@@ -19,7 +19,7 @@ end
 
 return {
   {'github/copilot.vim', requires = 'hrsh7th/nvim-cmp'},
-  {'folke/lua-dev.nvim', lspconfig = 'custom.plugins.lsp.servers.sumneko_lua'},
+  -- {'folke/lua-dev.nvim', lspconfig = 'custom.plugins.lsp.servers.sumneko_lua'},
   {'chr4/nginx.vim'},
   use({'folke/which-key.nvim', ext = load('whichkey')}),
   -- { -- stabilize buffer content on window open/close events.

@@ -80,9 +80,9 @@ local sources  = {
   b.formatting.nginx_beautifier,
   -- PHP
   -- composer global require "squizlabs/php_codesniffer=*"
-  b.formatting.phpcbf,
+  -- b.formatting.phpcbf,
   -- b.formatting.clang_format,
-  b.diagnostics.php,
+  -- b.diagnostics.php,
   b.diagnostics.zsh
   -- b.diagnostics.shellcheck.with {diagnostics_format = "#{m} [#{c}]"}
 }

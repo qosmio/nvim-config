@@ -1,6 +1,6 @@
 local ft  = require('Comment.ft')
+ft.set('', '#%s')
 ft.set('txt', '#%s')
-
 -- OPTIONS
 local opt = vim.opt
 opt.backupdir = ',' .. os.getenv('HOME') .. '/.vim/backup//'
