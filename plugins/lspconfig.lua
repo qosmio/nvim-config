@@ -117,8 +117,7 @@ M.setup_lsp = function(attach, capabilities)
     end
     server:setup(opts)
     vim.cmd([[ do User LspAttachBuffers ]])
-    vim.cmd(
-      [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor", border=rounded})]])
+    -- vim.cmd( [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor", border=rounded})]])
   end)
 end
 

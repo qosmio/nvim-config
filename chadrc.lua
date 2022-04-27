@@ -100,7 +100,8 @@ M.plugins = {
     esc_insertmode_timeout = 300
   },
   default_plugin_config_replace = {
-    nvim_cmp        = {experimental = {ghost_text = true}},
+     -- nvim_cmp        = {experimental = {ghost_text = true}},
+    nvim_cmp        = require('custom.plugins.config.cmp'),
     nvim_autopairs  = require('custom.plugins.config.autopairs'),
     nvim_treesitter = require('custom.plugins.config.treesitter'),
     nvim_tree       = require('custom.plugins.config.tree'),

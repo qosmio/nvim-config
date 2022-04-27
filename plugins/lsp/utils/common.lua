@@ -59,7 +59,7 @@ M.on_attach = function(client, bufnr)
   -- end
 
   if client.resolved_capabilities.document_highlight then
-    autocmds.DocumentHighlightAU()
+    -- autocmds.DocumentHighlightAU()
   end
 
   if client.resolved_capabilities.document_formatting then

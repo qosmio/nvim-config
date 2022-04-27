@@ -18,9 +18,22 @@ local load = function(path)
 end
 
 return {
-  {'github/copilot.vim', requires = 'hrsh7th/nvim-cmp'},
+   { "onsails/lspkind-nvim" },
+   {"zbirenbaum/copilot.lua",
+    branch = "dev",
+    event = {"VimEnter"},
+    config = function()
+      vim.defer_fn(function()
+        require("copilot").setup()
+      end, 100)
+    end,
+  },
+  {"zbirenbaum/copilot-cmp",
+    after = { "copilot.lua", "nvim-cmp" },
+  },
+  -- {'github/copilot.vim', requires = 'hrsh7th/nvim-cmp'},
   -- {'folke/lua-dev.nvim', lspconfig = 'custom.plugins.lsp.servers.sumneko_lua'},
-  {'chr4/nginx.vim'},
+  {'chr4/nginx.vim', ft = 'nginx' },
   use({'folke/which-key.nvim', ext = load('whichkey')}),
   -- { -- stabilize buffer content on window open/close events.
   --    "luukvbaal/stabilize.nvim",
