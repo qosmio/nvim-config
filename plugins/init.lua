@@ -12,6 +12,8 @@ return {
   --   end
   -- },
   -- ['zbirenbaum/copilot-cmp'] = {after = {'copilot.lua', 'nvim-cmp'}},
+  -- ["reewr/vim-monokai-phoenix"] = {},
+  ["reewr/vim-monokai-phoenix"] = { cond = function() return vim.env.TERM == "putty-256color" end },
   ["qosmio/filetype.nvim"] = {},
   ['github/copilot.vim'] = {requires = 'hrsh7th/nvim-cmp'},
   -- {'folke/lua-dev.nvim', lspconfig = 'custom.plugins.lsp.servers.sumneko_lua'},

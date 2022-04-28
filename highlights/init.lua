@@ -60,6 +60,14 @@ local colors = {
   folder_bg     = '#41a7fc'
 }
 
+if os.getenv('TERM') == 'putty-256color' then
+   vim.opt.background="dark"
+   bg("Normal", "NONE")
+   bg("Folded", "NONE")
+   fg("Folded", "NONE")
+   fg("Comment", colors.grey)
+   vim.cmd [[colo monokai-phoenix]]
+else
 if ui.transparency then
   fg('TelescopeBorder', '#ABB2BF')
   fg('TelescopePromptBorder', '#ABB2BF')
@@ -105,7 +113,7 @@ fg_bg("CmpItemAbbrMatchFuzzy","#569CD6","NONE")
 fg_bg("CmpItemKindInterface","#f90c71","NONE")
 fg_bg("CmpItemKindVariable","#9CDCFE","NONE")
 fg_bg("CmpItemMenu","#9C5A56","#56989c")
-
+end
 -- cmd("hi Constant guifg=#AE81FF guibg=NONE gui=NONE ctermfg=141 ctermbg=NONE cterm=NONE")
 -- cmd("hi Number guifg=#AE81FF guibg=NONE gui=NONE ctermfg=141 ctermbg=NONE cterm=NONE")
 -- cmd("hi Float guifg=#AE81FF guibg=NONE gui=NONE ctermfg=141 ctermbg=NONE cterm=NONE")
@@ -135,4 +143,4 @@ fg_bg("CmpItemMenu","#9C5A56","#56989c")
 -- cmd("hi Underlined guifg=#A6E22E guibg=NONE gui=NONE ctermfg=112 ctermbg=NONE cterm=NONE")
 -- cmd("hi Ignore guifg=NONE guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE")
 -- cmd("hi Todo guifg=#F8F8F2 guibg=#000000 gui=bold ctermfg=15 ctermbg=233 cterm=bold")
--- cmd("hi Error fgguifg=#F8F8F2 guibg=#960020 gui=NONE ctermfg=15 ctermbg=88 cterm=NONE")
+-- cmd("hi Error guifg=#F8F8F2 guibg=#960020 gui=NONE ctermfg=15 ctermbg=88 cterm=NONE")
