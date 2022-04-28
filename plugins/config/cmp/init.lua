@@ -1,8 +1,7 @@
-local cmp = require("cmp")
+pcall(require, "onsails/lspkind-nvim")
+--local lspkind = require('custom.plugins.config.cmp.lspkind')
+local present, cmp = pcall(require, "cmp")
 
-local lspkind = require("custom.plugins.config.cmp.lspkind")
-
-vim.opt.completeopt = "menuone,noselect"
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -13,8 +12,21 @@ cmp.setup({
     winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
   },
   formatting = {
-    format = lspkind.cmp_format({ with_text = false, maxwidth = 50 }),
-  },
+      format = function(entry, vim_item)
+         local icons = require "custom.plugins.config.cmp.lspkind_icons"
+         vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
+
+         vim_item.menu = ({
+            nvim_lsp = "[LSP]",
+            nvim_lua = "[Lua]",
+            buffer = "[BUF]",
+         })[entry.source.name]
+
+         return vim_item
+      end,
+      symbol_map =  require "custom.plugins.config.cmp.lspkind_icons"
+   },
+    -- format = lspkind.cmp_format({ with_text = false, maxwidth = 50 }),
   window = {
     completion = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
@@ -81,8 +93,8 @@ cmp.setup({
     { name = "copilot", group_index = 2 },
     { name = "nvim_lsp", group_index = 2 },
     { name = "path", group_index = 2 },
-    -- { name = "luasnip", group_index = 2 },
-    -- { name = "buffer", group_index = 5 },
+    { name = "luasnip", group_index = 2 },
+    { name = "buffer", group_index = 5 },
     { name = "nvim_lua", group_index = 2 },
   },
   sorting = {
@@ -97,39 +109,3 @@ cmp.setup({
   },
   preselect = cmp.PreselectMode.Item,
 })
-
---set max height of items
-vim.cmd([[ set pumheight=6 ]])
---set highlights
-local highlights = {
-  -- type highlights
-  CmpItemKindText = { fg = "LightGrey" },
-  CmpItemKindFunction = { fg = "#C586C0" },
-  CmpItemKindClass = { fg = "Orange" },
-  CmpItemKindKeyword = { fg = "#f90c71" },
-  CmpItemKindSnippet = { fg = "#565c64" },
-  CmpItemKindConstructor = { fg = "#ae43f0" },
-  CmpItemKindVariable = { fg = "#9CDCFE", bg = "NONE" },
-  CmpItemKindInterface = { fg = "#f90c71", bg = "NONE" },
-  CmpItemKindFolder = { fg = "#2986cc" },
-  CmpItemKindReference = { fg = "#922b21" },
-  CmpItemKindMethod = { fg = "#C586C0" },
-  CmpItemMenu = { fg = "#C586C0", bg = "#C586C0" },
-  CmpItemAbbr = { fg = "#565c64", bg = "NONE" },
-  CmpItemAbbrMatch = { fg = "#569CD6", bg = "NONE" },
-  CmpItemAbbrMatchFuzzy = { fg = "#569CD6", bg = "NONE" },
-  CmpMenuBorder = { fg="#263341" },
-  CmpMenu = { bg="#10171f" },
-  CmpSelection = { bg="#263341" },
-}
--- vim.api.nvim_set_hl(0, "CmpBorderedWindow_FloatBorder", { fg = "#565c64" })
-for group, hl in pairs(highlights) do
-  vim.api.nvim_set_hl(0, group, hl)
-end
-
--- CmpMenuBorder = { fg="#263341" },
-  -- CmpMenu = { bg="#10171f" },
-  -- CmpSelection = { bg="#263341" },
--- vim.cmd([[highlight! CmpMenuBorder guibg=#10171f]])
--- vim.cmd([[highlight! CmpSelection guibg=NONE guifg=NONE gui=underline guisp=#569CD6]])
-

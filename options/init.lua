@@ -9,6 +9,7 @@ opt.undodir = os.getenv('HOME') .. '/.vim/undo//'
 opt.undolevels = 5000
 opt.diffopt = opt.diffopt:append({'algorithm:patience'})
 opt.completeopt = 'menu,menuone,preview,noselect'
+opt.pumheight = 6
 vim.cmd([[imap <silent><script><expr> <C-e> copilot#Accept('\<CR>')]])
 vim.g.copilot_no_tab_map = true
 -- vim.g.copilot_assume_mapped = true

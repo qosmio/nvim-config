@@ -1,7 +1,7 @@
-local utils        = require('custom.plugins.lsp.utils')
+-- local utils        = require('custom.plugins.lsp.utils')
 
 local function define_signs(signs)
-  for type, icon in pairs(signs) do
+  for type, _ in pairs(signs) do
     local hl = 'DiagnosticSign' .. type
     vim.fn.sign_define(hl, {text   = nil, texthl = nil, numhl  = hl})
     -- without icon, but with number highlight
