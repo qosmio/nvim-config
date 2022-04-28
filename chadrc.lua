@@ -59,22 +59,6 @@ M.ui = {
 ---- PLUGIN OPTIONS ----
 
 M.plugins = {
-  -- enable/disable plugins (false for disable)
-  status                        = {
-    blankline     = true, -- indentline stuff
-    bufferline    = true, -- manage and preview opened buffers
-    colorizer     = true, -- color RGB, HEX, CSS, NAME color codes
-    comment       = true, -- easily (un)comment code, language aware
-    alpha         = false, -- dashboard
-    better_escape = false, -- map to <ESC> with no lag
-    feline        = true, -- statusline
-    gitsigns      = true,
-    lspsignature  = true, -- lsp enhancements
-    vim_matchup   = true, -- improved matchit
-    cmp           = true,
-    nvimtree      = true,
-    autopairs     = true
-  },
   options                       = {
     packer                 = {init_file = 'plugins.packerInit'},
     autopairs              = {loadAfter = 'nvim-cmp'},
@@ -100,15 +84,14 @@ M.plugins = {
     esc_insertmode_timeout = 300
   },
   default_plugin_config_replace = {
-     -- nvim_cmp        = {experimental = {ghost_text = true}},
-    nvim_cmp        = require('custom.plugins.config.cmp'),
-    nvim_autopairs  = require('custom.plugins.config.autopairs'),
-    nvim_treesitter = require('custom.plugins.config.treesitter'),
-    nvim_tree       = require('custom.plugins.config.tree'),
-    nvim_colorizer  = require('custom.plugins.config.colorizer')
+    ['hrsh7th/nvim-cmp'] =  require('custom.plugins.config.cmp'),
+    ['NvChad/nvim-colorizer.lua'] = require('custom.plugins.config.colorizer'),
+    ['nvim-treesitter/nvim-treesitter'] = require('custom.plugins.config.treesitter'),
+    ['windwp/nvim-autopairs'] = require('custom.plugins.config.autopairs'),
+    ['kyazdani42/nvim-tree.lua'] = require('custom.plugins.config.tree')
+    -- nvim_cmp        = require('custom.plugins.config.cmp'),
   },
-  default_plugin_remove         = {},
-  install                       = userPlugins
+  user                          = userPlugins
 }
 
 -- Don't use a single keymap twice
@@ -161,53 +144,6 @@ M.mappings = {
     new_horizontal    = '<leader>h',
     new_vertical      = '<leader>v',
     new_window        = '<leader>w'
-  }
-}
-
--- plugins related mappings
--- To disable a mapping, equate the variable to "" or false or nil in chadrc
-M.mappings.plugins = {
-  bufferline    = {next_buffer = '<TAB>', prev_buffer = '<S-Tab>'},
-  comment       = {toggle = '<leader>/'},
-
-  -- map to <ESC> with no lag
-  better_escape = { -- <ESC> will still work
-    esc_insertmode = {'jk'} -- multiple mappings allowed
-  },
-
-  lspconfig     = {
-    declaration             = 'gD',
-    definition              = 'gd',
-    hover                   = 'K',
-    implementation          = 'gi',
-    signature_help          = 'gk',
-    add_workspace_folder    = '<leader>wa',
-    remove_workspace_folder = '<leader>wr',
-    list_workspace_folders  = '<leader>wa',
-    type_definition         = '<leader>D',
-    rename                  = '<leader>ra',
-    code_action             = '<leader>ca',
-    references              = 'gr',
-    float_diagnostics       = 'ge',
-    goto_prev               = '[d',
-    goto_next               = ']d',
-    set_loclist             = '<leader>q',
-    formatting              = '<leader>fm'
-  },
-
-  nvimtree      = {toggle = '<C-n>', focus  = '<leader>e'},
-
-  telescope     = {
-    buffers          = '<leader>fb',
-    find_files       = '<leader>ff',
-    find_hiddenfiles = '<leader>fa',
-    git_commits      = '<leader>cm',
-    git_status       = '<leader>gt',
-    help_tags        = '<leader>fh',
-    live_grep        = '<leader>fw',
-    oldfiles         = '<leader>fo',
-
-    themes           = '<leader>th' -- NvChad theme picker
   }
 }
 
