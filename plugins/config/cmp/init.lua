@@ -2,6 +2,10 @@ pcall(require, "onsails/lspkind-nvim")
 --local lspkind = require('custom.plugins.config.cmp.lspkind')
 local present, cmp = pcall(require, "cmp")
 
+if not present then
+   return
+end
+
 cmp.setup({
   snippet = {
     expand = function(args)

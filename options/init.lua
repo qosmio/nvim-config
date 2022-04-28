@@ -1,6 +1,3 @@
-local ft  = require('Comment.ft')
-ft.set('', '#%s')
-ft.set('txt', '#%s')
 -- OPTIONS
 local opt = vim.opt
 opt.backupdir = ',' .. os.getenv('HOME') .. '/.vim/backup//'
@@ -29,3 +26,12 @@ vim.cmd 'command! -nargs=* Q q'
 vim.cmd 'command! -nargs=* Qa qa'
 vim.cmd 'command! -nargs=* QA qa'
 -- vim.g.redrawtime = 50
+
+local present, ft  = pcall("require","Comment.ft")
+
+if not present then
+   return
+end
+
+ft.set('', '#%s')
+ft.set('txt', '#%s')
