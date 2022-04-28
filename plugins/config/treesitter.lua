@@ -1,5 +1,4 @@
-return {
-  ensure_installed      = {
+local ensure_installed = {
     'dockerfile',
     'lua',
     'vim',
@@ -14,19 +13,16 @@ return {
     'yaml',
     'cpp',
     'cmake'
-    -- "comment",
-    -- "go",
-    -- "html",
-    -- "http",
-    -- "markdown",
-    -- "perl",
-    -- "regex",
-    -- "rust",
-    -- "scss",
-    -- "swift",
-    -- "toml",
-    -- "typescript",
-  },
+}
+return {
+  ensure_installed      = function()
+    local _, _, exit_code = os.execute("which gcc")
+    if exit_code == 0 then
+      return ensure_installed
+    else
+      return {}
+    end
+  end,
   highlight             = {
     enable                            = true,
     additional_vim_regex_highlighting = true
