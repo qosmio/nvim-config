@@ -27,7 +27,7 @@ vim.cmd 'command! -nargs=* Qa qa'
 vim.cmd 'command! -nargs=* QA qa'
 -- vim.g.redrawtime = 50
 
-local present, ft  = pcall("require","Comment.ft")
+local present, ft  = pcall(require,"Comment.ft")
 
 if not present then
    return
