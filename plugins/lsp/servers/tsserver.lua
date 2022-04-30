@@ -3,8 +3,8 @@ local filetypes = {'javascript', 'css', 'less', 'html', 'json', 'yaml', 'markdow
 
 local configs   = {
   on_attach = function(client)
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
     utils.common.set_default_formatter_for_filetypes('null-ls', filetypes)
   end
 }

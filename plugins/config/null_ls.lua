@@ -1,7 +1,7 @@
 local null_ls  = require('null-ls')
 local b        = null_ls.builtins
 local map      = require('core.utils').map
-local platform = require('nvim-lsp-installer.platform')
+-- local platform = require('nvim-lsp-installer.platform')
 
 local sources  = {
 
@@ -99,9 +99,9 @@ M.setup = function()
     fallback_severity  = vim.diagnostic.severity.ERROR,
     log                = {enable      = true, level       = 'warn', use_console = 'async'},
     on_attach          = function(client)
-      if client.resolved_capabilities.document_formatting then
+      if client.server_capabilities.documentFormattingProvider then
         map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
-      elseif client.resolved_capabilities.document_range_formatting then
+      elseif client.server_capabilities.documentRangeFormattingProvider then
         map('n', '<leader>F', '<cmd>lua vim.lsp.buf.range_formatting()<CR>')
       end
     end

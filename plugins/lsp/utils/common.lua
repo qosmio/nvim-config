@@ -4,7 +4,7 @@ local mappings = require('custom.plugins.lsp.mappings')
 M = {}
 
 M.set_contains = function(set, val)
-  for key, value in pairs(set) do
+  for _, value in pairs(set) do
     if value == val then
       return true
     end
@@ -29,8 +29,8 @@ M.set_default_formatter_for_filetypes = function(language_server_name, filetypes
 
   vim.lsp.for_each_buffer_client(0, function(client)
     if client.name ~= language_server_name then
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
     end
   end)
 end
@@ -50,19 +50,15 @@ M.on_attach = function(client, bufnr)
 
   mappings.setup(client)
 
-  if client.resolved_capabilities.goto_definition then
+  if client.server_capabilities.definitionProvider then
     vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
   end
 
-  -- if client.resolved_capabilities.semantic_tokens_full then
-  --   autocmds.SemanticTokensAU()
-  -- end
-
-  if client.resolved_capabilities.document_highlight then
-    -- autocmds.DocumentHighlightAU()
+  if client.server_capabilities.documentHighlightProvider then
+    autocmds.DocumentHighlightAU()
   end
 
-  if client.resolved_capabilities.document_formatting then
+  if client.server_capabilities.documentFormattingProvider then
     autocmds.DocumentFormattingAU()
   end
 end

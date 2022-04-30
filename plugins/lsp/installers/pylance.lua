@@ -6,7 +6,8 @@ local server = require "nvim-lsp-installer.server"
 local path = require "nvim-lsp-installer.path"
 local handlers = require "vim.lsp.handlers"
 local std = require "nvim-lsp-installer.core.managers.std"
-local fetch = require "nvim-lsp-installer.core.fetch"
+-- local fetch = require "nvim-lsp-installer.core.fetch"
+local github_client = require "nvim-lsp-installer.core.managers.github.client"
 
 local server_name = "pylance"
 
@@ -131,20 +132,26 @@ configs[server_name] = {
 
 ---@param response string @The `raw html from marketplace output.
 ---@return table<string> @Key is the version, value is its version.
-local parse_versions = function(response)
-   for line in response:gmatch "([^\r\n]*)\r?\n?" do
-      for version in line:gmatch [["version":"([%S]+)",]] do
-         return version
-      end
-   end
-   -- return versions[0] or versions[1]
-end
+-- local parse_versions = function(response)
+--    for line in response:gmatch "([^\r\n]*)\r?\n?" do
+--       for version in line:gmatch [["version":"([%S]+)",]] do
+--          return version
+--       end
+--    end
+--    -- return versions[0] or versions[1]
+-- end
 local bin_path = path.concat { "extension", "dist", "server.bundle.js" }
 
 local pylance_installer = function(ctx)
-   local version = fetch("https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance"):map(
-      parse_versions
-   ).value
+   local repo = "microsoft/pylance-release"
+   -- local version = fetch("https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance"):map(parse_versions).value
+   local version = ctx.requested_version:or_else_get(function()
+      return github_client.fetch_latest_tag(repo)
+         :map(function(tag)
+            return tag.name
+         end)
+         :get_or_throw()
+   end)
    local url = (
       "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
    ):format(version)
@@ -160,7 +167,12 @@ local pylance_installer = function(ctx)
       bin_path,
    }
    -- ctx.spawn.perl { "-p", "-i.bk", "-e", [['s/(if\s*?\(\s*?\!\s*?process\[.*?\]\s*?\[.*?\]\s*?\)\s*?return\s*?\!\s*?0)(x.)/\1x0/']], "extension/dist/server.bundle.js" }
-   ctx.receipt:with_primary_source { type = "github_tag", tag = version }
+   -- ctx.receipt:with_primary_source { type = "github_tag", tag = version }
+   ctx.receipt:with_primary_source {
+      type = "github_tag",
+      repo = repo,
+      tag = version,
+   }
 end
 
 local custom_server = server.Server:new {

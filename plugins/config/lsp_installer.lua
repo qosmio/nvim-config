@@ -18,8 +18,8 @@ M.set_default_formatter_for_filetypes = function(language_server_name, filetypes
 
   vim.lsp.for_each_buffer_client(0, function(client)
     if client.name ~= language_server_name then
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
     end
   end)
 end
@@ -30,7 +30,7 @@ M.setup_lsp = function(attach, capabilities)
   local map           = vim.api.nvim_buf_set_keymap
 
   lsp_installer.settings({
-    -- log_level = vim.log.levels.DEBUG,
+    log_level = vim.log.levels.DEBUG,
     ui        = {
       icons = {server_installed   = '﫟', server_pending     = '', server_uninstalled = '✗'}
     }
@@ -86,9 +86,9 @@ M.setup_lsp = function(attach, capabilities)
 
       M.set_default_formatter_for_filetypes('clangd', {'c'})
 
-      -- if client.resolved_capabilities.document_formatting then
+      -- if client.server_capabilities.documentFormattingProvider then
       map(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', mapopts)
-      -- elseif client.resolved_capabilities.document_range_formatting then
+      -- elseif client.server_capabilities.documentRangeFormattingProvider then
       map(bufnr, 'v', '<space>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', mapopts)
       -- end
       -- See `:help vim.lsp.*` for documentation on any of the below functions

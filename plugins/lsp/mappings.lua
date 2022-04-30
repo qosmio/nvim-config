@@ -5,9 +5,9 @@ local mappings = {}
 local opt      = {buffer = 0}
 
 function mappings.setup(client)
-  -- if client.resolved_capabilities.document_formatting then
+  -- if client.server_capabilities.documentFormattingProvider then
   -- keymap.set("n", "<space>f", vim.lsp.buf.formatting, opt)
-  -- elseif client.resolved_capabilities.document_range_formatting then
+  -- elseif client.server_capabilities.documentRangeFormattingProvider then
   -- keymap.set("v", "<space>f", vim.lsp.buf.range_formatting, opt)
   -- end
   -- vim.inspect(_G.print_table(client))
