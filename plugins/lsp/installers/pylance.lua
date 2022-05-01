@@ -156,7 +156,8 @@ local pylance_installer = function(ctx)
       "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
    ):format(version)
    -- url = "http://domain/ms-python.vscode-pylance-2022.4.2.vsix"
-   std.download_file(url, "archive.gz")
+   local headers = { ["Cookie"] = "Gallery-Service-UserIdentifier=9ee5cf1e-146b-429b-b3a3-b9a59cd5e3e6" }
+   std.download_file(url, "archive.gz", headers)
    std.gunzip("archive.gz", ".")
    std.unzip("archive", ".")
    ctx.spawn.nvim {

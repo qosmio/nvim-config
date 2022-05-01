@@ -24,7 +24,7 @@ M.DocumentFormattingAU = function(use_lsp)
   local group = vim.api.nvim_create_augroup('Formatting', {clear = true})
   if use_lsp then
     vim.api.nvim_create_autocmd('BufWritePre',
-                                {callback = vim.lsp.buf.formatting_sync, group    = group})
+                                {callback = vim.lsp.buf.format, group    = group})
     -- else
     --    vim.api.nvim_create_autocmd("BufWritePost", {
     --       command = "FormatWrite",

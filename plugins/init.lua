@@ -1,7 +1,6 @@
 return {
   ['max397574/better-escape.nvim'] = {disable = true},
   ['goolord/alpha-nvim'] = {disable = true},
-  -- ['onsails/lspkind-nvim'] = {},
   -- ['zbirenbaum/copilot.lua'] = {
   --   branch = 'dev',
   --   event  = {'VimEnter'},
@@ -12,7 +11,6 @@ return {
   --   end
   -- },
   -- ['zbirenbaum/copilot-cmp'] = {after = {'copilot.lua', 'nvim-cmp'}},
-  -- ["reewr/vim-monokai-phoenix"] = {},
   ["reewr/vim-monokai-phoenix"] = { cond = function() return vim.env.TERM == "putty-256color" end },
   ["qosmio/filetype.nvim"] = {},
   ['github/copilot.vim'] = {requires = 'hrsh7th/nvim-cmp'},
@@ -29,7 +27,7 @@ return {
       require('custom.plugins.config.null_ls').setup()
     end
   },
-  ['williamboman/nvim-lsp-installer'] = {
+  ['qosmio/nvim-lsp-installer'] = {
     -- before = "null-ls.nvim",
     -- lazy_load = true
     config = function()
