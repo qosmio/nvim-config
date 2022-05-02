@@ -1,5 +1,6 @@
 -- OPTIONS
 local opt = vim.opt
+
 opt.backupdir = ',' .. os.getenv('HOME') .. '/.vim/backup//'
 opt.directory = os.getenv('HOME') .. '/.vim/swap//'
 opt.undodir = os.getenv('HOME') .. '/.vim/undo//'
@@ -26,6 +27,13 @@ vim.cmd 'command! -nargs=* Q q'
 vim.cmd 'command! -nargs=* Qa qa'
 vim.cmd 'command! -nargs=* QA qa'
 -- vim.g.redrawtime = 50
+
+if os.getenv "LC_TERMINAL" == "iTerm2" then
+  vim.cmd [[
+  let &t_ti.="\<Esc>]1337;HighlightCursorLine=true\x7"
+  let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
+]]
+end
 
 local present, ft  = pcall(require,"Comment.ft")
 

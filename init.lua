@@ -9,6 +9,6 @@ end
 -- MAPPINGS
 require('custom.mappings')
 -- OPTIONS
-require('custom.options')
+-- require('custom.options')
 -- AUTOCMDS
 require('custom.autocmds')

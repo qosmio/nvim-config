@@ -1,5 +1,3 @@
-local userPlugins = require('custom.plugins')
---
 -- local removePlugins = require "custom.plugins.remove"
 
 local M           = {}
@@ -7,29 +5,9 @@ local M           = {}
 -- make sure you maintain the structure of `core/default_config.lua` here,
 
 M.options = {
-  -- custom = {}
   -- general nvim/vim options , check :h optionname to know more about an option
 
-  clipboard      = 'unnamedplus',
-  cmdheight      = 1,
-  ruler          = false,
-  hidden         = true,
-  ignorecase     = true,
-  smartcase      = true,
-  mapleader      = ' ',
-  mouse          = 'a',
-  number         = true,
-  numberwidth    = 2,
-  relativenumber = false,
-  expandtab      = true,
-  shiftwidth     = 2,
-  smartindent    = true,
-  tabstop        = 4,
-  timeoutlen     = 1000,
-  updatetime     = 250,
-  undofile       = true,
-  fillchars      = {eob = ' '},
-  shadafile      = vim.opt.shadafile,
+  user = function() require('custom.options') end,
 
   -- NvChad options
   nvChad         = {
@@ -49,8 +27,8 @@ M.options = {
 
 M.ui = {
   italic_comments = true,
-  theme           = 'onedark-deep', -- default theme
-  hl_override     = require('custom.highlights'),
+  theme           = 'onedark-deep',
+  hl_override     = require('custom.highlights').override,
   -- Change terminal bg to nvim theme's bg color so it'll match well
   -- For Ex : if you have onedark set in nvchad, set onedark's bg color on your terminal
   transparency    = false
@@ -89,9 +67,8 @@ M.plugins = {
     ['nvim-treesitter/nvim-treesitter'] = require('custom.plugins.config.treesitter'),
     ['windwp/nvim-autopairs'] = require('custom.plugins.config.autopairs'),
     ['kyazdani42/nvim-tree.lua'] = require('custom.plugins.config.tree')
-    -- nvim_cmp        = require('custom.plugins.config.cmp'),
   },
-  user                          = userPlugins
+  user                          = require('custom.plugins')
 }
 
 -- Don't use a single keymap twice
