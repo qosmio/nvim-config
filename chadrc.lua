@@ -50,7 +50,7 @@ M.options = {
 M.ui = {
   italic_comments = true,
   theme           = 'onedark-deep', -- default theme
-  hl_override     = 'custom.highlights',
+  hl_override     = require('custom.highlights'),
   -- Change terminal bg to nvim theme's bg color so it'll match well
   -- For Ex : if you have onedark set in nvchad, set onedark's bg color on your terminal
   transparency    = false

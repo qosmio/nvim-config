@@ -11,6 +11,7 @@ return {
   --   end
   -- },
   -- ['zbirenbaum/copilot-cmp'] = {after = {'copilot.lua', 'nvim-cmp'}},
+  ["rmagatti/alternate-toggler"] = {},
   ["reewr/vim-monokai-phoenix"] = { cond = function() return vim.env.TERM == "putty-256color" end },
   ["qosmio/filetype.nvim"] = {},
   ['github/copilot.vim'] = {requires = 'hrsh7th/nvim-cmp'},
