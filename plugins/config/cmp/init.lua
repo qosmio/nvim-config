@@ -3,10 +3,10 @@ pcall(require, "onsails/lspkind-nvim")
 local present, cmp = pcall(require, "cmp")
 
 if not present then
-   return
+  return
 end
 
-cmp.setup({
+cmp.setup {
   snippet = {
     expand = function(args)
       require("luasnip").lsp_expand(args.body)
@@ -16,26 +16,26 @@ cmp.setup({
     winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
   },
   formatting = {
-      format = function(entry, vim_item)
-         local icons = require "custom.plugins.config.cmp.lspkind_icons"
-         vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
+    format = function(entry, vim_item)
+      local icons = require "custom.plugins.config.cmp.lspkind_icons"
+      vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
 
-         vim_item.menu = ({
-            nvim_lsp = "[LSP]",
-            nvim_lua = "[Lua]",
-            buffer = "[BUF]",
-         })[entry.source.name]
+      vim_item.menu = ({
+        nvim_lsp = "[LSP]",
+        nvim_lua = "[Lua]",
+        buffer = "[BUF]",
+      })[entry.source.name]
 
-         return vim_item
-      end,
-      symbol_map =  require "custom.plugins.config.cmp.lspkind_icons"
-   },
-    -- format = lspkind.cmp_format({ with_text = false, maxwidth = 50 }),
+      return vim_item
+    end,
+    symbol_map = require "custom.plugins.config.cmp.lspkind_icons",
+  },
+  -- format = lspkind.cmp_format({ with_text = false, maxwidth = 50 }),
   window = {
     completion = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
       scrollbar = "║",
-      winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenuBorder,CursorLine:CmpSelection,Search:None',
+      winhighlight = "Normal:CmpMenu,FloatBorder:CmpMenuBorder,CursorLine:CmpSelection,Search:None",
       autocomplete = {
         require("cmp.types").cmp.TriggerEvent.InsertEnter,
         require("cmp.types").cmp.TriggerEvent.TextChanged,
@@ -58,32 +58,32 @@ cmp.setup({
         cmp.mapping.select_next_item()(nil)
       end
     end,
-    ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-    ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+    ["<C-p>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
+    ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-s>"] = cmp.mapping.complete({
-        config = {
-          sources = {
-            { name = 'copilot' }
-          }
-        }
-      }),
+    ["<C-s>"] = cmp.mapping.complete {
+      config = {
+        sources = {
+          { name = "copilot" },
+        },
+      },
+    },
     ["<C-e>"] = cmp.mapping.close(),
-    ["<CR>"] = cmp.mapping.confirm({
+    ["<CR>"] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = false,
-    }),
+    },
     ["<Tab>"] = function(fallback)
       if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+        cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
       else
         fallback()
       end
     end,
     ["<S-Tab>"] = function(fallback)
       if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+        cmp.select_prev_item { behavior = cmp.SelectBehavior.Select }
       else
         fallback()
       end
@@ -94,12 +94,13 @@ cmp.setup({
     ghost_text = true,
   },
   sources = {
-    { name = "copilot", group_index = 2 },
-    { name = "nvim_lsp", group_index = 2 },
-    { name = "path", group_index = 2 },
-    { name = "luasnip", group_index = 2 },
-    { name = "buffer", group_index = 5 },
-    { name = "nvim_lua", group_index = 2 },
+    { name = "copilot" },
+    { name = "nvim_lsp" },
+    { name = "path" },
+    { name = "luasnip" },
+    { name = "buffer" },
+    { name = "spell" },
+    { name = "nvim_lua" },
   },
   sorting = {
     comparators = {
@@ -112,4 +113,4 @@ cmp.setup({
     },
   },
   preselect = cmp.PreselectMode.Item,
-})
+}

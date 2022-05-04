@@ -1,7 +1,17 @@
 return {
   ["max397574/better-escape.nvim"] = { disable = true },
   ["goolord/alpha-nvim"] = { disable = true },
-  -- ["feline-nvim/feline.nvim"] = { disable = true },
+  ["hrsh7th/nvim-cmp"] = {
+      requires = {
+        { "saadparwaiz1/cmp_luasnip", after = "LuaSnip" },
+        { "hrsh7th/cmp-buffer", after = "cmp_luasnip" },
+        { "hrsh7th/cmp-nvim-lsp", after = "cmp-buffer" },
+        { "hrsh7th/cmp-nvim-lua", after = "cmp-nvim-lsp" },
+        { "hrsh7th/cmp-path", after = "cmp-nvim-lua" },
+        { "f3fora/cmp-spell", after = "cmp-path" },
+      },
+  },
+-- ["feline-nvim/feline.nvim"] = { disable = true },
   -- ['zbirenbaum/copilot.lua'] = {
   --   branch = 'dev',
   --   event  = {'VimEnter'},
@@ -42,23 +52,12 @@ return {
     end,
   },
   -- ["qosmio/nvim-lsp-installer"] = {},
-    -- before = "null-ls.nvim",
-    -- lazy_load = true
-    -- setup = function()
-    --   require "custom.plugins.config.lsp_installer"
-    -- end,
+  -- before = "null-ls.nvim",
+  -- lazy_load = true
+  -- setup = function()
+  --   require "custom.plugins.config.lsp_installer"
+  -- end,
   ["tbastos/vim-lua"] = { ft = "lua" },
   ["lambdalisue/suda.vim"] = {},
-  ["NvChad/nvim-colorizer.lua"] = {
-    event = "BufRead",
-    cond = function()
-      return vim.env.LC_TERMINAL ~= "shelly"
-    end,
-    setup = function()
-      require("core.utils").packer_lazy_load "nvim-colorizer.lua"
-    end,
-    config = function()
-      require("plugins.configs.others").colorizer()
-    end,
-  },
+  -- ["f3fora/cmp-spell"] = { after = 'cmp-path', setup = function() sources = { { name = "spell" }, } end },
 }

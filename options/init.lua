@@ -1,31 +1,30 @@
 -- OPTIONS
 local opt = vim.opt
 
-opt.backupdir = ',' .. os.getenv('HOME') .. '/.vim/backup//'
-opt.directory = os.getenv('HOME') .. '/.vim/swap//'
-opt.undodir = os.getenv('HOME') .. '/.vim/undo//'
+opt.backupdir = "," .. os.getenv "HOME" .. "/.vim/backup//"
+opt.directory = os.getenv "HOME" .. "/.vim/swap//"
+opt.undodir = os.getenv "HOME" .. "/.vim/undo//"
 opt.undolevels = 5000
-opt.diffopt = opt.diffopt:append({'algorithm:patience'})
-opt.completeopt = 'menu,menuone,preview,noselect'
+opt.diffopt = opt.diffopt:append { "algorithm:patience" }
+opt.completeopt = "menu,menuone,preview,noselect"
 opt.pumheight = 6
-vim.cmd([[imap <silent><script><expr> <C-e> copilot#Accept('\<CR>')]])
-vim.g.copilot_no_tab_map = true
--- vim.g.copilot_assume_mapped = true
--- vim.g.copilot_tab_fallback = ""
+
+-- opt.spell = true
+opt.spelllang = { "en_us" }
 
 -- MatchUp
 vim.g.matchup_matchparen_deferred = 1
-vim.g.matchup_mappings_enabled = 0
+vim.g.matchup_mappings_enabled = 1
 vim.g.matchup_override_vimtex = 1
 
 -- Fix common typo commands
 --
-vim.cmd 'command! -nargs=* W w'
-vim.cmd 'command! -nargs=* Wq wq'
-vim.cmd 'command! -nargs=* WQ wq'
-vim.cmd 'command! -nargs=* Q q'
-vim.cmd 'command! -nargs=* Qa qa'
-vim.cmd 'command! -nargs=* QA qa'
+vim.cmd "command! -nargs=* W w"
+vim.cmd "command! -nargs=* Wq wq"
+vim.cmd "command! -nargs=* WQ wq"
+vim.cmd "command! -nargs=* Q q"
+vim.cmd "command! -nargs=* Qa qa"
+vim.cmd "command! -nargs=* QA qa"
 -- vim.g.redrawtime = 50
 
 if os.getenv "LC_TERMINAL" == "iTerm2" then
@@ -34,12 +33,3 @@ if os.getenv "LC_TERMINAL" == "iTerm2" then
   let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
 ]]
 end
-
-local present, ft  = pcall(require,"Comment.ft")
-
-if not present then
-   return
-end
-
-ft.set('', '#%s')
-ft.set('txt', '#%s')
