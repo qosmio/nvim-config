@@ -1,28 +1,28 @@
-local lsp_installer = require('nvim-lsp-installer')
-local utils         = require('custom.plugins.lsp.utils')
+local utils = require('custom.plugins.lsp.utils')
+local lspinstaller = require('nvim-lsp-installer')
+local lspconfig = require('lspconfig')
 
-local configs       = {}
-local mt            = {}
-function mt:__index(k)
-  local ok, res = pcall(require, 'custom.plugins.lsp.servers.' .. k)
+lspinstaller.setup({})
 
-  if k == 'efm' then
-    require('custom.plugins.lsp.servers.efm')
-  end
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+for _, server in ipairs(lspinstaller.get_installed_servers()) do
+  local ok, res = pcall(require, 'custom.plugins.lsp.servers.' .. server.name)
   if ok then
-    self[k] = res
-    return res
+    lspconfig[server.name].setup(res)
+  else
+    lspconfig[server.name].setup({
+      on_attach = utils.common.on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      },
+      capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities),
+      handlers = {
+        ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
+      },
+    })
   end
-  return {on_attach = utils.common.on_attach}
 end
-configs = setmetatable(configs, mt)
 
--- local exclude       = {'ltex'}
-
-lsp_installer.on_server_ready(function(server)
-  -- if vim.tbl_contains(exclude, server.name) then
-  --   return
-  -- end
-  local opts = configs[server.name]
-  server:setup(opts)
-end)
+-- vim.cmd([[ do User LspAttachBuffers ]])
+-- vim.cmd( [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor", border=rounded})]])

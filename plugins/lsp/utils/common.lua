@@ -1,5 +1,5 @@
+local mappings = require('custom.plugins.lsp.utils.mappings')
 local autocmds = require('custom.plugins.lsp.utils.autocmds')
-local mappings = require('custom.plugins.lsp.mappings')
 
 M = {}
 

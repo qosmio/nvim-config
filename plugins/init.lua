@@ -41,13 +41,12 @@ return {
       require("custom.plugins.config.null_ls").setup()
     end,
   },
-  ["qosmio/nvim-lsp-installer"] = {
+  -- ["qosmio/nvim-lsp-installer"] = {},
     -- before = "null-ls.nvim",
     -- lazy_load = true
-    config = function()
-      require "custom.plugins.config.lsp_installer"
-    end,
-  },
+    -- setup = function()
+    --   require "custom.plugins.config.lsp_installer"
+    -- end,
   ["tbastos/vim-lua"] = { ft = "lua" },
   ["lambdalisue/suda.vim"] = {},
   ["NvChad/nvim-colorizer.lua"] = {
