@@ -25,8 +25,8 @@ local buf             = require('vim.lsp.buf')
 local util            = require('vim.lsp.util')
 function buf.semantic_tokens_full_delta()
   local params = {textDocument = util.make_text_document_params()}
-  local curbuf    = vim.api.nvim_get_current_buf()
-  params.previousResultId = last_result_id[curbuf]
+  local buf    = vim.api.nvim_get_current_buf()
+  params.previousResultId = last_result_id[buf]
   print(vim.inspect(params))
   require('custom.plugins.lsp.semantic_tokens.core')._save_tick()
   return request('textDocument/semanticTokens/full/delta', params)
