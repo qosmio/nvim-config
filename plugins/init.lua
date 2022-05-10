@@ -1,17 +1,20 @@
-return {
-  ["max397574/better-escape.nvim"] = { disable = true },
-  ["goolord/alpha-nvim"] = { disable = true },
-  ["hrsh7th/nvim-cmp"] = {
-      requires = {
-        { "saadparwaiz1/cmp_luasnip", after = "LuaSnip" },
-        { "hrsh7th/cmp-buffer", after = "cmp_luasnip" },
-        { "hrsh7th/cmp-nvim-lsp", after = "cmp-buffer" },
-        { "hrsh7th/cmp-nvim-lua", after = "cmp-nvim-lsp" },
-        { "hrsh7th/cmp-path", after = "cmp-nvim-lua" },
-        { "f3fora/cmp-spell", after = "cmp-path" },
-      },
-  },
--- ["feline-nvim/feline.nvim"] = { disable = true },
+local M = {}
+
+M.remove = {
+  "max397574/better-escape.nvim",
+  "goolord/alpha-nvim",
+}
+
+M.override = {
+  ["hrsh7th/nvim-cmp"] = require "custom.plugins.config.cmp",
+  ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
+  ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
+  ["windwp/nvim-autopairs"] = require "custom.plugins.config.autopairs",
+  ["kyazdani42/nvim-tree.lua"] = require "custom.plugins.config.tree",
+  ["numToStr/Comment.nvim"] = require("custom.plugins.config.comment").setup(),
+}
+
+M.user = {
   -- ['zbirenbaum/copilot.lua'] = {
   --   branch = 'dev',
   --   event  = {'VimEnter'},
@@ -22,42 +25,50 @@ return {
   --   end
   -- },
   -- ['zbirenbaum/copilot-cmp'] = {after = {'copilot.lua', 'nvim-cmp'}},
-  ["rmagatti/alternate-toggler"] = {
+  ["nvim-treesitter/playground"] = { requires = "nvim-treesitter/nvim-treesitter" },
+  ["rmagatti/alternate-toggler"] = { -- (toggle boolean values)
     setup = function()
-      require("core.utils").packer_lazy_load "alternate-toggler"
+      nvchad.packer_lazy_load "alternate-toggler"
     end,
-  },
-  ["reewr/vim-monokai-phoenix"] = {
-    cond = function()
-      return vim.env.LC_TERMINAL == "shelly"
+    config = function()
+      nvchad.map("n", "<C-t>", "<cmd>ToggleAlternate<CR>")
     end,
   },
   ["nathom/filetype.nvim"] = {},
-  ["github/copilot.vim"] = { requires = "hrsh7th/nvim-cmp" },
-  -- ["folke/lua-dev.nvim"] = {
-  --   setup = function()
-  --     lspconfig = require "custom.plugins.lsp.servers.sumneko_lua"
-  --   end,
-  -- },
+  ["github/copilot.vim"] = {
+    requires = "hrsh7th/nvim-cmp",
+    config = function()
+      nvchad.map("i", "<C-e>", 'copilot#Accept("<CR>")', { expr = true })
+      -- Copilot
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
+    end,
+  },
+  ["folke/lua-dev.nvim"] = {
+    setup = function()
+      lspconfig = require "custom.plugins.lsp.servers.sumneko_lua"
+    end,
+  },
   ["chr4/nginx.vim"] = { ft = "nginx" },
-  ["folke/which-key.nvim"] = { require "custom.plugins.config.whichkey" },
+  ["folke/which-key.nvim"] = require "custom.plugins.config.whichkey",
   -- Native terminal copying using OCS52
   ["ojroques/vim-oscyank"] = {},
   ["jose-elias-alvarez/null-ls.nvim"] = {
     setup = function()
-      require("core.utils").packer_lazy_load "null-ls.nvim"
+      nvchad.packer_lazy_load "null-ls.nvim"
     end,
     config = function()
       require("custom.plugins.config.null_ls").setup()
     end,
   },
-  -- ["qosmio/nvim-lsp-installer"] = {},
-  -- before = "null-ls.nvim",
-  -- lazy_load = true
-  -- setup = function()
-  --   require "custom.plugins.config.lsp_installer"
-  -- end,
   ["tbastos/vim-lua"] = { ft = "lua" },
   ["lambdalisue/suda.vim"] = {},
+  ["reewr/vim-monokai-phoenix"] = {
+    cond = function()
+      return vim.env.LC_TERMINAL == "shelly"
+    end,
+  },
   -- ["f3fora/cmp-spell"] = { after = 'cmp-path', setup = function() sources = { { name = "spell" }, } end },
 }
+
+return M

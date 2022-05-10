@@ -97,19 +97,22 @@ M.options = {
 ---- UI -----
 
 M.ui = {
-  italic_comments = true,
-  theme = "onedark-deep",
-  hl_override = require("custom.highlights").override,
-  -- Change terminal bg to nvim theme's bg color so it'll match well
-  -- For Ex : if you have onedark set in nvchad, set onedark's bg color on your terminal
+  -- hl_override = require("custom.highlights").override,
+  hl_override = require("custom.highlights.monokai-phoenix"),
+  changed_themes = {},
+  theme_toggle = { "onedark-deep", "onedark" },
+  theme = "rxyhn", --onedark-deep", -- default theme
   transparency = false,
 }
-
----- PLUGIN OPTIONS ----
+local plugins = require "custom.plugins"
 
 M.plugins = {
+
+  remove = plugins.remove,
+  override = plugins.override,
+  user = plugins.user,
+
   options = {
-    packer = { init_file = "plugins.packerInit" },
     autopairs = { loadAfter = "nvim-cmp" },
     cmp = { lazy_load = true },
     lspconfig = {
@@ -122,23 +125,9 @@ M.plugins = {
     },
     -- luasnip                = {snippet_path = {}},
     statusline = {
-      -- hide, show on specific filetypes
-      hidden = { "help", "NvimTree", "terminal", "alpha" },
-      -- truncate statusline on small screens
-      shortline = true,
-      style = "arrow", -- default, round , slant , block , arrow
+      separator_style = "arrow", -- default/round/slant/block/arrow
     },
-    esc_insertmode_timeout = 300,
   },
-  default_plugin_config_replace = {
-    ["hrsh7th/nvim-cmp"] = require "custom.plugins.config.cmp",
-    ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
-    ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
-    ["windwp/nvim-autopairs"] = require "custom.plugins.config.autopairs",
-    ["kyazdani42/nvim-tree.lua"] = require "custom.plugins.config.tree",
-    ["numToStr/Comment.nvim"] = require("custom.plugins.config.comment").setup(),
-  },
-  user = require "custom.plugins",
 }
 
 -- non plugin only

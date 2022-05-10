@@ -1,4 +1,4 @@
-local theme = {
+return {
    Pmenu = {
       fg = "#F8F8F8",
       bg = "#223344",
@@ -31,13 +31,13 @@ local theme = {
    },
    Normal = {
       fg = "#F8F8F2",
-      bg = "#111111",
+      bg = "#000000",
       ctermfg = 15,
       ctermbg = 233,
    },
    Conceal = {
       fg = "#66D9EF",
-      bg = "#111111",
+      bg = "#000000",
       ctermfg = 81,
       ctermbg = 233,
    },
@@ -49,13 +49,13 @@ local theme = {
    },
    StatusLine = {
       fg = "#66D9EF",
-      bg = "#111111",
+      bg = "#000000",
       ctermfg = 81,
       ctermbg = 233,
    },
    StatusLineNC = {
       fg = "#778899",
-      bg = "#111111",
+      bg = "#000000",
       ctermfg = 103,
       ctermbg = 233,
    },
@@ -933,4 +933,3 @@ local theme = {
       ctermbg = "NONE",
    },
 }
-return theme

@@ -1,1 +1,1 @@
-return {git = {enable = true}}
+return { git = { enable = true } }
