@@ -83,8 +83,8 @@ local sources  = {
   -- b.formatting.phpcbf,
   -- b.formatting.clang_format,
   -- b.diagnostics.php,
-  b.diagnostics.zsh
-  -- b.diagnostics.shellcheck.with {diagnostics_format = "#{m} [#{c}]"}
+  b.diagnostics.zsh,
+  b.diagnostics.shellcheck.with {diagnostics_format = "#{m} [#{c}]"}
 }
 
 local M        = {}

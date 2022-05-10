@@ -1,30 +1,26 @@
 local M = {}
 
-M.DocumentHighlightAU = function()
-  local group = vim.api.nvim_create_augroup('DocumentHighlight', {clear = true})
-  vim.api.nvim_create_autocmd('CursorHold',
-                              {callback = vim.lsp.buf.document_highlight, group    = group})
-  vim.api.nvim_create_autocmd('CursorMoved',
-                              {callback = vim.lsp.buf.clear_references, group    = group})
-end
-
-M.CodeLensAU = function()
-  local group = vim.api.nvim_create_augroup('CodeLens', {clear = true})
-  vim.api.nvim_create_autocmd('BufEnter', {
-    callback = require('vim.lsp.codelens').refresh,
-    group    = group,
-    once     = true
+M.DocumentHighlightAU = function(bufnr)
+  local group = vim.api.nvim_create_augroup("DocumentHighlight", {})
+  vim.api.nvim_create_autocmd("CursorHold", {
+    group = group,
+    buffer = bufnr,
+    callback = vim.lsp.buf.document_highlight,
   })
-
-  vim.api.nvim_create_autocmd({'BufWritePost', 'CursorHold'},
-                              {callback = require('vim.lsp.codelens').refresh, group    = group})
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    group = group,
+    buffer = bufnr,
+    callback = vim.lsp.buf.clear_references,
+  })
 end
 
-M.DocumentFormattingAU = function(use_lsp)
-  local group = vim.api.nvim_create_augroup('Formatting', {clear = true})
+M.DocumentFormattingAU = function(bufnr, use_lsp)
+  local group = vim.api.nvim_create_augroup("Formatting", { clear = true })
   if use_lsp then
-    vim.api.nvim_create_autocmd('BufWritePre',
-                                {callback = vim.lsp.buf.format, group    = group})
+    if not bufnr then
+      bufnr = vim.api.nvim_get_current_buf()
+    end
+    vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, callback = vim.lsp.buf.format, group = group })
     -- else
     --    vim.api.nvim_create_autocmd("BufWritePost", {
     --       command = "FormatWrite",
@@ -34,22 +30,32 @@ M.DocumentFormattingAU = function(use_lsp)
 end
 
 M.SemanticTokensAU = function()
-  local group = vim.api.nvim_create_augroup('SemanticTokens', {clear = true})
-  vim.api.nvim_create_autocmd({'BufEnter', 'CursorHold', 'InsertLeave'}, {
-    callback = vim.lsp.buf.semantic_tokens_full(),
-    group    = group
+  local group = vim.api.nvim_create_augroup("SemanticTokens", { clear = true })
+  vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+    callback = vim.lsp.buf.semantic_tokens_full,
+    group = group,
     -- once = true,
   })
 end
 
-M.InlayHintsAU = function()
-  local group = vim.api.nvim_create_augroup('InlayHints', {clear = true})
-  vim.api.nvim_create_autocmd({'CursorMoved', 'InsertLeave'}, {
-    callback = require('custom.plugins.lsp.inlay_hints').inlay_hints({
-      enabled = {'TypeHint', 'ChainingHint', 'ParameterHint'}
-    }),
-    group    = group
-    -- once = true,
+M.InlayHintsAU = function(bufnr)
+  local group = vim.api.nvim_create_augroup("InlayHints", {})
+  vim.api.nvim_create_autocmd({ "CursorMoved", "InsertLeave" }, {
+    group = group,
+    buffer = bufnr,
+    callback = function()
+      local opts = { enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
+      require("custom.plugins.lsp.inlay_hints").inlay_hints(opts)
+    end,
+  })
+end
+
+M.CodeLensAU = function(bufnr)
+  local group = vim.api.nvim_create_augroup(("_lsp_codelens_%d"):format(bufnr), { clear = true })
+  vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+    buffer = bufnr,
+    callback = vim.lsp.codelens.refresh,
+    group = group,
   })
 end
 

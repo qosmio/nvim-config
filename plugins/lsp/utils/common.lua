@@ -49,11 +49,15 @@ M.on_attach = function(client, bufnr)
   end
 
   if client.server_capabilities.documentHighlightProvider then
-    autocmds.DocumentHighlightAU()
+    autocmds.DocumentHighlightAU(bufnr)
+  end
+
+  if client.server_capabilities.codeLensProvider then
+    autocmds.CodeLensAU(bufnr)
   end
 
   if client.server_capabilities.documentFormattingProvider then
-    autocmds.DocumentFormattingAU()
+    autocmds.DocumentFormattingAU(bufnr)
   end
 end
 
