@@ -7,7 +7,7 @@ return {
    },
    PmenuSet = {
       fg = "#66D9EF",
-      bg = "#111111",
+      bg = "#000000",
       ctermfg = 81,
       ctermbg = 233,
    },
@@ -54,7 +54,7 @@ return {
       ctermbg = 233,
    },
    StatusLineNC = {
-      fg = "#778899",
+      fg = "#178899",
       bg = "#000000",
       ctermfg = 103,
       ctermbg = 233,
@@ -102,7 +102,7 @@ return {
       ctermbg = "NONE",
    },
    ErrorMsg = {
-      fg = "#111111",
+      fg = "#000000",
       bg = "#F92672",
       ctermfg = 233,
       ctermbg = 197,
@@ -115,7 +115,7 @@ return {
    },
    TabLine = {
       fg = "#8F908A",
-      bg = "#111111",
+      bg = "#000000",
       ctermfg = 102,
       ctermbg = 233,
    },
@@ -126,7 +126,7 @@ return {
       ctermbg = 59,
    },
    TabLineFill = {
-      fg = "#111111",
+      fg = "#000000",
       bg = "#111111",
       ctermfg = 233,
       ctermbg = 233,
@@ -204,7 +204,7 @@ return {
       ctermbg = 236,
    },
    Cursor = {
-      fg = "#111111",
+      fg = "#000000",
       bg = "#F8F8F2",
       ctermfg = 233,
       ctermbg = 15,
@@ -216,31 +216,33 @@ return {
       ctermbg = 59,
    },
    MatchParen = {
-      fg = "#111111",
-      bg = "#E6DB74",
-      ctermfg = 233,
-      ctermbg = 185,
+      fg = "#f43753",
+      bg = "#333333",
+      ctermfg = 203,
+      ctermbg = "NONE",
+      bold = true,
    },
    Constant = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
    },
    Number = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
+      bold = true,
    },
    Float = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
    },
    Boolean = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
@@ -291,6 +293,7 @@ return {
    Function = {
       fg = "#A6E22E",
       bg = "NONE",
+      bold = true,
       ctermfg = 112,
       ctermbg = "NONE",
    },
@@ -305,6 +308,7 @@ return {
       bg = "NONE",
       ctermfg = 197,
       ctermbg = "NONE",
+      bold = true,
    },
    Label = {
       fg = "#F92782",
@@ -349,10 +353,11 @@ return {
       ctermbg = "NONE",
    },
    Special = {
-      fg = "#66D9EF",
+      fg = "#FF00FF",
       bg = "NONE",
-      ctermfg = 81,
+      ctermfg = 13,
       ctermbg = "NONE",
+      bold = true,
    },
    SpecialChar = {
       fg = "#F92782",
@@ -363,6 +368,7 @@ return {
    Delimiter = {
       fg = "#F92782",
       bg = "NONE",
+      bold = true,
       ctermfg = 197,
       ctermbg = "NONE",
    },
@@ -441,13 +447,13 @@ return {
       ctermbg = "NONE",
    },
    jsBooleanTrue = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
    },
    jsBooleanFalse = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
@@ -650,13 +656,13 @@ return {
       ctermbg = "NONE",
    },
    jsNumber = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
    },
    jsFloat = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
@@ -856,7 +862,7 @@ return {
       ctermbg = "NONE",
    },
    jsonNull = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
@@ -886,19 +892,19 @@ return {
       ctermbg = "NONE",
    },
    purescriptConstructor = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
    },
    purescriptConstructorDecl = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
    },
    purescriptTypeAlias = {
-      fg = "#AE81FF",
+      fg = "#d56af5",
       bg = "NONE",
       ctermfg = 141,
       ctermbg = "NONE",
@@ -932,5 +938,17 @@ return {
       bg = "NONE",
       ctermfg = 15,
       ctermbg = "NONE",
+   },
+   TermCursor = {
+      fg = "#000000",
+      bg = "#F8F8F2",
+      ctermfg = 233,
+      ctermbg = 15,
+   },   
+   TermCursorNC = {
+      fg = "#000000",
+      bg = "#778899",
+      ctermfg = 233,
+      ctermbg = 103,
    },
 }
