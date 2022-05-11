@@ -15,6 +15,12 @@ M.override = {
 }
 
 M.user = {
+  -- ["feline-nvim/feline.nvim"] = {
+  --   requires = { "nvim-lua/lsp-status.nvim", "nvim-web-devicons" },
+  --   config = function()
+  --     require "custom.plugins.config.feline"
+  --   end,
+  -- },
   -- ['zbirenbaum/copilot.lua'] = {
   --   branch = 'dev',
   --   event  = {'VimEnter'},
@@ -25,6 +31,7 @@ M.user = {
   --   end
   -- },
   -- ['zbirenbaum/copilot-cmp'] = {after = {'copilot.lua', 'nvim-cmp'}},
+  -- ["nvim-lua/lsp-status.nvim"] = { before = { "feline" } },
   ["nvim-treesitter/playground"] = { requires = "nvim-treesitter/nvim-treesitter" },
   ["rmagatti/alternate-toggler"] = { -- (toggle boolean values)
     setup = function()
@@ -68,7 +75,6 @@ M.user = {
       return vim.env.LC_TERMINAL == "shelly"
     end,
   },
-  -- ["f3fora/cmp-spell"] = { after = 'cmp-path', setup = function() sources = { { name = "spell" }, } end },
 }
 
 return M
