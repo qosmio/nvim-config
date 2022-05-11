@@ -304,9 +304,9 @@ return {
       ctermbg = "NONE",
    },
    Operator = {
-      fg = "#F92782",
+      fg = "#E6DB74",
       bg = "NONE",
-      ctermfg = 197,
+      ctermfg = 185,
       ctermbg = "NONE",
       bold = true,
    },
