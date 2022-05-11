@@ -252,9 +252,9 @@ return {
       ctermbg = "NONE",
    },
    String = {
-      fg = "#E6DB74",
+      fg = "#66D9EF",
       bg = "NONE",
-      ctermfg = 185,
+      ctermfg = 81,
       ctermbg = "NONE",
    },
    Type = {
@@ -282,9 +282,10 @@ return {
       ctermbg = "NONE",
    },
    Identifier = {
-      fg = "#A6E22E",
+      fg = "#ca2168",
       bg = "NONE",
-      ctermfg = 112,
+      bold = true,
+      ctermfg = 197,
       ctermbg = "NONE",
    },
    Function = {

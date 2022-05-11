@@ -67,7 +67,7 @@ M.override = {
    Normal = { bg = M.color.darker_black },
    Identifier = { fg = M.color.pink, bold = true },
    Constant = { fg = M.color.yellow, bold = true },
-   String = { fg = M.color.green },
+   -- String = { fg = M.color.green },
    Keyword = { fg = M.color.purple },
    Function = { fg = M.color.baby_pink },
    MatchParen = { fg = M.color.grey_bg, bg = M.color.red },
