@@ -101,7 +101,8 @@ M.ui = {
   hl_override = require("custom.highlights.monokai-phoenix"),
   changed_themes = {},
   theme_toggle = { "onedark-deep", "onedark" },
-  theme = "rxyhn", --onedark-deep", -- default theme
+  theme = "onedark-deep", -- default theme
+  -- theme = "rxyhn", --onedark-deep", -- default theme
   transparency = false,
 }
 local plugins = require "custom.plugins"
