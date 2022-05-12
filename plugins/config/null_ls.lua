@@ -1,16 +1,16 @@
-local null_ls  = require "null-ls"
-local b        = null_ls.builtins
-local map      = nvchad.map
+local null_ls = require "null-ls"
+local b = null_ls.builtins
+local map = nvchad.map
 -- local platform = require('nvim-lsp-installer.platform')
 
-local sources  = {
+local sources = {
 
   -- Javascript
   -- b.diagnostics.eslint,
-  b.formatting.prettier_d_slim.with({
-    extra_args = {'--no-semi', '--single-quote', '--jsx-single-quote'},
-    filetypes  = {'javascript', 'css', 'less', 'html', 'json', 'yaml', 'markdown'}
-  }),
+  b.formatting.prettierd.with {
+    -- extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
+    -- filetypes = { "javascript", "css", "less", "html", "json", "yaml", "markdown" },
+  },
   -- Lua
   -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
   b.formatting.stylua,
@@ -77,35 +77,35 @@ local sources  = {
 
   -- Nginx
   -- npm -g i nginxbeautifier
-  b.formatting.nginx_beautifier,
+  b.formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
   -- PHP
   -- composer global require "squizlabs/php_codesniffer=*"
   -- b.formatting.phpcbf,
   -- b.formatting.clang_format,
   -- b.diagnostics.php,
   b.diagnostics.zsh,
-  b.diagnostics.shellcheck.with {diagnostics_format = "#{m} [#{c}]"}
+  b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
 }
 
-local M        = {}
+local M = {}
 
 M.setup = function()
-  null_ls.setup({
-    debug              = false,
-    sources            = sources,
-    debounce           = 1250,
-    default_timeout    = 5000,
-    diagnostics_format = '[#{c}] #{m} (#{s})',
-    fallback_severity  = vim.diagnostic.severity.ERROR,
-    log                = {enable      = true, level       = 'warn', use_console = 'async'},
-    on_attach          = function(client)
+  null_ls.setup {
+    debug = false,
+    sources = sources,
+    debounce = 1250,
+    default_timeout = 5000,
+    diagnostics_format = "[#{c}] #{m} (#{s})",
+    fallback_severity = vim.diagnostic.severity.ERROR,
+    log = { enable = true, level = "warn", use_console = "async" },
+    on_attach = function(client)
       if client.server_capabilities.documentFormattingProvider then
-        map('n', '<leader>f', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
+        map("n", "<leader>f", "<cmd>lua vim.lsp.buf.format { async = true }<CR>")
       elseif client.server_capabilities.documentRangeFormattingProvider then
-        map('n', '<leader>F', '<cmd>lua vim.lsp.buf.range_formatting()<CR>')
+        map("n", "<leader>F", "<cmd>lua vim.lsp.buf.range_formatting()<CR>")
       end
-    end
-  })
+    end,
+  }
 end
 
 return M
