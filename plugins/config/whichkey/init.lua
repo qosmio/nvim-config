@@ -30,7 +30,7 @@ return {
       }, -- hide mapping boilerplate
     }
     wk.register({
-      ["/"] = { "Toggle comment" },
+      --["/"] = { "Toggle comment" },
       a = {
         name = "General",
         c = { "<cmd>e $MYVIMRC<cr>", "Edit Config" },

@@ -87,3 +87,14 @@ end
 -- require('custom.options')
 -- AUTOCMDS
 require "custom.autocmds"
+vim.g.copilot_no_tab_map = true
+vim.g.copilot_assume_mapped = true
+
+local present, ft = pcall(require, "Comment.ft")
+
+if not present then
+  return
+end
+-- set the default comment char to be '#'
+ft.set("", "#%s")
+ft.set("txt", "#%s")

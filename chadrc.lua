@@ -99,12 +99,14 @@ M.options = {
 M.ui = {
   -- hl_override = require("custom.highlights").override,
   hl_override = require("custom.highlights.monokai-phoenix"),
-  changed_themes = {},
-  theme_toggle = { "onedark-deep", "onedark" },
-  theme = "onedark-deep", -- default theme
+  changed_themes = {
+      onedark = require "custom.themes.onedark-deep",
+  },
+  theme = "onedark", -- default theme
   -- theme = "rxyhn", --onedark-deep", -- default theme
   transparency = false,
 }
+
 local plugins = require "custom.plugins"
 
 M.plugins = {
@@ -132,10 +134,6 @@ M.plugins = {
 }
 
 -- non plugin only
-M.mappings = {
-  misc = function()
-    require "custom.mappings"
-  end,
-}
+M.mappings = require "custom.mappings"
 
 return M
