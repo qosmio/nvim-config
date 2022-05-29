@@ -1,6 +1,6 @@
 local null_ls = require "null-ls"
 local b = null_ls.builtins
-local map = nvchad.map
+local map = vim.keymap.set
 -- local platform = require('nvim-lsp-installer.platform')
 
 local sources = {
@@ -100,9 +100,9 @@ M.setup = function()
     log = { enable = true, level = "warn", use_console = "async" },
     on_attach = function(client)
       if client.server_capabilities.documentFormattingProvider then
-        map("n", "<leader>f", "<cmd>lua vim.lsp.buf.format { async = true }<CR>")
+        vim.keymap.set("n", "<leader>f", "<cmd>lua vim.lsp.buf.format { async = true }<CR>")
       elseif client.server_capabilities.documentRangeFormattingProvider then
-        map("n", "<leader>F", "<cmd>lua vim.lsp.buf.range_formatting()<CR>")
+        vim.keymap.set("n", "<leader>F", "<cmd>lua vim.lsp.buf.range_formatting()<CR>")
       end
     end,
   }

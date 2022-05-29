@@ -28,10 +28,10 @@ M.user = {
   ["nvim-treesitter/playground"] = { requires = "nvim-treesitter/nvim-treesitter" },
   ["rmagatti/alternate-toggler"] = { -- (toggle boolean values)
     setup = function()
-      nvchad.packer_lazy_load "alternate-toggler"
+      require("core.utils").packer_lazy_load "alternate-toggler"
     end,
     config = function()
-      nvchad.map("n", "<C-t>", "<cmd>ToggleAlternate<CR>")
+      vim.keymap.set("n", "<C-t>", "<cmd>ToggleAlternate<CR>")
     end,
   },
   ["nathom/filetype.nvim"] = {},
@@ -68,7 +68,7 @@ M.user = {
   ["ojroques/vim-oscyank"] = {},
   ["jose-elias-alvarez/null-ls.nvim"] = {
     setup = function()
-      nvchad.packer_lazy_load "null-ls.nvim"
+      require("core.utils").packer_lazy_load "null-ls.nvim"
     end,
     config = function()
       require("custom.plugins.config.null_ls").setup()

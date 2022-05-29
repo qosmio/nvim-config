@@ -18,7 +18,7 @@ local root_files = {
   "requirements.txt",
   "Pipfile",
   "pyrightconfig.json",
-  ".",
+  -- ".",
 }
 
 local messages = {}
