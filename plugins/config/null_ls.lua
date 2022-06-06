@@ -44,7 +44,7 @@ local sources = {
   --
   -- Bash
   -- go install mvdan.cc/sh/v3/cmd/shfmt@latest
-  b.formatting.shfmt,
+  b.formatting.shfmt.with { args = { "-i", "2", "-sr", "-kp" } },
   --
   -- Python
   -- pip install reorder-python-imports
