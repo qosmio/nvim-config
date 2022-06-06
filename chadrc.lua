@@ -98,9 +98,9 @@ M.options = {
 
 M.ui = {
   -- hl_override = require("custom.highlights").override,
-  hl_override = require("custom.highlights.monokai-phoenix"),
+  hl_override = require "custom.highlights.monokai-phoenix",
   changed_themes = {
-      onedark = require "custom.themes.onedark-deep",
+    onedark = require "custom.themes.onedark-deep",
   },
   theme = "onedark", -- default theme
   -- theme = "rxyhn", --onedark-deep", -- default theme
@@ -116,23 +116,16 @@ M.plugins = {
   user = plugins.user,
 
   options = {
-    autopairs = { loadAfter = "nvim-cmp" },
-    cmp = { lazy_load = true },
+    -- cmp = { lazy_load = true },
     lspconfig = {
-      lazy_load = true,
+      -- lazy_load = true,
       setup_lspconf = "custom.plugins.lsp", -- path of file containing setups of different lsps
     },
-    nvimtree = {
-      -- packerCompile required after changing lazy_load
-      lazy_load = true,
-    },
-    -- luasnip                = {snippet_path = {}},
     statusline = {
-      separator_style = "arrow", -- default/round/slant/block/arrow
+      separator_style = "block", -- default/round/block
     },
   },
 }
-
 -- non plugin only
 M.mappings = require "custom.mappings"
 

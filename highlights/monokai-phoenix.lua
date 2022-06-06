@@ -47,18 +47,18 @@ return {
       ctermfg = 59,
       ctermbg = "NONE",
    },
-   StatusLine = {
-      fg = "#66D9EF",
-      bg = "#000000",
-      ctermfg = 81,
-      ctermbg = 233,
-   },
-   StatusLineNC = {
-      fg = "#178899",
-      bg = "#000000",
-      ctermfg = 103,
-      ctermbg = 233,
-   },
+   -- StatusLine = {
+   --    fg = "#66D9EF",
+   --    bg = "#000000",
+   --    ctermfg = 81,
+   --    ctermbg = 233,
+   -- },
+   -- StatusLineNC = {
+   --    fg = "#178899",
+   --    bg = "#000000",
+   --    ctermfg = 103,
+   --    ctermbg = 233,
+   -- },
    Search = {
       fg = "#000000",
       bg = "#FFE972",

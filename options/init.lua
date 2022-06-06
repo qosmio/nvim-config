@@ -25,11 +25,15 @@ vim.cmd "command! -nargs=* WQ wq"
 vim.cmd "command! -nargs=* Q q"
 vim.cmd "command! -nargs=* Qa qa"
 vim.cmd "command! -nargs=* QA qa"
--- vim.g.redrawtime = 50
+vim.g.redrawtime = 50
 
-if os.getenv "LC_TERMINAL" == "iTerm2" then
-  vim.cmd [[
-  let &t_ti.="\<Esc>]1337;HighlightCursorLine=true\x7"
-  let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
-]]
-end
+vim.schedule(function()
+   vim.opt.shadafile = vim.fn.expand "$HOME" .. "/.local/share/nvim/shada/main.shada"
+   vim.cmd [[ silent! rsh ]]
+end)
+-- if os.getenv "LC_TERMINAL" == "iTerm2" then
+--   vim.cmd [[
+--   let &t_ti.="\<Esc>]1337;HighlightCursorLine=true\x7"
+--   let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
+-- ]]
+-- end

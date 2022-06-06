@@ -13,12 +13,6 @@ local server_name = "pylance"
 
 local root_files = {
   "pyproject.toml",
-  "setup.py",
-  "setup.cfg",
-  "requirements.txt",
-  "Pipfile",
-  "pyrightconfig.json",
-  -- ".",
 }
 
 local messages = {}
@@ -100,7 +94,6 @@ local pylance_handlers = {
   end,
   ["workspace/executeCommand"] = on_workspace_executecommand,
 }
-local root_dir = server.get_server_root_path(server_name)
 configs[server_name] = {
   default_config = {
     filetypes = { "python" },
@@ -115,7 +108,7 @@ configs[server_name] = {
           autoSearchPaths = true,
           useLibraryCodeForTypes = true,
           diagnosticMode = "workspace",
-          indexing = false,
+          indexing = true,
         },
         experiments = { optInto = { "Experiment1", "Experiment13", "Experiment56", "Experiment106" } },
       },
@@ -176,6 +169,7 @@ local pylance_installer = function(ctx)
   }
 end
 
+local root_dir = server.get_server_root_path(server_name)
 local custom_server = server.Server:new {
   name = server_name,
   root_dir = root_dir,
