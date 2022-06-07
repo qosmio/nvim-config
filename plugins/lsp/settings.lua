@@ -21,13 +21,14 @@ local popup_border = {
   {'│', 'FloatBorder'}
 }
 
-local group        = 'NullLs'
+local group_name        = 'NullLs'
 
 -- -- Show diagnostics in popup window (using the border above)
 -- vim.api.nvim_command( "autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({border=" .. vim.inspect(popup_border) .. ", focusable=false, show_header=false})")
 
+vim.api.nvim_create_augroup(group_name, { clear = true })
 vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-  group    = group,
+  group    = group_name,
   callback = function()
     vim.diagnostic
       .open_float({border      = popup_border, focusable   = false, show_header = false})
