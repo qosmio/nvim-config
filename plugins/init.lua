@@ -56,9 +56,10 @@ M.user = {
   -- Native terminal copying using OCS52
   ["ojroques/vim-oscyank"] = {},
   ["jose-elias-alvarez/null-ls.nvim"] = {
-    setup = function()
-      require("core.utils").packer_lazy_load "null-ls.nvim"
-    end,
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "neovim/nvim-lspconfig",
+    },
     config = function()
       require("custom.plugins.config.null_ls").setup()
     end,

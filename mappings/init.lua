@@ -7,7 +7,7 @@ local M = {}
 M.misc = {
   -- toggle comment in both modes
   n = {
-    ["d"] = { '"_d', "蘒  delete" },
+    -- ["d"] = { '"_d', "蘒  delete" },
     ["<C-o>"] = { "<cmd> TSHighlightCapturesUnderCursor <CR>", " Show Highlight Group" },
   },
   v = {
@@ -24,7 +24,7 @@ M.lsp = {
         "Add Workspace",
       },
       -- r={'<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',"Remove Workspace"},
-      l = {
+      W = {
         "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
         "List Workspaces",
       },
@@ -37,8 +37,8 @@ M.lsp = {
         "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>",
         "Loc List",
       },
-      f = {
-        "<cmd>lua vim.lsp.buf.format()<CR>",
+      l = {
+        "<cmd>lua vim.lsp.buf.format() <CR>",
         "Format",
       },
     },

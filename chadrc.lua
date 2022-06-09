@@ -116,9 +116,7 @@ M.plugins = {
   user = plugins.user,
 
   options = {
-    -- cmp = { lazy_load = true },
     lspconfig = {
-      -- lazy_load = true,
       setup_lspconf = "custom.plugins.lsp", -- path of file containing setups of different lsps
     },
     statusline = {

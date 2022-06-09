@@ -1,5 +1,5 @@
-local mappings = require('custom.plugins.lsp.utils.mappings')
-local autocmds = require('custom.plugins.lsp.utils.autocmds')
+local mappings = require "custom.plugins.lsp.utils.mappings"
+local autocmds = require "custom.plugins.lsp.utils.autocmds"
 
 M = {}
 
@@ -35,17 +35,23 @@ M.set_default_formatter_for_filetypes = function(language_server_name, filetypes
   end)
 end
 
+M.has_exec = function(filename)
+  return function(_)
+    return vim.fn.executable(filename) == 1
+  end
+end
+
 M.on_attach = function(client, bufnr)
   local function buf_set_option(...)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
 
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
   mappings.setup(client)
 
   if client.server_capabilities.definitionProvider then
-    vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+    vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
   end
 
   if client.server_capabilities.documentHighlightProvider then

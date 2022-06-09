@@ -38,13 +38,13 @@ vim.api.nvim_create_autocmd("TextYankPost", { group = group_name, callback = pro
 --   once = false,
 -- })
 
--- vim.api.nvim_create_autocmd({ 'BufEnter' }, {
---   group = group_name,
---   pattern = { '*' },
---   callback = function()
---     pcall(vim.cmd, [[lcd `=expand('%:p:h')`]])
---   end,
--- })
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  group = group_name,
+  pattern = { '*' },
+  callback = function()
+    pcall(vim.cmd, [[lcd `=expand('%:p:h')`]])
+  end,
+})
 
 -- vim.api.nvim_create_autocmd({ "VimEnter" }, {
 --   group = group_name,
@@ -94,12 +94,12 @@ vim.api.nvim_create_autocmd(
 -- }}}
 
 -- Folds with marker in given file types {{{
-local mark_fold = vim.api.nvim_create_augroup("FoldMaker", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "tex", "vim", "zsh" },
-  command = [[setlocal foldmethod=marker foldlevel=0]],
-  group = mark_fold,
-})
+-- local mark_fold = vim.api.nvim_create_augroup("FoldMaker", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = { "tex", "vim", "zsh" },
+--   command = [[setlocal foldmethod=marker foldlevel=0]],
+--   group = mark_fold,
+-- })
 -- }}}
 
 -- Misc {{{

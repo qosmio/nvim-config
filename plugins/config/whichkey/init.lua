@@ -81,7 +81,7 @@ return {
           "Loc List",
         },
         f = {
-          "<cmd>lua vim.lsp.buf.formatting()<CR>",
+          "<cmd>lua vim.lsp.buf.format()<CR>",
           "Format",
         },
       },
