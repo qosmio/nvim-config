@@ -90,8 +90,8 @@ function M.post()
     diff_binaries = false, -- Show diffs for binaries
     file_panel = {
       win_config = {
-      width = 50,
-      }
+        width = 50,
+      },
     },
     key_bindings = {
       disable_defaults = false, -- Disable the default key bindings

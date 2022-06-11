@@ -1,7 +1,7 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local utils = require "custom.plugins.lsp.utils"
 
-return require("lua-dev").setup({
+return require("lua-dev").setup {
   flags = {
     debounce_text_changes = 250,
   },
@@ -14,7 +14,7 @@ return require("lua-dev").setup({
       init_options = { documentFormatting = true, codeAction = false },
       Lua = {
         runtime = {
-          version = 'LuaJIT',
+          version = "LuaJIT",
         },
         diagnostics = {
           enable = true,
@@ -33,7 +33,7 @@ return require("lua-dev").setup({
             "unused-local",
             "unused-vararg",
             "trailing-space",
-            "packer_plugins"
+            "packer_plugins",
           },
         },
         completion = {
@@ -43,10 +43,11 @@ return require("lua-dev").setup({
         workspace = {
           -- library = vim.api.nvim_get_runtime_file("", true),
           library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true },
+            [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+            [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+          },
           preloadFileSize = 100000,
-          maxPreload = 10000
+          maxPreload = 10000,
         },
         telemetry = {
           enable = false,
@@ -54,5 +55,5 @@ return require("lua-dev").setup({
         single_file_support = true,
       },
     },
-  }
-})
+  },
+}
