@@ -21,21 +21,7 @@ M.DocumentFormattingAU = function(bufnr, use_lsp)
       bufnr = vim.api.nvim_get_current_buf()
     end
     vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, callback = vim.lsp.buf.format, group = group })
-    -- else
-    --    vim.api.nvim_create_autocmd("BufWritePost", {
-    --       command = "FormatWrite",
-    --       group = group,
-    --    })
   end
-end
-
-M.SemanticTokensAU = function()
-  local group = vim.api.nvim_create_augroup("SemanticTokens", { clear = true })
-  vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-    callback = vim.lsp.buf.semantic_tokens_full,
-    group = group,
-    -- once = true,
-  })
 end
 
 M.InlayHintsAU = function(bufnr)

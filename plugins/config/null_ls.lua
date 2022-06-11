@@ -2,8 +2,6 @@ local utils = require "custom.plugins.lsp.utils"
 local null_ls = require "null-ls"
 local b = null_ls.builtins
 
-local map = vim.keymap.set
-
 local sources = {
   -- Javascript
   b.formatting.prettierd,
@@ -13,11 +11,9 @@ local sources = {
   b.formatting.stylua,
 
   -- Python
-  -- pip install reorder-python-imports
+  -- pip install reorder-python-imports black yapf
   b.formatting.reorder_python_imports,
-  -- pip install black
   b.formatting.black,
-  -- pip install yapf
   -- b.formatting.yapf,
 
   -- Nginx

@@ -5,7 +5,7 @@ function _G.print_table(node)
 
   while true do
     local size = 0
-    for k, v in pairs(node) do
+    for _, _ in pairs(node) do
       size = size + 1
     end
 
@@ -120,7 +120,7 @@ M.plugins = {
       setup_lspconf = "custom.plugins.lsp", -- path of file containing setups of different lsps
     },
     statusline = {
-      separator_style = "block", -- default/round/block
+      separator_style = "default", -- default/round/block
     },
   },
 }

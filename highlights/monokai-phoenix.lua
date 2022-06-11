@@ -944,7 +944,7 @@ return {
       bg = "#F8F8F2",
       ctermfg = 233,
       ctermbg = 15,
-   },   
+   },
    TermCursorNC = {
       fg = "#000000",
       bg = "#778899",

@@ -1,7 +1,7 @@
 local mappings = require "custom.plugins.lsp.utils.mappings"
 local autocmds = require "custom.plugins.lsp.utils.autocmds"
 
-M = {}
+local M = {}
 
 M.set_contains = function(set, val)
   for _, value in pairs(set) do

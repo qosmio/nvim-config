@@ -10,7 +10,7 @@ local ensure_installed = {
 
 return {
   ensure_installed = (function()
-    local out = vim.fn.system "which node"
+    _ = vim.fn.system "which node"
     if vim.v.shell_error ~= 0 then
       return false
     else

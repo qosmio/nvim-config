@@ -1,5 +1,3 @@
-local utils = require "custom.plugins.lsp.utils"
-
 local configs = {
   -- on_attach = utils.common.on_attach,
   flags = { debounce_text_changes = 250 },

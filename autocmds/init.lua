@@ -1,7 +1,10 @@
 local aucmd = vim.api.nvim_create_autocmd
 
 local ft_aucmd = function(pattern, ft)
-  aucmd({ "BufRead", "BufNewFile", "BufWinEnter" }, { pattern = pattern, command = [[set ft=]] .. ft, once = false })
+  aucmd(
+    { "BufRead", "BufNewFile", "BufWinEnter" },
+    { pattern = pattern, command = [[set ft=]] .. ft, once = false }
+  )
 end
 
 ft_aucmd({
@@ -38,41 +41,13 @@ vim.api.nvim_create_autocmd("TextYankPost", { group = group_name, callback = pro
 --   once = false,
 -- })
 
-vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
   group = group_name,
-  pattern = { '*' },
+  pattern = { "*" },
   callback = function()
     pcall(vim.cmd, [[lcd `=expand('%:p:h')`]])
   end,
 })
-
--- vim.api.nvim_create_autocmd({ "VimEnter" }, {
---   group = group_name,
---   pattern = { "*" },
---   callback = function()
---     if os.getenv "LC_TERMINAL" == "shelly" then
---       vim.cmd [[
---       if has('termguicolors')
---         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
---         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
---         set termguicolors
---       endif ]]
---       -- vim.opt.termguicolors = false
---       vim.cmd [[ colo monokai-phoenix ]]
---     end
---     -- opt.termguicolors = true
---     if vim.fn.bufname "%" ~= "" then
---       return
---     end
---     local byte = vim.fn.line2byte(vim.fn.line "$" + 1)
---     if byte ~= -1 or byte > 1 then
---       return
---     end
---     vim.bo.buftype = "nofile"
---     vim.bo.swapfile = false
---     vim.bo.fileformat = "unix"
---   end,
--- })
 
 -- Coding {{{
 -- Auto-format *.files prior to saving them{{{
@@ -93,21 +68,12 @@ vim.api.nvim_create_autocmd(
 
 -- }}}
 
--- Folds with marker in given file types {{{
--- local mark_fold = vim.api.nvim_create_augroup("FoldMaker", { clear = true })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = { "tex", "vim", "zsh" },
---   command = [[setlocal foldmethod=marker foldlevel=0]],
---   group = mark_fold,
--- })
--- }}}
-
 -- Misc {{{
 
 -- Unset paste on InsertLeave.{{{
-vim.api.nvim_create_autocmd("InsertLeave", { command = "silent! set nopaste" })
--- }}}
-
+-- vim.api.nvim_create_autocmd("InsertLeave", { command = "silent! set nopaste" })
+-- -- }}}
+--
 -- go to last position when opening a buffer {{{
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
   group = vim.api.nvim_create_augroup("LastPosition", { clear = true }),
@@ -150,7 +116,10 @@ vim.api.nvim_create_autocmd(
 
 -- edit hex for bins - edit binary using xxd-format {{{
 local binary = vim.api.nvim_create_augroup("Binary", { clear = true })
-vim.api.nvim_create_autocmd("BufReadPre", { pattern = { "*.bin", "*.dat" }, command = "let &bin=1", group = binary })
+vim.api.nvim_create_autocmd(
+  "BufReadPre",
+  { pattern = { "*.bin", "*.dat" }, command = "let &bin=1", group = binary }
+)
 vim.api.nvim_create_autocmd(
   "BufReadPost",
   { pattern = { "*.bin", "*.dat" }, command = "if &bin | %!xxd", group = binary }
@@ -163,7 +132,10 @@ vim.api.nvim_create_autocmd(
   "BufWritePre",
   { pattern = { "*.bin", "*.dat" }, command = "if &bin | %!xxd -r", group = binary }
 )
-vim.api.nvim_create_autocmd("BufWritePre", { pattern = { "*.bin", "*.dat" }, command = "endif", group = binary })
+vim.api.nvim_create_autocmd(
+  "BufWritePre",
+  { pattern = { "*.bin", "*.dat" }, command = "endif", group = binary }
+)
 vim.api.nvim_create_autocmd(
   "BufWritePost",
   { pattern = { "*.bin", "*.dat" }, command = "if &bin | %!xxd", group = binary }
