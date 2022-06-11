@@ -14,7 +14,7 @@ for _, server in ipairs(lspinstaller.get_installed_servers()) do
     lspconfig[server.name].setup {
       on_attach = utils.common.on_attach,
       flags = {
-        debounce_text_changes = 150,
+        debounce_text_changes = 250,
       },
       capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities),
       handlers = {
@@ -23,6 +23,3 @@ for _, server in ipairs(lspinstaller.get_installed_servers()) do
     }
   end
 end
-
--- vim.cmd([[ do User LspAttachBuffers ]])
--- vim.cmd( [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor", border=rounded})]])

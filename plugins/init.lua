@@ -10,7 +10,6 @@ M.override = {
   ["hrsh7th/nvim-cmp"] = require "custom.plugins.config.cmp",
   ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
   ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
-  -- ["windwp/nvim-autopairs"] = require "custom.plugins.config.autopairs",
   -- ["kyazdani42/nvim-tree.lua"] = require "custom.plugins.config.tree",
   ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
 }
@@ -31,12 +30,9 @@ M.user = {
     end,
     requires = "hrsh7th/nvim-cmp",
     after = { "which-key.nvim" },
-    cmd = "Copilot",
     event = "InsertEnter",
     config = function()
-      vim.g.copilot_filetypes = {
-        TelescopePrompt = false,
-      }
+      vim.g.copilot_filetypes = { TelescopePrompt = false }
       vim.g.copilot_no_tab_map = true
       vim.g.copilot_assume_mapped = true
       -- vim.g.copilot_tab_fallback = ""
@@ -49,47 +45,48 @@ M.user = {
     end,
   },
   ["folke/lua-dev.nvim"] = {
+    requires = { "cmp-nvim-lsp" },
     setup = function()
-      require("lua-dev").setup()
+      require("core.utils").packer_lazy_load "lua-dev.nvim"
     end,
+    -- require("core.utils").packer_lazy_load "alternate-toggler"
+    ft = { "lua" },
   },
   ["chr4/nginx.vim"] = { ft = "nginx" },
   -- Native terminal copying using OCS52
   ["ojroques/vim-oscyank"] = {},
   ["jose-elias-alvarez/null-ls.nvim"] = {
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "neovim/nvim-lspconfig",
-    },
-    config = require("custom.plugins.config.null_ls").setup(),
-  },
-  -- ["tbastos/vim-lua"] = { ft = "lua" },
-  ["lambdalisue/suda.vim"] = {},
-  ["reewr/vim-monokai-phoenix"] = {
-    cond = function()
-      return vim.env.LC_TERMINAL == "shelly"
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("custom.plugins.config.null_ls").setup()
     end,
   },
+  ["lambdalisue/suda.vim"] = {},
   ["antoinemadec/FixCursorHold.nvim"] = {},
-  ["machakann/vim-sandwich"] = {},
+  ["machakann/vim-sandwich"] = {
+    event = "InsertEnter",
+  },
   ["rcarriga/nvim-notify"] = {
     config = function()
       vim.notify = require "notify"
     end,
   },
   -- Switch between single-line and multiline forms of code
-  -- gS to split a one-liner into multiple lines
-  -- gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
+  -- <ESC>gS to split a one-liner into multiple lines
+  -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
-  ["vladdoster/remember.nvim"] = {
-    config = function()
-      require("remember").setup {}
-    end,
-  },
+  ["lukas-reineke/cmp-under-comparator"] = {},
+  -- ["vladdoster/remember.nvim"] = { config = function() require("remember").setup({}) end },
   ["sindrets/diffview.nvim"] = {
     requires = { "lewis6991/gitsigns.nvim" },
-    config = "require('custom.plugins.config.gitsigns').post()",
-    -- config = require("custom.plugins.config.gitsigns").post {},
+    config = function()
+      require("custom.plugins.config.gitsigns").post()
+    end,
+  },
+  ["reewr/vim-monokai-phoenix"] = {
+    cond = function()
+      return vim.env.LC_TERMINAL == "shelly"
+    end,
   },
 }
 
