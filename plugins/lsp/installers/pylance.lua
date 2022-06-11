@@ -140,14 +140,14 @@ local pylance_installer = function(ctx)
   -- local version = fetch("https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance"):map(parse_versions).value
   local version = ctx.requested_version:or_else_get(function()
     return github_client.fetch_latest_tag(repo)
-        :map(function(tag)
-          return tag.name
-        end)
-        :get_or_throw()
+      :map(function(tag)
+        return tag.name
+      end)
+      :get_or_throw()
   end)
   local url = (
-      "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
-      ):format(version)
+    "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
+  ):format(version)
   -- url = "http://domain/ms-python.vscode-pylance-2022.4.2.vsix"
   local headers = { ["Cookie"] = "Gallery-Service-UserIdentifier=9ee5cf1e-146b-429b-b3a3-b9a59cd5e3e6" }
   std.download_file(url, "archive.gz", headers)

@@ -16,7 +16,7 @@ local configs = {
     init_options = { documentFormatting = true, codeAction = false },
     Lua = {
       runtime = {
-        version = 'LuaJIT',
+        version = "LuaJIT",
       },
       diagnostics = {
         enable = true,
@@ -35,7 +35,7 @@ local configs = {
           "unused-local",
           "unused-vararg",
           "trailing-space",
-          "packer_plugins"
+          "packer_plugins",
         },
       },
       completion = {
@@ -45,10 +45,11 @@ local configs = {
       workspace = {
         -- ibrary = vim.api.nvim_get_runtime_file("", true),
         library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true },
+          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+        },
         preloadFileSize = 100000,
-        maxPreload = 10000
+        maxPreload = 10000,
       },
       telemetry = {
         enable = false,

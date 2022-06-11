@@ -17,7 +17,7 @@ local ensure_installed = {
 
 return {
   ensure_installed = (function()
-    _ = vim.fn.system("which gcc")
+    _ = vim.fn.system "which gcc"
     if vim.v.shell_error ~= 0 then
       return false
     else
