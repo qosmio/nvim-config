@@ -1,47 +1,51 @@
 local utils = require "custom.plugins.lsp.utils"
-local null_ls = require "null-ls"
-local b = null_ls.builtins
+
+local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+if not null_ls_status_ok then
+  return
+end
+
+local formatting = null_ls.builtins.formatting
+local diagnostics = null_ls.builtins.diagnostics
 
 local sources = {
   -- Javascript
-  b.formatting.prettierd,
+  formatting.prettierd,
 
   -- Lua
   -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
-  b.formatting.stylua,
+  formatting.stylua,
 
   -- Python
   -- pip install reorder-python-imports black yapf
-  b.formatting.reorder_python_imports,
-  b.formatting.black,
-  -- b.formatting.yapf,
+  formatting.reorder_python_imports,
+  formatting.black,
+  -- formatting.yapf,
 
   -- Nginx
   -- npm -g i nginxbeautifier
-  b.formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
+  formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
 
   -- PHP
   -- composer global require "squizlabs/php_codesniffer=*"
-  -- b.formatting.phpcbf,
-  -- b.diagnostics.php,
+  -- formatting.phpcbf,
+  -- diagnostics.php,
 
   -- C/Clang
-  -- b.formatting.clang_format,
+  -- formatting.clang_format,
 
   -- ZSH
-  b.diagnostics.zsh,
+  diagnostics.zsh,
 
   -- Bash
-  b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
+  diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
   -- go install mvdan.cc/sh/v3/cmd/shfmt@latest
-  b.formatting.shfmt.with {
-    runtime_condition = utils.common.has_exec "shfmt",
+  formatting.shfmt.with {
     extra_args = { "-i", "2", "-bn", "-ci", "-sr" },
   },
-  -- b.formatting.shellharden.with {
-  --   runtime_condition = utils.common.has_exec "shellharden",
-  --   extra_filetypes = { "zsh", "bash", "sh" },
-  -- },
+  formatting.shellharden.with {
+    extra_filetypes = { "zsh", "bash", "sh" },
+  },
 }
 
 local M = {}
