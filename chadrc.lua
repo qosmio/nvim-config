@@ -17,8 +17,8 @@ M.options = {
 ---- UI -----
 
 M.ui = {
-  -- hl_override = require "custom.highlights.monokai-phoenix",
-  hl_override = require "custom.highlights",
+  hl_override = require "custom.highlights.monokai-phoenix",
+  -- hl_override = require "custom.highlights",
   -- hl_override = require "custom.highlights.rcol",
   changed_themes = {
     onedark = require "custom.themes.onedark-deep",

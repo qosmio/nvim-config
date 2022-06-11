@@ -1,6 +1,9 @@
 local _, cmp = pcall(require, "cmp")
+local _, _comparator = pcall(require, "cmp-under-comparator")
 
-return {
+comparator = _comparator.under or nil
+
+local config = {
   style = {
     winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
   },
@@ -44,7 +47,7 @@ return {
       cmp.config.compare.offset,
       cmp.config.compare.exact,
       cmp.config.compare.score,
-      require("cmp-under-comparator").under,
+      comparator,
       cmp.config.compare.kind,
       cmp.config.compare.sort_text,
       cmp.config.compare.length,
@@ -53,3 +56,5 @@ return {
   },
   preselect = cmp.PreselectMode.Item,
 }
+
+return config
