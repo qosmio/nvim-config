@@ -7,27 +7,25 @@ M.remove = {
 }
 
 M.override = {
-  ["hrsh7th/nvim-cmp"] = require "custom.plugins.config.cmp",
   ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
   ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
   -- ["kyazdani42/nvim-tree.lua"] = require "custom.plugins.config.tree",
   ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
 }
 
+local present, _ = pcall(require, "cmp-under-comparator")
+if present then
+  table.insert(M.override, { ["hrsh7th/nvim-cmp"] = require "custom.plugins.config.cmp" })
+end
+
 M.user = {
   ["rmagatti/alternate-toggler"] = {
-    setup = function()
-      require("core.utils").packer_lazy_load "alternate-toggler"
-    end,
     config = function()
       vim.keymap.set("n", "<C-t>", "<cmd>ToggleAlternate<CR>")
     end,
   },
   ["nathom/filetype.nvim"] = {},
   ["github/copilot.vim"] = {
-    setup = function()
-      require("core.utils").packer_lazy_load "copilot.vim"
-    end,
     requires = "hrsh7th/nvim-cmp",
     after = { "which-key.nvim" },
     event = "InsertEnter",
@@ -46,10 +44,9 @@ M.user = {
   },
   ["folke/lua-dev.nvim"] = {
     requires = { "cmp-nvim-lsp" },
-    setup = function()
-      require("core.utils").packer_lazy_load "lua-dev.nvim"
+    config = function()
+      require("lua-dev").setup()
     end,
-    -- require("core.utils").packer_lazy_load "alternate-toggler"
     ft = { "lua" },
   },
   ["chr4/nginx.vim"] = { ft = "nginx" },
@@ -75,12 +72,17 @@ M.user = {
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
-  ["lukas-reineke/cmp-under-comparator"] = {},
-  -- ["vladdoster/remember.nvim"] = { config = function() require("remember").setup({}) end },
+  ["lukas-reineke/cmp-under-comparator"] = { before = { "nvim-cmp" } },
+  ["lewis6991/gitsigns.nvim"] = {
+    before = { "sindrets/diffview.nvim" },
+    config = function()
+      require "custom.plugins.config.gitsigns"
+    end,
+  },
   ["sindrets/diffview.nvim"] = {
     requires = { "lewis6991/gitsigns.nvim" },
     config = function()
-      require("custom.plugins.config.gitsigns").post()
+      require("custom.plugins.config.diffview").post()
     end,
   },
   ["reewr/vim-monokai-phoenix"] = {

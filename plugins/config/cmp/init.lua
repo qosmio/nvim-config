@@ -1,7 +1,14 @@
-local _, cmp = pcall(require, "cmp")
-local _, _comparator = pcall(require, "cmp-under-comparator")
+local present, cmp = pcall(require, "cmp")
 
-comparator = _comparator.under or nil
+if not present then
+   return
+end
+
+local _present, comparator = pcall(require, "cmp-under-comparator")
+
+if not _present then
+   return
+end
 
 local config = {
   style = {
