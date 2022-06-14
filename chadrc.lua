@@ -17,14 +17,13 @@ M.options = {
 ---- UI -----
 
 M.ui = {
-  -- hl_override = require "custom.highlights.monokai-phoenix",
+  hl_override = require "custom.highlights.monokai-phoenix",
   -- hl_override = require "custom.highlights",
-  hl_override = require "custom.highlights.rcol",
+  -- hl_override = require "custom.highlights.rcol",
   changed_themes = {
     onedark = require "custom.themes.onedark-deep",
   },
   theme = "onedark", -- default theme
-  -- theme = "rxyhn", --onedark-deep", -- default theme
   transparency = false,
 }
 

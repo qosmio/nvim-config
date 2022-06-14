@@ -41,10 +41,10 @@ return require("lua-dev").setup {
           callSnippet = "Replace",
         },
         workspace = {
-          -- library = vim.api.nvim_get_runtime_file("", true),
           library = {
             [vim.fn.expand "$VIMRUNTIME/lua"] = true,
             [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+            -- vim.api.nvim_get_runtime_file("", true)
           },
           preloadFileSize = 100000,
           maxPreload = 10000,

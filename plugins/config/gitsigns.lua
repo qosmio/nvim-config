@@ -1,11 +1,10 @@
-local present, gitsigns = pcall(require, "gitsigns")
+-- local present, gitsigns = pcall(require, "gitsigns")
+--
+-- if not present then
+--   return
+-- end
 
-if not present then
-  print "ASDF"
-  return
-end
-
-return gitsigns.setup {
+return {
   on_attach = function(bufnr)
     local gs = package.loaded.gitsigns
     local function map(mode, l, r, opts)
@@ -57,8 +56,18 @@ return gitsigns.setup {
   end,
   signs = {
     add = { hl = "GitSignsAdd", text = "", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-    change = { hl = "GitSignsChange", text = "", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-    delete = { hl = "GitSignsDelete", text = "", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
+    change = {
+      hl = "GitSignsChange",
+      text = "",
+      numhl = "GitSignsChangeNr",
+      linehl = "GitSignsChangeLn",
+    },
+    delete = {
+      hl = "GitSignsDelete",
+      text = "",
+      numhl = "GitSignsDeleteNr",
+      linehl = "GitSignsDeleteLn",
+    },
     topdelete = {
       hl = "GitSignsDelete",
       text = "",

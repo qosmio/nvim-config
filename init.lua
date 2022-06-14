@@ -5,7 +5,27 @@
 if vim.fn.has "mac" == 1 then
   vim.fn.setenv("CC", "gcc-11")
 end
-
+-- local M = {}
+--
+-- function M.clean(s)
+--   ---if s it not nil, strip leading and trailing whitespace
+--   if s == nil then
+--     return s
+--   end
+--   return s:match "^%s*(.-)%s*$"
+-- end
+--
+-- function M.check_vim_option(option, value)
+--   if opt[option] ~= nil then
+--     -- if M.clean(_value) == M.clean(value) then
+--     if value ~= opt[option]._value then
+--       print("opt." .. option .. " = " .. tostring(opt[option]._value) .. " -- " .. tostring(value))
+--     end
+--     -- print(string.format("%s=%s -- %s", option, opt[option]._value, value))
+--   end
+--   -- vim.cmd("set " .. option)
+--   -- end
+-- end
 -- require('custom.options')
 -- AUTOCMDS
 require "custom.autocmds"

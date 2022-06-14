@@ -1,131 +1,62 @@
 -- OPTIONS
 local opt = vim.opt
 
-opt.backupdir = "," .. os.getenv "HOME" .. "/.vim/backup//"
-opt.directory = os.getenv "HOME" .. "/.vim/swap//"
-opt.undodir = os.getenv "HOME" .. "/.vim/undo//"
-opt.undolevels = 5000
-opt.diffopt = opt.diffopt:append { "algorithm:patience" }
-opt.completeopt = "menu,menuone,preview,noselect"
-opt.pumheight = 6
-
+opt.backupdir = "," .. os.getenv "HOME" .. "/.vim/backup//" -- backup directory
+opt.directory = os.getenv "HOME" .. "/.vim/swap//" -- swap directory
+opt.undodir = os.getenv "HOME" .. "/.vim/undo//" -- for undo
+opt.undolevels = 5000 -- default is 1000
+opt.diffopt = opt.diffopt:append { "algorithm:patience" } -- algorithm for diff
+opt.completeopt = "menu,menuone,preview,noselect" -- default is "menuone,preview"
+opt.pumheight = 6 -- number of lines to display in the popup menu
 -- opt.spell = true
-opt.spelllang = { "en_us" }
+-- opt.spelllang = { "en_us" } -- languages to use for spell checking
+opt.foldmethod = "expr" -- use expression defined in `opt.foldexpr` for folding
+opt.foldexpr = "nvim_treesitter#foldexpr()" -- fold expression (requires nvim_treesitter)
+opt.breakindent = true -- indent lines after a break
+opt.linebreak = true -- break lines after a character
+opt.updatetime = 550 -- update the file info every 550ms
+opt.timeoutlen = 400 -- timeout length for commands
+opt.textwidth = 120 -- text width for the editor
+opt.relativenumber = false -- true to show relative line numbers
+opt.cursorlineopt = "both" -- number the lines from the cursor
+opt.tabstop = 2 -- number of spaces in a tab
+opt.shiftwidth = 0 -- number of spaces to shift
+opt.conceallevel = 3 -- number of concealed characters
+opt.switchbuf = "useopen" -- useopen, useall, useallfile, usealltabs
+opt.viewoptions = "cursor,folds,slash,unix" -- options for the view
+vim.cmd "set listchars=tab:╍╍,nbsp:_,trail:·"
+opt.list = false -- show a list of files in the buffer
+opt.scrolloff = 10 -- number of lines to scroll
+opt.wrap = true -- wrap lines, if possible (not on a terminal)
+opt.fixendofline = true -- fix end of line characters
+-- vim.opt.characters for after foldtext, eof, foldcolumn
+opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff: ,eob: "
 
 -- MatchUp
-vim.g.matchup_matchparen_deferred = 1
-vim.g.matchup_mappings_enabled = 1
-vim.g.matchup_override_vimtex = 1
+vim.g.matchup_matchparen_deferred = 1 -- defer the matchparen highlighting
+vim.g.matchup_mappings_enabled = 1 -- enable the mappings
+vim.g.matchup_override_vimtex = 1 -- override vimtex
 
 -- Fix common typo commands
---
 vim.cmd "command! -nargs=* W w"
 vim.cmd "command! -nargs=* Wq wq"
 vim.cmd "command! -nargs=* WQ wq"
 vim.cmd "command! -nargs=* Q q"
 vim.cmd "command! -nargs=* Qa qa"
 vim.cmd "command! -nargs=* QA qa"
-vim.g.redrawtime = 50
 
+-- Misc
+vim.g.redrawtime = 500 -- redraw the screen every 500ms
+
+-- Cleanup shadafile
 vim.schedule(function()
   opt.shadafile = vim.fn.expand "$HOME" .. "/.local/share/nvim/shada/main.shada"
   vim.cmd [[ silent! rsh ]]
 end)
 
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-local M = {}
-
-function M.clean(s)
-  ---if s it not nil, strip leading and trailing whitespace
-  if s == nil then
-    return s
-  end
-  return s:match "^%s*(.-)%s*$"
+if os.getenv "LC_TERMINAL" == "iTerm2" then
+  vim.cmd [[
+  let &t_ti.="\<Esc>]1337;HighlightCursorLine=true\x7"
+  let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
+]]
 end
-
-function M.check_vim_option(option, value)
-  if opt[option] ~= nil then
-    -- if M.clean(_value) == M.clean(value) then
-    if value ~= opt[option]._value then
-      print("opt." .. option .. " = " .. tostring(opt[option]._value) .. " -- " .. tostring(value))
-    end
-    -- print(string.format("%s=%s -- %s", option, opt[option]._value, value))
-  end
-  -- vim.cmd("set " .. option)
-  -- end
-end
-
--- M.check_vim_option("completeopt", "menuone,noselect,menu")
--- M.check_vim_option("modeline", true)
--- M.check_vim_option("signcolumn", "yes")
--- M.check_vim_option("breakindent", true)
--- M.check_vim_option("formatoptions", "l")
--- M.check_vim_option("linebreak", true)
--- M.check_vim_option("laststatus", 3)
--- M.check_vim_option("showmode", false)
--- M.check_vim_option("updatetime", 4000)
--- M.check_vim_option("termguicolors", true)
--- M.check_vim_option("timeoutlen", 1000)
--- M.check_vim_option("textwidth", 120)
--- M.check_vim_option("relativenumber", true)
--- M.check_vim_option("cursorlineopt", "number")
--- M.check_vim_option("number", true)
--- M.check_vim_option("backspace", "indent,eol,start")
--- M.check_vim_option("tabstop", 2)
--- M.check_vim_option("softtabstop", 0)
--- M.check_vim_option("expandtab", true)
--- M.check_vim_option("shiftwidth", 0)
--- M.check_vim_option("smarttab", true)
--- M.check_vim_option("splitbelow", true)
--- M.check_vim_option("splitright", true)
--- M.check_vim_option("foldlevel", 99)
--- M.check_vim_option("foldmethod", "expr")
--- M.check_vim_option("foldexpr", "nvim_treesitter#foldexpr()")
--- M.check_vim_option("autoread", true)
--- M.check_vim_option("undodir", 'vim.fn.expand("~/.cache/nvim/undodir")')
--- M.check_vim_option("hidden", true)
--- --M.check_vim_option('shortmess:append("c")','')
--- M.check_vim_option("ignorecase", true)
--- M.check_vim_option("smartcase", true)
--- M.check_vim_option("conceallevel", 3)
--- M.check_vim_option("mouse", "a")
--- M.check_vim_option("inccommand", "nosplit")
--- M.check_vim_option("fillchars", "fold: ,foldclose:,foldopen:,foldsep: ,diff: ,eob: ")
--- M.check_vim_option("switchbuf", "useopen")
--- M.check_vim_option("viewoptions", "cursor,folds,slash,unix")
--- M.check_vim_option("list", false)
--- M.check_vim_option("scrolloff", 10)
--- M.check_vim_option("pyxversion", 3)
--- M.check_vim_option("wrap", false)
--- M.check_vim_option("diffopt", "internal,filler,closeoff,algorithm:patience")
--- M.check_vim_option("fixendofline", false)
--- M.check_vim_option("regexpengine", 0)
-opt.breakindent = true
-opt.linebreak = true
-opt.updatetime = 550
-opt.timeoutlen = 400
-opt.textwidth = 120
-opt.relativenumber = false -- true
-opt.cursorlineopt = "both" -- number
-opt.tabstop = 2
-opt.shiftwidth = 0
--- opt.foldlevel = 0 -- 99
-opt.conceallevel = 3
---opt.fillchars="fold:,foldclose:,foldopen:,foldsep:,diff:,eob:"
-opt.switchbuf = useopen -- useopen
-opt.viewoptions = "cursor,folds,slash,unix"
-vim.cmd "set listchars=tab:╍╍,nbsp:_,trail:·"
-opt.list = false
-opt.scrolloff = 10
-opt.wrap = true
-opt.fixendofline = true
--- Preview changes when using search and replace
--- vim.opt.characters for after foldtext, eof, foldcolumn
-opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff: ,eob: "
--- if os.getenv "LC_TERMINAL" == "iTerm2" then
---   vim.cmd [[
---   let &t_ti.="\<Esc>]1337;HighlightCursorLine=true\x7"
---   let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
--- ]]
--- end
