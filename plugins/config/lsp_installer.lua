@@ -4,6 +4,7 @@ local ensure_installed = {
   "jsonls",
   "pylance",
   "bashls",
+  "gopls",
   "yamlls",
   "diagnosticls",
 }

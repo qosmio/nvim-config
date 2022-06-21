@@ -7,6 +7,7 @@ local ft_aucmd = function(pattern, ft)
   )
 end
 
+-- nginx filetype
 ft_aucmd({
   "*.nginx",
   "nginx*.conf",
@@ -15,6 +16,16 @@ ft_aucmd({
   "*/usr/local/nginx/conf/*",
   "*/nginx/*.conf",
 }, "nginx")
+
+-- go template filetype
+ft_aucmd({
+  "*.tmpl",
+}, "gotexttmpl")
+
+-- Dockerfile filetype
+ft_aucmd({
+  "Dockerfile*",
+}, "dockerfile")
 
 local function init_term()
   vim.wo.number = false

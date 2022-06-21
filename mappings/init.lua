@@ -5,6 +5,7 @@ local M = {}
 -- don't yank text on delete ( dd )
 -- map({ "n", "v" }, "d", '"_d')
 M.disabled = {
+  n = { ["sr"] = "", ["sd"] = "" },
   i = {
     -- go to  beginning and end
     ["<C-b>"] = "",
@@ -19,10 +20,14 @@ M.disabled = {
 
 M.misc = {
   n = {
+    ["d"] = { '"_d' },
+    ["x"] = { '"_x' },
     ["<C-o>"] = { "<cmd> TSHighlightCapturesUnderCursor <CR>", " Show Highlight Group" },
   },
   v = {
-    ["d"] = { '"_d', "蘒  delete" },
+    ["d"] = { '"_d' },
+    ["x"] = { '"_x' },
+    ["c"] = { '"_dP' },
   },
 }
 

@@ -1,8 +1,12 @@
 local M = {}
 
 function M.post()
-  local cb = require("diffview.config").diffview_callback
-  require("diffview").setup {
+  local _present, diffview = pcall(require, "diffview.config")
+  if not _present then
+    return
+  end
+  cb = diffview.diffview_callback
+  diffview.setup {
     diff_binaries = false, -- Show diffs for binaries
     file_panel = {
       win_config = {

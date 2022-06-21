@@ -54,6 +54,7 @@ M.user = {
   ["lukas-reineke/cmp-under-comparator"] = { before = { "nvim-cmp" } },
   ["sindrets/diffview.nvim"] = {
     requires = { "lewis6991/gitsigns.nvim" },
+    after = { "plenary.nvim" },
     config = function()
       require("custom.plugins.config.diffview").post()
     end,
@@ -68,16 +69,26 @@ M.user = {
     event = "InsertEnter",
     config = function()
       vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
-      -- local opts = { silent = true, expr = true }
-      -- local map = vim.keymap.set
-      -- map("i", "<c-j>", "copilot#Accept()", opts)
-      -- map("i", "<c-k>", "copilot#Previous()", opts)
-      -- map("i", "<c-z>", "copilot#Next()", opts)
       vim.g.copilot_no_tab_map = true
       vim.g.copilot_assume_mapped = true
       -- vim.g.copilot_tab_fallback = ""
     end,
   },
+  -- ["gbprod/yanky.nvim"] = {
+  --   config = require("custom.plugins.config.yanky").config,
+  -- },
+  -- ["gbprod/cutlass.nvim"] = {
+  --   -- config = function()
+  --   --   require("custom.plugins.config.cutlass").setup { cut_key = "X", override_del = true }
+  --   -- end,
+  -- },
+  -- ["ray-x/go.nvim"] = {
+  --   requires = { "ray-x/guihua.lua" },
+  --   -- ft = { "go", "gohtmltmpl" },
+  --   config = function()
+  --     require("custom.plugins.config.go_nvim").setup()
+  --   end,
+  -- },
 }
 
 return M
