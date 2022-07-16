@@ -41,9 +41,7 @@ local sources = {
   formatting.shfmt.with {
     extra_args = { "-i", "2", "-bn", "-ci", "-sr" },
   },
-  formatting.shellharden.with {
-    extra_filetypes = { "zsh", "bash", "sh" },
-  },
+  -- formatting.shellharden.with { extra_filetypes = { "zsh", "bash", "sh" }, },
 }
 
 local M = {}
