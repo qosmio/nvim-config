@@ -19,8 +19,8 @@ opt.timeoutlen = 400 -- timeout length for commands
 opt.textwidth = 120 -- text width for the editor
 opt.relativenumber = false -- true to show relative line numbers
 opt.cursorlineopt = "both" -- number the lines from the cursor
--- opt.tabstop = 2 -- number of spaces in a tab
--- opt.shiftwidth = 0 -- number of spaces to shift
+opt.tabstop = 2 -- number of spaces in a tab
+opt.shiftwidth = 0 -- number of spaces to shift
 opt.conceallevel = 3 -- number of concealed characters
 opt.switchbuf = "useopen" -- useopen, useall, useallfile, usealltabs
 opt.viewoptions = "cursor,folds,slash,unix" -- options for the view
@@ -47,6 +47,20 @@ vim.cmd "command! -nargs=* QA qa"
 
 -- Misc
 vim.g.redrawtime = 500 -- redraw the screen every 500ms
+
+-- Text behaviour
+-- opt.formatoptions = opt.formatoptions
+--                    - 't'    -- auto-wrap text using textwidth
+--                    + 'c'    -- auto-wrap comments using textwidth
+--                    + 'r'    -- auto insert comment leader on pressing enter
+--                    - 'o'    -- don't insert comment leader on pressing o
+--                    + 'q'    -- format comments with gq
+--                    - 'a'    -- don't autoformat the paragraphs (use some formatter instead)
+--                    + 'n'    -- autoformat numbered list
+--                    - '2'    -- I am a programmer and not a writer
+--                    + 'j'    -- Join comments smartly
+opt.formatoptions = "crqnj"
+opt.joinspaces = false
 
 -- Cleanup shadafile
 vim.schedule(function()

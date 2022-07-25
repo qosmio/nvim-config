@@ -5,7 +5,7 @@ function M.post()
   if not _present then
     return
   end
-  cb = diffview.diffview_callback
+  local cb = diffview.diffview_callback
   diffview.setup {
     diff_binaries = false, -- Show diffs for binaries
     file_panel = {

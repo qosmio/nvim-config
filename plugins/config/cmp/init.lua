@@ -42,7 +42,6 @@ local config = {
     ghost_text = true,
   },
   sources = {
-    -- { name = "copilot" },
     { name = "path" },
     { name = "luasnip" },
     { name = "buffer" },

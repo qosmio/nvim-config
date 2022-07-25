@@ -24,15 +24,6 @@ local configs = {
     utils.common.on_attach(client, bufnr)
   end,
   capabilities = capabilities,
-  -- settings     = {
-  --   python = {
-  --     analysis = {
-  --       typeCheckingMode       = 'basic',
-  --       completeFunctionParens = true,
-  --       indexing               = false
-  --     }
-  --   }
-  -- },
   before_init = function(_, config)
     local stub_path = require("lspconfig/util").path.join(
       vim.fn.stdpath "data",

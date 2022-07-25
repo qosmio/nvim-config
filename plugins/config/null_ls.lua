@@ -7,6 +7,10 @@ local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 
 local sources = {
+  -- SQL
+  -- diagnostics.sqlfluff.with { extra_args = { "--dialect", "postgres" } },
+  formatting.sqlfluff.with { extra_args = { "--dialect", "sqlite" } },
+
   -- Javascript
   formatting.prettierd,
 
