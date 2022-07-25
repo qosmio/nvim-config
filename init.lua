@@ -26,7 +26,8 @@ end
 --   -- vim.cmd("set " .. option)
 --   -- end
 -- end
--- require('custom.options')
+-- local M = require "custom.plugins.lsp.servers"
+require "custom.options"
 -- AUTOCMDS
 require "custom.autocmds"
 local present, ft = pcall(require, "Comment.ft")

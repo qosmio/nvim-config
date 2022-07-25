@@ -2,10 +2,6 @@ local M = {}
 
 M.options = {
 
-  user = function()
-    require "custom.options"
-  end,
-
   -- NvChad options
   nvChad = {
     -- updater
@@ -17,9 +13,10 @@ M.options = {
 ---- UI -----
 
 M.ui = {
-  hl_override = require "custom.highlights.monokai-phoenix",
-  -- hl_override = require "custom.highlights",
-  -- hl_override = require "custom.highlights.rcol",
+  -- hl_override = require "custom.highlights.monokai-phoenix",
+  -- hl_add = require "custom.highlights.monokai-phoenix",
+  hl_override = require "custom.highlights.hl_override",
+  hl_add = require "custom.highlights.hl_add",
   changed_themes = {
     onedark = require "custom.themes.onedark-deep",
   },

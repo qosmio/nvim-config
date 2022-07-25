@@ -3,7 +3,6 @@ local util = require "lspconfig.util"
 local server = require "nvim-lsp-installer.server"
 local path = require "nvim-lsp-installer.path"
 local configs = require "lspconfig.configs"
-local github = require "nvim-lsp-installer.core.managers.github"
 local github_client = require "nvim-lsp-installer.core.managers.github.client"
 local std = require "nvim-lsp-installer.core.managers.std"
 local server_name = "vscode-home-assistant"
@@ -21,15 +20,15 @@ local on_workspace_executecommand = function(err, actions, ctx)
 end
 
 local hass_handlers = {
-  ["workspace/diagnostic/refresh"] = on_workspace_executecommand
+  ["workspace/diagnostic/refresh"] = on_workspace_executecommand,
 }
- 
+
 local random = math.random
 local function uuid()
-  local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-  return string.gsub(template, '[xy]', function(c)
-    local v = (c == 'x') and random(0, 0xf) or random(8, 0xb)
-    return string.format('%x', v)
+  local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+  return string.gsub(template, "[xy]", function(c)
+    local v = (c == "x") and random(0, 0xf) or random(8, 0xb)
+    return string.format("%x", v)
   end)
 end
 
@@ -41,7 +40,7 @@ configs[server_name] = {
     -- single_file_support = true,
     settings = {},
     handlers = hass_handlers,
-  }
+  },
 }
 
 local root_dir = server.get_server_root_path(server_name)
@@ -55,16 +54,16 @@ local custom_server = server.Server:new {
     local repo = "keesschollaart81/vscode-home-assistant"
     local version = ctx.requested_version:or_else_get(function()
       return github_client.fetch_latest_tag(repo)
-          :map(function(tag)
-            return tag.name
-          end)
-          :get_or_throw()
+        :map(function(tag)
+          return tag.name
+        end)
+        :get_or_throw()
     end)
     -- strip all alpha characters from version
     version = version:gsub("[^%d.]", "")
     local url = (
-        "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/keesschollaart/vsextensions/vscode-home-assistant/%s/vspackage"
-        ):format(version)
+      "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/keesschollaart/vsextensions/vscode-home-assistant/%s/vspackage"
+    ):format(version)
     local headers = { ["Cookie"] = ("Gallery-Service-UserIdentifier=%s"):format(uuid) }
     std.download_file(url, "archive.gz", headers)
     std.gunzip("archive.gz", ".")

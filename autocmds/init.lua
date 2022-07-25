@@ -1,6 +1,8 @@
 local aucmd = vim.api.nvim_create_autocmd
 
-local ft_aucmd = function(pattern, ft)
+local M = {}
+
+function M.ft_aucmd(pattern, ft)
   aucmd(
     { "BufRead", "BufNewFile", "BufWinEnter" },
     { pattern = pattern, command = [[set ft=]] .. ft, once = false }
@@ -8,7 +10,7 @@ local ft_aucmd = function(pattern, ft)
 end
 
 -- nginx filetype
-ft_aucmd({
+M.ft_aucmd({
   "*.nginx",
   "nginx*.conf",
   "*nginx.conf",
@@ -18,12 +20,12 @@ ft_aucmd({
 }, "nginx")
 
 -- go template filetype
-ft_aucmd({
+M.ft_aucmd({
   "*.tmpl",
 }, "gotexttmpl")
 
 -- Dockerfile filetype
-ft_aucmd({
+M.ft_aucmd({
   "Dockerfile*",
 }, "dockerfile")
 
@@ -79,7 +81,7 @@ vim.api.nvim_create_autocmd(
 -- vim.api.nvim_create_autocmd("InsertLeave", { command = "silent! set nopaste" })
 -- -- }}}
 
--- go to last position when opening a buffer {{{
+-- remember and go to last position when opening a buffer {{{
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
   group = vim.api.nvim_create_augroup("LastPosition", { clear = true }),
   callback = function()
@@ -95,7 +97,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
 -- }}}
 
 -- wrapping for txt {{{
-local function setupWrapping()
+M.setupWrapping = function()
   vim.w.wrap = true
   vim.bo.wm = 2
   vim.bo.textwidth = 79
@@ -104,7 +106,7 @@ end
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt" },
   callback = function()
-    vim.schedule(setupWrapping)
+    vim.schedule(M.setupWrapping)
   end,
 })
 -- }}}
@@ -181,7 +183,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 -------- This function is taken from https://github.com/norcalli/nvim_utils
 local vim = vim
 local api = vim.api
-local M = {}
 function M.nvim_create_augroups(definitions)
   for _group_name, definition in pairs(definitions) do
     api.nvim_command("augroup " .. _group_name)
@@ -196,8 +197,11 @@ end
 
 local autoCommands = {
   -- other autocommands
-  open_folds = {
-    { "BufReadPost,FileReadPost", "*", "normal zR" },
+    remember_folds = {
+    -- { 'BufWinLeave', '*.*', ':mkview<CR>' },
+    -- { 'BufWinEnter', '*.*', ':silent! loadview<CR>' },
+    { 'BufWinLeave', '?*', 'mkview 1' },
+    { 'BufWinEnter', '?*', 'silent! loadview 1' },
   },
 }
 M.nvim_create_augroups(autoCommands)

@@ -19,11 +19,15 @@ if present then
 end
 
 M.user = {
+  ["neovim/nvim-lspconfig"] = {
+    config = function()
+      require "plugins.configs.lspconfig"
+      require("custom.plugins.lsp").setup_lsp()
+    end,
+  },
+
   ["folke/lua-dev.nvim"] = {
     requires = { "cmp-nvim-lsp" },
-    -- config = function()
-    --   require("lua-dev").setup()
-    -- end,
     ft = { "lua" },
   },
   ["rmagatti/alternate-toggler"] = {},
@@ -74,21 +78,6 @@ M.user = {
       -- vim.g.copilot_tab_fallback = ""
     end,
   },
-  -- ["gbprod/yanky.nvim"] = {
-  --   config = require("custom.plugins.config.yanky").config,
-  -- },
-  -- ["gbprod/cutlass.nvim"] = {
-  --   -- config = function()
-  --   --   require("custom.plugins.config.cutlass").setup { cut_key = "X", override_del = true }
-  --   -- end,
-  -- },
-  -- ["ray-x/go.nvim"] = {
-  --   requires = { "ray-x/guihua.lua" },
-  --   -- ft = { "go", "gohtmltmpl" },
-  --   config = function()
-  --     require("custom.plugins.config.go_nvim").setup()
-  --   end,
-  -- },
 }
 
 return M
