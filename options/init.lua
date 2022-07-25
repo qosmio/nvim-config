@@ -1,9 +1,9 @@
 -- OPTIONS
 local opt = vim.opt
 
-opt.backupdir = "," .. os.getenv "HOME" .. "/.vim/backup//" -- backup directory
-opt.directory = os.getenv "HOME" .. "/.vim/swap//" -- swap directory
-opt.undodir = os.getenv "HOME" .. "/.vim/undo//" -- for undo
+opt.backupdir = "," .. os.getenv "HOME" .. "/.nvim/backup//" -- backup directory
+opt.directory = os.getenv "HOME" .. "/.nvim/swap//" -- swap directory
+opt.undodir = os.getenv "HOME" .. "/.nvim/undo//" -- for undo
 opt.undolevels = 5000 -- default is 1000
 opt.diffopt = opt.diffopt:append { "algorithm:patience" } -- algorithm for diff
 opt.completeopt = "menu,menuone,preview,noselect" -- default is "menuone,preview"
@@ -21,7 +21,7 @@ opt.relativenumber = false -- true to show relative line numbers
 opt.cursorlineopt = "both" -- number the lines from the cursor
 opt.tabstop = 2 -- number of spaces in a tab
 opt.shiftwidth = 0 -- number of spaces to shift
-opt.conceallevel = 3 -- number of concealed characters
+-- opt.conceallevel = 3 -- number of concealed characters
 opt.switchbuf = "useopen" -- useopen, useall, useallfile, usealltabs
 opt.viewoptions = "cursor,folds,slash,unix" -- options for the view
 vim.cmd "set listchars=tab:╍╍,nbsp:_,trail:·"
@@ -44,9 +44,12 @@ vim.cmd "command! -nargs=* WQ wq"
 vim.cmd "command! -nargs=* Q q"
 vim.cmd "command! -nargs=* Qa qa"
 vim.cmd "command! -nargs=* QA qa"
+vim.cmd "command! -nargs=* Wqa wqa"
+vim.cmd "command! -nargs=* WQa wqa"
+vim.cmd "command! -nargs=* WQA wqa"
 
 -- Misc
-vim.g.redrawtime = 500 -- redraw the screen every 500ms
+-- vim.g.redrawtime = 500 -- redraw the screen every 500ms
 
 -- Text behaviour
 -- opt.formatoptions = opt.formatoptions
