@@ -1,11 +1,13 @@
 local utils = require "custom.plugins.lsp.utils"
+-- local registry = require "mason-registry"
 local lspinstaller = require "nvim-lsp-installer"
 local lspconfig = require "lspconfig"
 
-lspinstaller.setup {}
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
+lspinstaller.setup {}
+
+-- for _, server in ipairs(registry.get_installed_packages()) do
 for _, server in ipairs(lspinstaller.get_installed_servers()) do
   local ok, res = pcall(require, "custom.plugins.lsp.servers." .. server.name)
   if ok then

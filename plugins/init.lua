@@ -3,14 +3,14 @@ local M = {}
 M.remove = {
   "max397574/better-escape.nvim",
   "goolord/alpha-nvim",
-  "windwp/nvim-autopairs",
+  -- "windwp/nvim-autopairs",
+  "williamboman/mason",
 }
 
 M.override = {
   ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
   ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
   ["lewis6991/gitsigns.nvim"] = require "custom.plugins.config.gitsigns",
-  ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
 }
 
 local present, _ = pcall(require, "cmp-under-comparator")
@@ -19,13 +19,14 @@ if present then
 end
 
 M.user = {
+  ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
+  -- ["williamboman/mason-lspconfig.nvim"] = {},
   ["neovim/nvim-lspconfig"] = {
     config = function()
       require "plugins.configs.lspconfig"
       require("custom.plugins.lsp").setup_lsp()
     end,
   },
-
   ["folke/lua-dev.nvim"] = {
     requires = { "cmp-nvim-lsp" },
     ft = { "lua" },
@@ -42,7 +43,7 @@ M.user = {
     end,
   },
   ["lambdalisue/suda.vim"] = {},
-  ["antoinemadec/FixCursorHold.nvim"] = {},
+  -- ["antoinemadec/FixCursorHold.nvim"] = {},
   ["machakann/vim-sandwich"] = {
     event = "InsertEnter",
   },
@@ -56,13 +57,13 @@ M.user = {
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
   ["lukas-reineke/cmp-under-comparator"] = { before = { "nvim-cmp" } },
-  ["sindrets/diffview.nvim"] = {
-    requires = { "lewis6991/gitsigns.nvim" },
-    after = { "plenary.nvim" },
-    config = function()
-      require("custom.plugins.config.diffview").post()
-    end,
-  },
+  -- ["sindrets/diffview.nvim"] = {
+  --   requires = { "lewis6991/gitsigns.nvim" },
+  --   after = { "plenary.nvim" },
+  --   config = function()
+  --     require("custom.plugins.config.diffview").post()
+  --   end,
+  -- },
   ["reewr/vim-monokai-phoenix"] = {
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
@@ -71,14 +72,14 @@ M.user = {
   ["github/copilot.vim"] = {
     requires = { "hrsh7th/nvim-cmp" },
     event = "InsertEnter",
-    config = function()
+    setup = function()
       vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
       vim.g.copilot_no_tab_map = true
       vim.g.copilot_assume_mapped = true
-      -- vim.g.copilot_tab_fallback = ""
+      vim.g.copilot_tab_fallback = ""
     end,
   },
-  ["hashivim/vim-terraform"] = { ft = { "tf", "terraform" } },
+  -- ["hashivim/vim-terraform"] = { ft = { "tf", "terraform" } },
 }
 
 return M

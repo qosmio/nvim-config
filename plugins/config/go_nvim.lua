@@ -4,7 +4,6 @@ M.setup = function()
   if not present then
     return
   end
-  print(vim.inspect(path))
   local install_root_dir = path.concat { vim.fn.stdpath "data", "lsp_servers" }
   local _present, go = pcall(require, "go")
   if not _present then
