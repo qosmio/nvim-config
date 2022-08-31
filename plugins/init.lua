@@ -69,16 +69,16 @@ M.user = {
       return vim.env.LC_TERMINAL == "shelly"
     end,
   },
-  ["github/copilot.vim"] = {
-    requires = { "hrsh7th/nvim-cmp" },
-    event = "InsertEnter",
-    setup = function()
-      vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_assume_mapped = true
-      vim.g.copilot_tab_fallback = ""
-    end,
-  },
+  -- ["github/copilot.vim"] = {
+  --   requires = { "hrsh7th/nvim-cmp" },
+  --   event = "InsertEnter",
+  --   setup = function()
+  --     vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
+  --     vim.g.copilot_no_tab_map = true
+  --     vim.g.copilot_assume_mapped = true
+  --     vim.g.copilot_tab_fallback = ""
+  --   end,
+  -- },
   -- ["hashivim/vim-terraform"] = { ft = { "tf", "terraform" } },
 }
 

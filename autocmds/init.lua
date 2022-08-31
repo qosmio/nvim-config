@@ -18,6 +18,11 @@ function M.syn_aucmd(pattern, syn)
   )
 end
 
+-- Plist
+M.ft_aucmd({
+  "*.plist",
+}, "xml")
+
 -- Terraform filetype
 M.ft_aucmd({
   "*.tf",
