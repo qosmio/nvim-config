@@ -79,25 +79,25 @@ M.lsp = {
 }
 local opts = { silent = true, nowait = true, expr = true }
 
-M.copilot = {
-  i = {
-    ["<C-j>"] = {
-      "copilot#Accept()",
-      "Accept",
-      opts = opts,
-    },
-    ["<C-k>"] = {
-      "copilot#Next()",
-      "Next",
-      opts = opts,
-    },
-    ["<C-z>"] = {
-      "Copilot#Previous()",
-      "Previous",
-      opts = opts,
-    },
-  },
-}
+-- M.copilot = {
+--   i = {
+--     ["<C-j>"] = {
+--       "copilot#Accept()",
+--       "Accept",
+--       opts = opts,
+--     },
+--     ["<C-k>"] = {
+--       "copilot#Next()",
+--       "Next",
+--       opts = opts,
+--     },
+--     ["<C-z>"] = {
+--       "Copilot#Previous()",
+--       "Previous",
+--       opts = opts,
+--     },
+--   },
+-- }
 
 M.toggle_alternate = {
   n = {
