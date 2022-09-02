@@ -3,7 +3,6 @@ local M = {}
 M.remove = {
   "max397574/better-escape.nvim",
   "goolord/alpha-nvim",
-  -- "windwp/nvim-autopairs",
   "williamboman/mason",
 }
 
@@ -11,6 +10,7 @@ M.override = {
   ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
   ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
   ["lewis6991/gitsigns.nvim"] = require "custom.plugins.config.gitsigns",
+  -- ["lukas-reineke/indent-blankline.nvim"] = require "custom.plugins.config.indent_blankline",
 }
 
 local present, _ = pcall(require, "cmp-under-comparator")
@@ -19,12 +19,24 @@ if present then
 end
 
 M.user = {
-  ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
-  -- ["williamboman/mason-lspconfig.nvim"] = {},
+  ["folke/which-key.nvim"] = { disable = false },
+  ["qosmio/nvim-lsp-installer"] = {
+    setup = function()
+      require("core.lazy_load").on_file_open "nvim-lsp-installer"
+      -- reload the current file so lsp actually starts for it
+      vim.defer_fn(function()
+        vim.cmd 'if &ft == "packer" | echo "" | else | silent! e %'
+      end, 0)
+    end,
+  },
   ["neovim/nvim-lspconfig"] = {
+    setup = function()
+      require("core.lazy_load").on_file_open "nvim-lspconfig"
+    end,
     config = function()
       require "plugins.configs.lspconfig"
-      require("custom.plugins.lsp").setup_lsp()
+      require "custom.plugins.config.lsp_installer"
+      require "custom.plugins.lsp".setup_lsp()
     end,
   },
   ["folke/lua-dev.nvim"] = {
@@ -43,7 +55,6 @@ M.user = {
     end,
   },
   ["lambdalisue/suda.vim"] = {},
-  -- ["antoinemadec/FixCursorHold.nvim"] = {},
   ["machakann/vim-sandwich"] = {
     event = "InsertEnter",
   },
@@ -69,17 +80,25 @@ M.user = {
       return vim.env.LC_TERMINAL == "shelly"
     end,
   },
-  ["github/copilot.vim"] = {
-    requires = { "hrsh7th/nvim-cmp" },
-    event = "InsertEnter",
-    setup = function()
-      vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_assume_mapped = true
-      vim.g.copilot_tab_fallback = ""
-    end,
-  },
+  -- ["github/copilot.vim"] = {
+  --   requires = { "hrsh7th/nvim-cmp" },
+  --   event = "InsertEnter",
+  --   setup = function()
+  --     vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
+  --     vim.g.copilot_no_tab_map = true
+  --     vim.g.copilot_assume_mapped = true
+  --     vim.g.copilot_tab_fallback = ""
+  --   end,
+  -- },
   -- ["hashivim/vim-terraform"] = { ft = { "tf", "terraform" } },
+  -- ["anuvyklack/pretty-fold.nvim"] = {
+  --   config = function()
+  --     -- require("pretty-fold").setup(function()
+  --     require "custom.plugins.config.pretty_fold"
+  --     -- end)
+  --   end,
+  --   --config = require "custom.plugins.config.pretty_fold",
+  -- },
 }
 
 return M

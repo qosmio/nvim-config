@@ -132,7 +132,8 @@ return {
     ctermbg = 233,
   },
   SpecialKey = {
-    fg = "#49483E",
+    fg = "#E6DB74",
+    -- fg = "#49483E",
     bg = "NONE",
     ctermfg = 59,
     ctermbg = "NONE",
@@ -216,9 +217,9 @@ return {
     ctermbg = 59,
   },
   MatchParen = {
-    fg = "#f43753",
-    bg = "#333333",
-    ctermfg = 203,
+    fg = "#000000",
+    bg = "#FD971F",
+    ctermfg = 208,
     ctermbg = "NONE",
     bold = true,
   },
