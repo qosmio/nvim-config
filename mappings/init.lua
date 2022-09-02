@@ -33,15 +33,48 @@ M.misc = {
 
 M.lsp = {
   n = {
-    ["<leader>lw"] = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", "Add Workspace" },
+    ["<leader>lw"] = {
+      function()
+        vim.lsp.buf.add_workspace_folder {}
+      end,
+      "Add Workspace",
+    },
     ["<leader>lW"] = {
-      "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
+      function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+      end,
       "List Workspaces",
     },
-    ["<leader>lt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Type Definition" },
-    ["<leader>lr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
-    ["<leader>lo"] = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", "Loc List" },
-    ["<leader>ll"] = { "<cmd>lua vim.lsp.buf.format() <CR>", "Format" },
+    ["<leader>lt"] = {
+      function()
+        vim.lsp.buf.type_definition {}
+      end,
+      "Type Definition",
+    },
+    ["<leader>lr"] = {
+      function()
+        vim.lsp.buf.rename {}
+      end,
+      "Rename",
+    },
+    ["<leader>lo"] = {
+      function()
+        vim.lsp.diagnostic.setloclist {}
+      end,
+      "Loc List",
+    },
+    ["<leader>ll"] = {
+      function()
+        vim.lsp.buf.format {}
+      end,
+      "Format code",
+    },
+    ["<leader>lk"] = {
+      function()
+        vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line "$", 0 })
+      end,
+      "Format code",
+    },
   },
 }
 -- local opts = { silent = true, nowait = true, expr = true }

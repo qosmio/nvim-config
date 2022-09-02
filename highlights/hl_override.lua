@@ -20,7 +20,7 @@ return {
     fg = "#66D9EF",
   },
   Cursor = {
-    bg = "#F8F8F2",
+    bg = "#08F8F2",
     ctermbg = 15,
     ctermfg = 233,
     fg = "#000000",
@@ -82,11 +82,11 @@ return {
     fg = "#A6E22E",
   },
   MatchParen = {
-    bg = "#333333",
+    bg = "#FD971F",
     bold = true,
     ctermbg = "NONE",
-    ctermfg = 203,
-    fg = "#f43753",
+    ctermfg = 208,
+    fg = "#000000",
     link = "MatchWord",
   },
   ModeMsg = {
@@ -154,7 +154,7 @@ return {
     bg = "NONE",
     ctermbg = "NONE",
     ctermfg = 59,
-    fg = "#49483E",
+    fg = "#E6DB74",
   },
   Title = {
     bg = "NONE",

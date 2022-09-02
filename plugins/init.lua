@@ -3,17 +3,13 @@ local M = {}
 M.remove = {
   "max397574/better-escape.nvim",
   "goolord/alpha-nvim",
-  -- "windwp/nvim-autopairs",
   "williamboman/mason",
 }
 M.override = {
   ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
   ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
   ["lewis6991/gitsigns.nvim"] = require "custom.plugins.config.gitsigns",
-  -- ['L3MON4D3/LuaSnip'] = require "custom.plugins.config.luasnip",
-  -- config = function()
-  --   require 'j.plugins.luasnip'
-  -- end,
+  -- ["lukas-reineke/indent-blankline.nvim"] = require "custom.plugins.config.indent_blankline",
 }
 
 local present, _ = pcall(require, "cmp-under-comparator")
@@ -22,11 +18,24 @@ if present then
 end
 
 M.user = {
-  ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
+  ["folke/which-key.nvim"] = { disable = false },
+  ["qosmio/nvim-lsp-installer"] = {
+    setup = function()
+      require("core.lazy_load").on_file_open "nvim-lsp-installer"
+      -- reload the current file so lsp actually starts for it
+      vim.defer_fn(function()
+        vim.cmd 'if &ft == "packer" | echo "" | else | silent! e %'
+      end, 0)
+    end,
+  },
   ["neovim/nvim-lspconfig"] = {
+    setup = function()
+      require("core.lazy_load").on_file_open "nvim-lspconfig"
+    end,
     config = function()
       require "plugins.configs.lspconfig"
-      require("custom.plugins.lsp").setup_lsp()
+      require "custom.plugins.config.lsp_installer"
+      require "custom.plugins.lsp".setup_lsp()
     end,
   },
   ["L3MON4D3/LuaSnip"] = {
@@ -52,7 +61,6 @@ M.user = {
     end,
   },
   ["lambdalisue/suda.vim"] = {},
-  -- ["antoinemadec/FixCursorHold.nvim"] = {},
   ["machakann/vim-sandwich"] = {
     event = "InsertEnter",
   },
@@ -89,6 +97,14 @@ M.user = {
   --   end,
   -- },
   -- ["hashivim/vim-terraform"] = { ft = { "tf", "terraform" } },
+  -- ["anuvyklack/pretty-fold.nvim"] = {
+  --   config = function()
+  --     -- require("pretty-fold").setup(function()
+  --     require "custom.plugins.config.pretty_fold"
+  --     -- end)
+  --   end,
+  --   --config = require "custom.plugins.config.pretty_fold",
+  -- },
 }
 
 return M
