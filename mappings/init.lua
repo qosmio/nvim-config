@@ -44,7 +44,7 @@ M.lsp = {
     ["<leader>ll"] = { "<cmd>lua vim.lsp.buf.format() <CR>", "Format" },
   },
 }
-local opts = { silent = true, nowait = true, expr = true }
+-- local opts = { silent = true, nowait = true, expr = true }
 
 -- M.copilot = {
 --   i = {

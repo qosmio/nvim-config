@@ -6,11 +6,14 @@ M.remove = {
   -- "windwp/nvim-autopairs",
   "williamboman/mason",
 }
-
 M.override = {
   ["NvChad/nvim-colorizer.lua"] = require "custom.plugins.config.colorizer",
   ["nvim-treesitter/nvim-treesitter"] = require "custom.plugins.config.treesitter",
   ["lewis6991/gitsigns.nvim"] = require "custom.plugins.config.gitsigns",
+  -- ['L3MON4D3/LuaSnip'] = require "custom.plugins.config.luasnip",
+  -- config = function()
+  --   require 'j.plugins.luasnip'
+  -- end,
 }
 
 local present, _ = pcall(require, "cmp-under-comparator")
@@ -20,11 +23,17 @@ end
 
 M.user = {
   ["qosmio/nvim-lsp-installer"] = require "custom.plugins.config.lsp_installer",
-  -- ["williamboman/mason-lspconfig.nvim"] = {},
   ["neovim/nvim-lspconfig"] = {
     config = function()
       require "plugins.configs.lspconfig"
       require("custom.plugins.lsp").setup_lsp()
+    end,
+  },
+  ["L3MON4D3/LuaSnip"] = {
+    wants = "friendly-snippets",
+    after = "nvim-cmp",
+    config = function()
+      require "custom.plugins.config.luasnip"
     end,
   },
   ["folke/lua-dev.nvim"] = {
