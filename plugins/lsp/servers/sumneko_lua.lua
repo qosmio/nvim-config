@@ -1,17 +1,16 @@
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local M = {}
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local utils = require "custom.plugins.lsp.utils"
+local has_neodev, neodev = pcall(require, "neodev")
+if not has_neodev then
+  return
+end
+neodev.setup({
+	library = { plugins = { "nvim-cmp", "plenary.nvim" } },
+})
 
-return require("lua-dev").setup {
-  flags = {
-    debounce_text_changes = 250,
-  },
-  library = { vimruntime = true, plugins = { "nvim-cmp", "plenary.nvim" }, types = true },
-  lspconfig = {
-    on_attach = utils.common.on_attach,
-    capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities),
+M.setup = {
     settings = {
-      format = { enable = false },
-      init_options = { documentFormatting = true, codeAction = false },
       Lua = {
         runtime = {
           version = "LuaJIT",
@@ -41,10 +40,10 @@ return require("lua-dev").setup {
           callSnippet = "Replace",
         },
         workspace = {
+          checkThirdParty = false,
           library = {
             [vim.fn.expand "$VIMRUNTIME/lua"] = true,
             [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-            -- vim.api.nvim_get_runtime_file("", true)
           },
           preloadFileSize = 100000,
           maxPreload = 10000,
@@ -55,5 +54,8 @@ return require("lua-dev").setup {
         single_file_support = true,
       },
     },
-  },
+    on_attach = utils.common.on_attach,
+    capabilities = capabilities,
 }
+
+return M

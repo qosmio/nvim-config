@@ -2,8 +2,7 @@ local utils = require "custom.plugins.lsp.utils"
 -- local registry = require "mason-registry"
 local lspinstaller = require "nvim-lsp-installer"
 local lspconfig = require "lspconfig"
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 lspinstaller.setup {}
 
@@ -18,7 +17,7 @@ for _, server in ipairs(lspinstaller.get_installed_servers()) do
       flags = {
         debounce_text_changes = 250,
       },
-      capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities),
+      capabilities = capabilities,
       handlers = {
         ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
       },

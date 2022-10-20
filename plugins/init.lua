@@ -45,12 +45,13 @@ M.user = {
       require "custom.plugins.config.luasnip"
     end,
   },
-  ["folke/lua-dev.nvim"] = {
+  ["folke/neodev.nvim"] = {
+    before = { "lspconfig" },
     requires = { "cmp-nvim-lsp" },
     ft = { "lua" },
   },
   ["rmagatti/alternate-toggler"] = {},
-  ["nathom/filetype.nvim"] = {},
+  -- ["nathom/filetype.nvim"] = {},
   ["chr4/nginx.vim"] = { ft = "nginx" },
   -- Native terminal copying using OCS52
   ["ojroques/vim-oscyank"] = {},
