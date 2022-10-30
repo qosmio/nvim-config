@@ -24,12 +24,7 @@ local inlay_hints = {}
 local inlay_hints_ns = vim.api.nvim_create_namespace "lsp_extensions.inlay_hints"
 
 inlay_hints.request = function(opts, bufnr)
-  vim.lsp.buf_request(
-    bufnr or 0,
-    "rust-analyzer/inlayHints",
-    inlay_hints.get_params(),
-    inlay_hints.get_callback(opts)
-  )
+  vim.lsp.buf_request(bufnr or 0, "rust-analyzer/inlayHints", inlay_hints.get_params(), inlay_hints.get_callback(opts))
 
   -- TODO: At some point, rust probably adds this?
   -- vim.lsp.buf_request(bufnr or 0, 'experimental/inlayHints', inlay_hints.get_params(), inlay_hints.get_callback(opts))
@@ -85,10 +80,7 @@ inlay_hints.get_callback = function(opts)
         hint_store[finish] = hint
 
         if aligned then
-          longest_line = math.max(
-            longest_line,
-            #vim.api.nvim_buf_get_lines(ctx.bufnr, finish, finish + 1, false)[1]
-          )
+          longest_line = math.max(longest_line, #vim.api.nvim_buf_get_lines(ctx.bufnr, finish, finish + 1, false)[1])
         end
       end
     end

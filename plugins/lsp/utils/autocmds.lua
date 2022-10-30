@@ -20,10 +20,7 @@ M.DocumentFormattingAU = function(bufnr, use_lsp)
     if not bufnr then
       bufnr = vim.api.nvim_get_current_buf()
     end
-    vim.api.nvim_create_autocmd(
-      "BufWritePre",
-      { buffer = bufnr, callback = vim.lsp.buf.format, group = group }
-    )
+    vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, callback = vim.lsp.buf.format, group = group })
   end
 end
 

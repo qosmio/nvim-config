@@ -4,10 +4,7 @@ local M = {}
 
 -- set filetypes function
 function M.ft_aucmd(pattern, ft)
-  aucmd(
-    { "BufRead", "BufNewFile", "BufWinEnter" },
-    { pattern = pattern, command = [[set ft=]] .. ft, once = false }
-  )
+  aucmd({ "BufRead", "BufNewFile", "BufWinEnter" }, { pattern = pattern, command = [[set ft=]] .. ft, once = false })
 end
 
 -- set syntax function
@@ -17,6 +14,11 @@ function M.syn_aucmd(pattern, syn)
     { pattern = pattern, command = [[set syntax=]] .. syn, once = false }
   )
 end
+
+-- Plist
+M.ft_aucmd({
+  "*.xm",
+}, "objc")
 
 -- Plist
 M.ft_aucmd({
@@ -90,10 +92,7 @@ aucmd(
   { "BufNewFile", "BufRead", "InsertLeave" },
   { command = "silent! match ExtraWhitespace /\\s\\+$/", group = extra_whitespace }
 )
-aucmd(
-  { "InsertEnter" },
-  { command = "silent! match ExtraWhitespace /\\s\\+\\%#\\@<!$/", group = extra_whitespace }
-)
+aucmd({ "InsertEnter" }, { command = "silent! match ExtraWhitespace /\\s\\+\\%#\\@<!$/", group = extra_whitespace })
 -- }}}
 
 -- }}}

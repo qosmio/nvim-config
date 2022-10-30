@@ -13,7 +13,7 @@ local ensure_installed = {
   "yaml",
   "cpp",
   "cmake",
-  "go"
+  "go",
 }
 
 return {

@@ -12,11 +12,13 @@ local sources = {
   formatting.sqlfluff.with { extra_args = { "--dialect", "sqlite" } },
 
   -- Javascript
-  formatting.prettierd,
+  formatting.prettier,
 
   -- Lua
   -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
-  formatting.stylua.with { extra_args = { "--config-path", vim.fn.stdpath("config") .. "/lua/custom/plugins/config/stylua.toml" } },
+  formatting.stylua.with {
+    extra_args = { "--config-path", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/stylua.toml" },
+  },
 
   -- Python
   -- pip install reorder-python-imports black yapf

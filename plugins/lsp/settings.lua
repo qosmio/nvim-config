@@ -34,20 +34,17 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
   end,
 })
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] =
-  vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false, -- if using pop-up window
-    signs = true,
-    underline = true,
-    update_in_insert = false, -- update diagnostics insert mode
-    severity_sort = false,
-  })
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  virtual_text = false, -- if using pop-up window
+  signs = true,
+  underline = true,
+  update_in_insert = false, -- update diagnostics insert mode
+  severity_sort = false,
+})
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = popup_border })
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-  vim.lsp.handlers.signature_help,
-  { border = popup_border }
-)
+vim.lsp.handlers["textDocument/signatureHelp"] =
+  vim.lsp.with(vim.lsp.handlers.signature_help, { border = popup_border })
 vim.diagnostic.config {
   -- virtual_text = { prefix = "", },
   signs = true,

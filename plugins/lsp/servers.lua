@@ -2,7 +2,7 @@ local utils = require "custom.plugins.lsp.utils"
 -- local registry = require "mason-registry"
 local lspinstaller = require "nvim-lsp-installer"
 local lspconfig = require "lspconfig"
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 lspinstaller.setup {}
 

@@ -1,18 +1,18 @@
-local ls = require 'luasnip'
-local fmt = require('luasnip.extras.fmt').fmt
-local rep = require('luasnip.extras').rep
+local ls = require "luasnip"
+local fmt = require("luasnip.extras.fmt").fmt
+local rep = require("luasnip.extras").rep
 
 local s = ls.snippet
 local d = ls.dynamic_node
 local sn = ls.snippet_node
 local i = ls.insert_node
 
-ls.filetype_extend('typescript', { 'javascript' })
+ls.filetype_extend("typescript", { "javascript" })
 
-ls.add_snippets('typescript', {
+ls.add_snippets("typescript", {
   -- Storybook story
   s(
-    'story',
+    "story",
     fmt(
       [[
 import {} from './{}.vue';
@@ -35,7 +35,7 @@ export const Default: Story = (_, {{ argTypes }}) => ({{
 ]],
       {
         d(1, function(_, snip)
-          local filename_without_extension, _ = snip.env.TM_FILENAME_BASE:gsub('.stories$', '')
+          local filename_without_extension, _ = snip.env.TM_FILENAME_BASE:gsub(".stories$", "")
 
           return sn(nil, {
             i(1, filename_without_extension),

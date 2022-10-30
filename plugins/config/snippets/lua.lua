@@ -1,18 +1,18 @@
-local ls = require 'luasnip'
+local ls = require "luasnip"
 
 local s = ls.s
-local fmt = require('luasnip.extras.fmt').fmt
+local fmt = require("luasnip.extras.fmt").fmt
 local i = ls.insert_node
 local f = ls.function_node
 
-ls.add_snippets('lua', {
+ls.add_snippets("lua", {
   -- Require statement
   s(
-    'req',
+    "req",
     fmt([[local {} = require('{}')]], {
       f(function(import_name)
-        local parts = vim.split(import_name[1][1], '.', true)
-        return parts[#parts] or ''
+        local parts = vim.split(import_name[1][1], ".", true)
+        return parts[#parts] or ""
       end, { 1 }),
       i(1),
     })
@@ -20,7 +20,7 @@ ls.add_snippets('lua', {
 
   -- Function declaration
   s(
-    'f',
+    "f",
     fmt(
       [[
 function({})
@@ -33,7 +33,7 @@ end
 
   -- If statement
   s(
-    'lf',
+    "lf",
     fmt(
       [[
 local {} = function({})

@@ -1,15 +1,15 @@
-local ls = require 'luasnip'
+local ls = require "luasnip"
 
 local s = ls.s
-local fmt = require('luasnip.extras.fmt').fmt
+local fmt = require("luasnip.extras.fmt").fmt
 local i = ls.insert_node
 
-ls.filetype_extend('vue', { 'typescript', 'javascript' })
+ls.filetype_extend("vue", { "typescript", "javascript" })
 
-ls.add_snippets('vue', {
+ls.add_snippets("vue", {
   -- Function declaration
   s(
-    'f',
+    "f",
     fmt(
       [[
 const {} = ({}) => {{
@@ -22,7 +22,7 @@ const {} = ({}) => {{
 
   -- Debugging composables with watchEffect
   s(
-    'debug',
+    "debug",
     fmt(
       [[
 watchEffect(() => {{
@@ -35,7 +35,7 @@ watchEffect(() => {{
 
   -- Vue component
   s(
-    'comp',
+    "comp",
     fmt(
       [[
 <template>

@@ -25,14 +25,8 @@ local configs = {
   end,
   capabilities = capabilities,
   before_init = function(_, config)
-    local stub_path = require("lspconfig/util").path.join(
-      vim.fn.stdpath "data",
-      "site",
-      "pack",
-      "packer",
-      "opt",
-      "python-type-stubs"
-    )
+    local stub_path =
+      require("lspconfig/util").path.join(vim.fn.stdpath "data", "site", "pack", "packer", "opt", "python-type-stubs")
     config.settings.python.analysis.stubPath = stub_path
   end,
   on_init = function(client)

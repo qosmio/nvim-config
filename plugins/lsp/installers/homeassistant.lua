@@ -53,7 +53,8 @@ local custom_server = server.Server:new {
   installer = function(ctx)
     local repo = "keesschollaart81/vscode-home-assistant"
     local version = ctx.requested_version:or_else_get(function()
-      return github_client.fetch_latest_tag(repo)
+      return github_client
+        .fetch_latest_tag(repo)
         :map(function(tag)
           return tag.name
         end)
@@ -61,9 +62,9 @@ local custom_server = server.Server:new {
     end)
     -- strip all alpha characters from version
     version = version:gsub("[^%d.]", "")
-    local url = (
-      "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/keesschollaart/vsextensions/vscode-home-assistant/%s/vspackage"
-    ):format(version)
+    local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/keesschollaart/vsextensions/vscode-home-assistant/%s/vspackage"):format(
+      version
+    )
     local headers = { ["Cookie"] = ("Gallery-Service-UserIdentifier=%s"):format(uuid) }
     std.download_file(url, "archive.gz", headers)
     std.gunzip("archive.gz", ".")

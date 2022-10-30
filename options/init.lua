@@ -21,7 +21,7 @@ opt.relativenumber = false -- true to show relative line numbers
 opt.cursorlineopt = "both" -- number the lines from the cursor
 
 --" Spaces & Tabs {{{
-opt.expandtab = false
+-- opt.expandtab = false
 opt.softtabstop = 2 -- number of soft spaces in a tab
 opt.tabstop = 4 -- number of spaces in a tab
 opt.shiftwidth = 2 -- number of spaces to shift
@@ -41,12 +41,12 @@ opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff: ,eob: "
 opt.list = true --> show whitespace characters
 -- opt.listchars:append("eol:↲")
 -- opt.listchars:append("extends:━━")
-opt.listchars:append("nbsp:+")
+opt.listchars:append "nbsp:+"
 -- opt.listchars:append("trail:●")
 -- opt.listchars:append("extends:≫")
-opt.listchars:append("precedes:≪")
-opt.listchars:append("tab:»·")
-opt.listchars:append("trail:·")
+opt.listchars:append "precedes:≪"
+opt.listchars:append "tab:»·"
+opt.listchars:append "trail:·"
 -- MatchUp
 vim.g.matchup_matchparen_deferred = 1 -- defer the matchparen highlighting
 vim.g.matchup_mappings_enabled = 1 -- enable the mappings
