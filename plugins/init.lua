@@ -21,6 +21,11 @@ M.user = {
       require "plugins.configs.treesitter"
     end,
   },
+  ["numToStr/Comment.nvim"] = {
+    setup = function()
+      require("custom.plugins.config.comment").setup()
+    end,
+  },
   ["folke/which-key.nvim"] = { disable = false },
   ["qosmio/nvim-lsp-installer"] = {
     setup = function()
