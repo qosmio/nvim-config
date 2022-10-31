@@ -92,6 +92,11 @@ M.user = {
       require "custom.plugins.config.cmp"
     end,
   },
+  -- ["anuvyklack/pretty-fold.nvim"] = {
+  --   config = function()
+  --     require "custom.plugins.config.pretty_fold"
+  --   end,
+  -- },
   -- ["github/copilot.vim"] = {
   --   requires = { "hrsh7th/nvim-cmp" },
   --   event = "InsertEnter",
@@ -101,14 +106,6 @@ M.user = {
   --     vim.g.copilot_assume_mapped = true
   --     vim.g.copilot_tab_fallback = ""
   --   end,
-  -- },
-  -- ["anuvyklack/pretty-fold.nvim"] = {
-  --   config = function()
-  --     -- require("pretty-fold").setup(function()
-  --     require "custom.plugins.config.pretty_fold"
-  --     -- end)
-  --   end,
-  --   --config = require "custom.plugins.config.pretty_fold",
   -- },
 }
 
