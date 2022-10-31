@@ -22,8 +22,13 @@ M.user = {
     end,
   },
   ["numToStr/Comment.nvim"] = {
-    setup = function()
+    module = "Comment",
+    keys = { "gc", "gb" },
+    config = function()
       require("custom.plugins.config.comment").setup()
+    end,
+    setup = function()
+      require("core.utils").load_mappings "comment"
     end,
   },
   ["folke/which-key.nvim"] = { disable = false },
