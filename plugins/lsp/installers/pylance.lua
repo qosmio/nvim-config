@@ -5,6 +5,7 @@ local servers = require "nvim-lsp-installer.servers"
 local server = require "nvim-lsp-installer.server"
 local path = require "nvim-lsp-installer.path"
 local handlers = require "vim.lsp.handlers"
+local platform = require "nvim-lsp-installer.platform"
 local std = require "nvim-lsp-installer.core.managers.std"
 -- local fetch = require "nvim-lsp-installer.core.fetch"
 local github_client = require "nvim-lsp-installer.core.managers.github.client"
@@ -161,6 +162,16 @@ local pylance_installer = function(ctx)
     [[silent %s/\(if\s*(\s*!\s*process\[.\{-}\]\s*)\s*return\s*\!\s*0\)x\(.\)/\1x0/g|silent wq]],
     bin_path,
   }
+  if platform.is_linux then
+    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "win32" })
+    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "darwin" })
+  elseif platform.is_mac then
+    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "linux" })
+    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "win32" })
+  else -- assume windows
+    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "linux" })
+    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "darwin" })
+  end
   -- ctx.spawn.perl { "-p", "-i.bk", "-e", [['s/(if\s*?\(\s*?\!\s*?process\[.*?\]\s*?\[.*?\]\s*?\)\s*?return\s*?\!\s*?0)(x.)/\1x0/']], "extension/dist/server.bundle.js" }
   -- ctx.receipt:with_primary_source { type = "github_tag", tag = version }
   ctx.receipt:with_primary_source {
