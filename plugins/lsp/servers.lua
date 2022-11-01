@@ -9,7 +9,7 @@ lspinstaller.setup {}
 -- for _, server in ipairs(registry.get_installed_packages()) do
 for _, server in ipairs(lspinstaller.get_installed_servers()) do
   local ok, res = pcall(require, "custom.plugins.lsp.servers." .. server.name)
-  if ok then
+  if ok and res ~= true then
     lspconfig[server.name].setup(res)
   else
     lspconfig[server.name].setup {

@@ -1,10 +1,7 @@
 local ensure_installed = {
-  "dockerls",
-  "vimls",
   "jsonls",
   "pylance",
   "bashls",
-  "gopls",
   "yamlls",
 }
 
