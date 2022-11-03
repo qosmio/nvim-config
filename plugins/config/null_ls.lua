@@ -5,6 +5,8 @@ end
 
 local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
+local ca = null_ls.builtins.code_actions
+local cmp = null_ls.builtins.completion
 
 local sources = {
   -- SQL
@@ -19,6 +21,7 @@ local sources = {
   formatting.stylua.with {
     extra_args = { "--config-path", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/stylua.toml" },
   },
+  cmp.luasnip,
 
   -- Python
   -- pip install reorder-python-imports black yapf
@@ -37,17 +40,22 @@ local sources = {
 
   -- C/Clang
   -- formatting.clang_format,
+  formatting.uncrustify,
 
   -- ZSH
   diagnostics.zsh,
 
   -- Bash
   diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
+  ca.shellcheck,
   -- go install mvdan.cc/sh/v3/cmd/shfmt@latest
   formatting.shfmt.with {
     extra_args = { "-i", "2", "-bn", "-ci", "-sr" },
   },
   -- formatting.shellharden.with { extra_filetypes = { "zsh", "bash", "sh" }, },
+
+  -- JSON
+  formatting.jq,
 }
 
 local M = {}

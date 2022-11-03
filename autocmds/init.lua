@@ -51,6 +51,61 @@ M.ft_aucmd({
   "Dockerfile*",
 }, "dockerfile")
 
+--{{ FileType Indentation
+vim.api.nvim_create_augroup("extension file", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = "extension file",
+  pattern = "cpp,c,python",
+  callback = function()
+    -- vim.opt.cindent = true
+    vim.opt.softtabstop = 2
+    vim.opt.tabstop = 4
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  group = "extension file",
+  pattern = "yaml,json",
+  callback = function()
+    vim.opt.tabstop = 2
+    vim.opt.softtabstop = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "smart indent for yaml",
+  group = "extension file",
+  pattern = "lua,sh",
+  callback = function()
+    vim.opt.tabstop = 4
+    vim.opt.softtabstop = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
+  end,
+})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  desc = "kill trailing whitespace",
+  group = "extension file",
+  pattern = "*",
+  callback = function()
+    vim.cmd [[%s/\s\+$//e]]
+  end,
+})
+
+vim.api.nvim_create_augroup("highlight", { clear = true })
+vim.api.nvim_create_autocmd("Syntax", {
+  desc = "whitespace trailing display",
+  group = "highlight",
+  pattern = "*",
+  callback = function()
+    vim.cmd [[highlight ExtraWhitespace ctermbg=red guibg=red]]
+    -- TODO
+    vim.cmd [[syn match ExtraWhitespace /\s\+$\| \+\ze\t/]]
+  end,
+})
+--}}
 local function init_term()
   vim.wo.number = false
   vim.wo.relativenumber = false

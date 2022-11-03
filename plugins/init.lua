@@ -37,7 +37,7 @@ M.user = {
       require("core.lazy_load").on_file_open "nvim-lsp-installer"
       -- reload the current file so lsp actually starts for it
       vim.defer_fn(function()
-        vim.cmd 'if &ft == "packer" | echo "" | else | silent! e %'
+        vim.cmd 'if &ft =="packer"| echo""| else | silent! e %'
       end, 0)
     end,
   },
@@ -68,6 +68,7 @@ M.user = {
   -- Native terminal copying using OCS52
   ["ojroques/vim-oscyank"] = {},
   ["jose-elias-alvarez/null-ls.nvim"] = {
+    after = { "nvim-cmp" },
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("custom.plugins.config.null_ls").setup()
@@ -86,7 +87,9 @@ M.user = {
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
-  ["lukas-reineke/cmp-under-comparator"] = { before = { "hrsh7th/nvim-cmp" } },
+  ["lukas-reineke/cmp-under-comparator"] = { -- make the sorting of completion results smarter
+    before = { "hrsh7th/nvim-cmp" },
+  },
   ["reewr/vim-monokai-phoenix"] = {
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
@@ -97,11 +100,24 @@ M.user = {
       require "custom.plugins.config.cmp"
     end,
   },
-  -- ["anuvyklack/pretty-fold.nvim"] = {
+  ["anuvyklack/pretty-fold.nvim"] = {
+    config = function()
+      require "custom.plugins.config.pretty_fold"
+    end,
+  },
+  -- ["f3fora/cmp-spell"] = {
+  --   after = "null-ls.nvim",
+  --   requires = {
+  --     "hrsh7th/nvim-cmp",
+  --   },
   --   config = function()
-  --     require "custom.plugins.config.pretty_fold"
+  --     vim.opt.spell = true
+  --     vim.opt.spelllang = { "en_us" }
   --   end,
   -- },
+  ["hrsh7th/cmp-calc"] = { after = "null-ls.nvim" }, --  math calculation
+  ["hrsh7th/cmp-nvim-lsp-signature-help"] = { after = "null-ls.nvim" }, --  function signature help
+  ["hrsh7th/cmp-cmdline"] = { after = "null-ls.nvim" }, --  command completion
   -- ["github/copilot.vim"] = {
   --   requires = { "hrsh7th/nvim-cmp" },
   --   event = "InsertEnter",
