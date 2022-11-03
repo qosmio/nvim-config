@@ -141,17 +141,25 @@ local pylance_installer = function(ctx)
   -- local version = fetch("https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance"):map(parse_versions).value
   local version = ctx.requested_version:or_else_get(function()
     return github_client
-      .fetch_latest_tag(repo)
-      :map(function(tag)
-        return tag.name
-      end)
-      :get_or_throw()
+        .fetch_latest_tag(repo)
+        :map(function(tag)
+          if tag.name == "2022.11.21" then
+            tag.name = "2022.11.11"
+          end
+          return tag.name
+        end)
+        :get_or_throw()
   end)
-  local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"):format(
-    version
-  )
+  local url = (
+      "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
+      ):format(
+        version
+      )
   -- url = "http://domain/ms-python.vscode-pylance-2022.4.2.vsix"
-  local headers = { ["Cookie"] = "Gallery-Service-UserIdentifier=9ee5cf1e-146b-429b-b3a3-b9a59cd5e3e6" }
+  local headers = {
+    ["Cookie"] = "Gallery-Service-UserIdentifier=31b2287d-bbf7-471c-a5aa-a25c931b1b71",
+    ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.68.1 Chrome/98.0.4758.141 Electron/17.4.7 Safari/537.36",
+  }
   std.download_file(url, "archive.gz", headers)
   std.gunzip("archive.gz", ".")
   std.unzip("archive", ".")
