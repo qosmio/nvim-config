@@ -1,5 +1,5 @@
 local utils = require "custom.utils"
-package.path = utils.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins", "?.lua") .. ';' .. package.path
+package.path = utils.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins", "?.lua") .. ";" .. package.path
 -- print(utils.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins", "?.lua"))
 -- Please check NvChad docs if you're totally new to nvchad + dont know lua!!
 -- This is an example init file in /lua/custom/

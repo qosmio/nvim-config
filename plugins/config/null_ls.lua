@@ -29,7 +29,6 @@ local sources = {
   formatting.stylua.with {
     extra_args = { "--config-path", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/stylua.toml" },
   },
-  cmp.luasnip,
 
   -- Python
   -- pip install reorder-python-imports black yapf

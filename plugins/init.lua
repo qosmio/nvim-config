@@ -51,47 +51,52 @@ M.user = {
       require("custom.plugins.lsp").setup_lsp()
     end,
   },
-  ["smjonas/snippet-converter.nvim"] = {
-    after = { "LuaSnip" },
-    config = function()
-      local status_ok, snips = pcall(require, "luasnip.loaders.from_vscode")
-      if status_ok then
-        snips.load "opts"
-        local template = {
-          name = "Remove-License-Snippets",
-          sources = {
-            vscode_luasnip = { "./friendly-snippets" },
-          },
-          output = {
-            vscode_luasnip = { vim.fn.stdpath "data" .. "/site/pack/packer/opt/friendly-snippets/snippets" },
-          },
-          transform_snippets = function(snippet, _)
-            if snippet.path:find "python%"
-                or (
-                snippet.path:find "global%.json$" and snippet.trigger:find "[Ll]icense"
-                    or (snippet.description and snippet.description:find "[Ll]icense")
-                )
-            then
-              return false
-            end
-          end,
-        }
-        require("snippet_converter").setup {
-          templates = { template },
-        }
-      end
-    end,
-  },
-  ["L3MON4D3/LuaSnip"] = {
-    wants = "friendly-snippets",
-    after = "nvim-cmp",
-    config = function()
-      require "custom.plugins.config.luasnip"
-    end,
-  },
+  -- ["smjonas/snippet-converter.nvim"] = {
+  --   after = { "LuaSnip" },
+  --   config = function()
+  --     local status_ok, snips = pcall(require, "luasnip.loaders.from_vscode")
+  --     if status_ok then
+  --       snips.load "opts"
+  --       local template = {
+  --         name = "Remove-License-Snippets",
+  --         sources = {
+  --           vscode_luasnip = { "./friendly-snippets" },
+  --         },
+  --         output = {
+  --           vscode_luasnip = { vim.fn.stdpath "data" .. "/site/pack/packer/opt/friendly-snippets/snippets" },
+  --         },
+  --         transform_snippets = function(snippet, _)
+  --           if snippet.path:find "python%"
+  --               or (
+  --               snippet.path:find "global%.json$" and snippet.trigger:find "[Ll]icense"
+  --                   or (snippet.description and snippet.description:find "[Ll]icense")
+  --               )
+  --           then
+  --             return false
+  --           end
+  --         end,
+  --       }
+  --       require("snippet_converter").setup {
+  --         templates = { template },
+  --       }
+  --     end
+  --   end,
+  -- },
+  --["hrsh7th/cmp-buffer"] = false,
+  --["hrsh7th/cmp-nvim-lsp"] = false,
+  --["hrsh7th/cmp-nvim-lua"] = false,
+  ["L3MON4D3/LuaSnip"] = false,
+  ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
+  ["saadparwaiz1/cmp_luasnip"] = false,
+  --   wants = "friendly-snippets",
+  --   after = "nvim-cmp",
+  --   config = function()
+  --     require "custom.plugins.config.luasnip"
+  --   end,
+  -- },
   ["folke/neodev.nvim"] = {
     before = { "lspconfig" },
-    requires = { "cmp-nvim-lsp" },
+    -- requires = { "cmp-nvim-lsp" },
     ft = { "lua" },
   },
   ["rmagatti/alternate-toggler"] = {},
