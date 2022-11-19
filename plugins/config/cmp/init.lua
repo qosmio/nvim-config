@@ -40,7 +40,6 @@ if present then
     sources = cmp.config.sources {
       { name = "path" },
       { name = "nvim_lsp" },
-      { name = "luasnip" },
       { name = "buffer" },
       -- {
       --   name = "spell",
@@ -52,8 +51,9 @@ if present then
       --   },
       -- },
       { name = "nvim_lsp_signature_help" },
-      { name = "calc" },
       { name = "nvim_lua" },
+      -- { name = "calc" },
+      -- { name = "luasnip" },
     },
     sorting = {
       comparators = {
@@ -61,7 +61,7 @@ if present then
         cmp.config.compare.offset,
         cmp.config.compare.exact,
         cmp.config.compare.score,
-        comparator,
+        comparator.under,
         cmp.config.compare.kind,
         cmp.config.compare.sort_text,
         cmp.config.compare.length,

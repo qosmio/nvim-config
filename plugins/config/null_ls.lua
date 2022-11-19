@@ -14,7 +14,15 @@ local sources = {
   formatting.sqlfluff.with { extra_args = { "--dialect", "sqlite" } },
 
   -- Javascript
-  formatting.prettier,
+  formatting.prettier.with {
+    extra_args = "--no-editorconfig",
+    "--single-quote",
+    "true",
+    "--tab-width",
+    2,
+    "--use-tabs",
+    "false",
+  },
 
   -- Lua
   -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
@@ -56,6 +64,8 @@ local sources = {
 
   -- JSON
   formatting.jq,
+  -- TOML
+  formatting.taplo,
 }
 
 local M = {}

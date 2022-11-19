@@ -1,0 +1,10 @@
+{
+    "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+    "Lua.workspace.library": [
+        "/Users/matebook/.local/share/nvim/site/pack/packer/opt/neodev.nvim/types/nightly",
+        "/usr/local/Cellar/neovim/HEAD-cc5b736/share/nvim/runtime",
+        "/Users/matebook/.local/share/nvim/site/pack/packer/opt/nvim-cmp",
+        "/Users/matebook/.local/share/nvim/site/pack/packer/opt/plenary.nvim",
+        "${3rd}/luassert/library"
+    ]
+}

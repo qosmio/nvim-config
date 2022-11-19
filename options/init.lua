@@ -32,6 +32,16 @@ opt.softtabstop = 2 -- number of soft spaces in a tab
 opt.tabstop = 4 -- number of spaces in a tab
 opt.shiftwidth = 2 -- number of spaces to shift
 opt.copyindent = true
+
+opt.tabstop = 2
+opt.softtabstop = 0
+-- opt.expandtab = false
+opt.shiftwidth = 2
+opt.shiftround = true
+opt.autoindent = true
+opt.copyindent = true
+-- opt.smartindent = true
+-- opt.autoindent = true
 --" }}} Spaces & Tabs
 
 -- opt.conceallevel = 3 -- number of concealed characters

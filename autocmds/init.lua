@@ -55,18 +55,19 @@ M.ft_aucmd({
 vim.api.nvim_create_augroup("extension file", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
   group = "extension file",
-  pattern = "cpp,c,python",
+  pattern = { "cpp", "c", "python" },
   callback = function()
-    -- vim.opt.cindent = true
+    vim.opt.autoindent = true
+    vim.opt.cindent = true
     vim.opt.softtabstop = 2
     vim.opt.tabstop = 4
-    vim.opt.shiftwidth = 2
+    vim.opt.shiftwidth = 4
     vim.opt.expandtab = true
   end,
 })
 vim.api.nvim_create_autocmd("FileType", {
   group = "extension file",
-  pattern = "yaml,json",
+  pattern = { "yaml", "json" },
   callback = function()
     vim.opt.tabstop = 2
     vim.opt.softtabstop = 2
@@ -77,7 +78,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   desc = "smart indent for yaml",
   group = "extension file",
-  pattern = "lua,sh",
+  pattern = { "lua", "sh", "zsh", "bash" },
   callback = function()
     vim.opt.tabstop = 4
     vim.opt.softtabstop = 2

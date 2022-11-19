@@ -51,6 +51,37 @@ M.user = {
       require("custom.plugins.lsp").setup_lsp()
     end,
   },
+  ["smjonas/snippet-converter.nvim"] = {
+    after = { "LuaSnip" },
+    config = function()
+      local status_ok, snips = pcall(require, "luasnip.loaders.from_vscode")
+      if status_ok then
+        snips.load "opts"
+        local template = {
+          name = "Remove-License-Snippets",
+          sources = {
+            vscode_luasnip = { "./friendly-snippets" },
+          },
+          output = {
+            vscode_luasnip = { vim.fn.stdpath "data" .. "/site/pack/packer/opt/friendly-snippets/snippets" },
+          },
+          transform_snippets = function(snippet, _)
+            if snippet.path:find "python%"
+                or (
+                snippet.path:find "global%.json$" and snippet.trigger:find "[Ll]icense"
+                    or (snippet.description and snippet.description:find "[Ll]icense")
+                )
+            then
+              return false
+            end
+          end,
+        }
+        require("snippet_converter").setup {
+          templates = { template },
+        }
+      end
+    end,
+  },
   ["L3MON4D3/LuaSnip"] = {
     wants = "friendly-snippets",
     after = "nvim-cmp",
@@ -88,7 +119,11 @@ M.user = {
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
   ["lukas-reineke/cmp-under-comparator"] = { -- make the sorting of completion results smarter
-    before = { "hrsh7th/nvim-cmp" },
+    requires = { "hrsh7th/nvim-cmp" },
+    after = { "null-ls.nvim" },
+    config = function()
+      require "custom.plugins.config.cmp.python"
+    end,
   },
   ["reewr/vim-monokai-phoenix"] = {
     cond = function()
@@ -115,9 +150,9 @@ M.user = {
   --     vim.opt.spelllang = { "en_us" }
   --   end,
   -- },
-  ["hrsh7th/cmp-calc"] = { after = "null-ls.nvim" }, --  math calculation
+  -- ["hrsh7th/cmp-calc"] = { after = "null-ls.nvim" }, --  math calculation
   ["hrsh7th/cmp-nvim-lsp-signature-help"] = { after = "null-ls.nvim" }, --  function signature help
-  ["hrsh7th/cmp-cmdline"] = { after = "null-ls.nvim" }, --  command completion
+  -- ["hrsh7th/cmp-cmdline"] = { after = "null-ls.nvim" }, --  command completion
   -- ["github/copilot.vim"] = {
   --   requires = { "hrsh7th/nvim-cmp" },
   --   event = "InsertEnter",
