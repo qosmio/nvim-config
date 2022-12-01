@@ -12,7 +12,7 @@ opt.diffopt:append "hiddenoff"
 opt.diffopt:append "indent-heuristic"
 opt.diffopt:append "algorithm:patience"
 opt.completeopt = { "menu", "menuone", "noinsert", "noselect" } -- default is "menuone,preview"
-opt.pumheight = 6 -- number of lines to display in the popup menu
+-- opt.pumheight = 6 -- number of lines to display in the popup menu
 -- opt.spell = true
 -- opt.spelllang = { "en_us" } -- languages to use for spell checking
 -- opt.spelloptions = { "camel" }

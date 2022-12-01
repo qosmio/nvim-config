@@ -52,7 +52,7 @@ if present then
       -- },
       { name = "nvim_lsp_signature_help" },
       { name = "nvim_lua" },
-      -- { name = "calc" },
+      { name = "zsh" },
       -- { name = "luasnip" },
     },
     sorting = {

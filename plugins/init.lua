@@ -51,52 +51,11 @@ M.user = {
       require("custom.plugins.lsp").setup_lsp()
     end,
   },
-  -- ["smjonas/snippet-converter.nvim"] = {
-  --   after = { "LuaSnip" },
-  --   config = function()
-  --     local status_ok, snips = pcall(require, "luasnip.loaders.from_vscode")
-  --     if status_ok then
-  --       snips.load "opts"
-  --       local template = {
-  --         name = "Remove-License-Snippets",
-  --         sources = {
-  --           vscode_luasnip = { "./friendly-snippets" },
-  --         },
-  --         output = {
-  --           vscode_luasnip = { vim.fn.stdpath "data" .. "/site/pack/packer/opt/friendly-snippets/snippets" },
-  --         },
-  --         transform_snippets = function(snippet, _)
-  --           if snippet.path:find "python%"
-  --               or (
-  --               snippet.path:find "global%.json$" and snippet.trigger:find "[Ll]icense"
-  --                   or (snippet.description and snippet.description:find "[Ll]icense")
-  --               )
-  --           then
-  --             return false
-  --           end
-  --         end,
-  --       }
-  --       require("snippet_converter").setup {
-  --         templates = { template },
-  --       }
-  --     end
-  --   end,
-  -- },
-  --["hrsh7th/cmp-buffer"] = false,
-  --["hrsh7th/cmp-nvim-lsp"] = false,
-  --["hrsh7th/cmp-nvim-lua"] = false,
   ["L3MON4D3/LuaSnip"] = false,
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
   ["saadparwaiz1/cmp_luasnip"] = false,
-  --   wants = "friendly-snippets",
-  --   after = "nvim-cmp",
-  --   config = function()
-  --     require "custom.plugins.config.luasnip"
-  --   end,
-  -- },
   ["folke/neodev.nvim"] = {
     before = { "lspconfig" },
-    -- requires = { "cmp-nvim-lsp" },
     ft = { "lua" },
   },
   ["rmagatti/alternate-toggler"] = {},
@@ -114,11 +73,6 @@ M.user = {
   ["machakann/vim-sandwich"] = {
     event = "InsertEnter",
   },
-  ["rcarriga/nvim-notify"] = {
-    config = function()
-      vim.notify = require "notify"
-    end,
-  },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
@@ -128,6 +82,7 @@ M.user = {
     after = { "null-ls.nvim" },
     config = function()
       require "custom.plugins.config.cmp.python"
+      require "custom.plugins.config.cmp.zsh"
     end,
   },
   ["reewr/vim-monokai-phoenix"] = {
@@ -145,19 +100,7 @@ M.user = {
       require "custom.plugins.config.pretty_fold"
     end,
   },
-  -- ["f3fora/cmp-spell"] = {
-  --   after = "null-ls.nvim",
-  --   requires = {
-  --     "hrsh7th/nvim-cmp",
-  --   },
-  --   config = function()
-  --     vim.opt.spell = true
-  --     vim.opt.spelllang = { "en_us" }
-  --   end,
-  -- },
-  -- ["hrsh7th/cmp-calc"] = { after = "null-ls.nvim" }, --  math calculation
   ["hrsh7th/cmp-nvim-lsp-signature-help"] = { after = "null-ls.nvim" }, --  function signature help
-  -- ["hrsh7th/cmp-cmdline"] = { after = "null-ls.nvim" }, --  command completion
   -- ["github/copilot.vim"] = {
   --   requires = { "hrsh7th/nvim-cmp" },
   --   event = "InsertEnter",
@@ -168,6 +111,12 @@ M.user = {
   --     vim.g.copilot_tab_fallback = ""
   --   end,
   -- },
+  ["tamago324/cmp-zsh"] = {
+    requires = { "Shougo/deol.nvim" },
+    setup = function()
+      return { filetypes = { "deoledit", "zsh" } }
+    end,
+  },
 }
 
 return M.user
