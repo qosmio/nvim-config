@@ -1,5 +1,6 @@
 local M = {}
 
+local lspsettings = require "custom.plugins.lsp.settings"
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -41,10 +42,7 @@ capabilities.textDocument.foldingRange = {
 local on_attach = function(client, bufnr)
   -- Modifying a server's capabilities is not recommended and is no longer
   -- necessary thanks to the `vim.lsp.buf.format` API introduced in Neovim
-  -- 0.8. Users with Neovim 0.7 needs to uncomment below lines to make tsserver formatting work (or keep using eslint).
-
-  -- client.server_capabilities.documentFormattingProvider = false
-  -- client.server_capabilities.documentRangeFormattingProvider = false
+  -- 0.8.
 
   local function buf_set_option(...)
     vim.api.nvim_buf_set_option(bufnr, ...)
@@ -79,22 +77,16 @@ local function filterReactDTS(value)
   end
 end
 
-local handlers = {
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = EcoVim.ui.float.border }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = EcoVim.ui.float.border }),
-  ["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    { virtual_text = EcoVim.lsp.virtual_text }
-  ),
+local _handlers = {
   ["textDocument/definition"] = function(err, result, method, ...)
     if vim.tbl_islist(result) and #result > 1 then
       local filtered_result = filter(result, filterReactDTS)
       return vim.lsp.handlers["textDocument/definition"](err, filtered_result, method, ...)
     end
-
     vim.lsp.handlers["textDocument/definition"](err, result, method, ...)
   end,
 }
+local handlers = vim.tbl_deep_extend("force", lspsettings.handlers, _handlers)
 
 local settings = {
   typescript = {

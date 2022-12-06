@@ -1,5 +1,4 @@
-local M = {}
-
-M.settings = {}
-
-return M
+-- YAML
+return {
+  filetypes = { "sh", "bash", "zsh" },
+}

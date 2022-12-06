@@ -1,6 +1,4 @@
 local M = {}
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-local utils = require "custom.plugins.lsp.utils"
 local has_neodev, neodev_config = pcall(require, "neodev.config")
 if not has_neodev then
   return
@@ -8,8 +6,7 @@ end
 
 local add_packages_to_workspace = function(packages, config)
   -- config.settings.Lua = config.settings.Lua or { workspace = default_workspace }
-  local runtimedirs = {}
-  runtimedirs = vim.api.nvim__get_runtime({ "lua" }, true, { is_lua = true })
+  local runtimedirs = vim.api.nvim__get_runtime({ "lua" }, true, { is_lua = true })
   local workspace = config.settings.Lua.workspace
   if type(runtimedirs) ~= "nil" then
     for _, v in pairs(runtimedirs) do
@@ -40,56 +37,52 @@ lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_c
   on_new_config = make_on_new_config(lspconfig.util.default_config.on_new_config),
 })
 
-M.setup = {
-  settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-        special = {
-          reload = "require",
-        },
+M.settings = {
+  Lua = {
+    runtime = {
+      version = "LuaJIT",
+      special = {
+        reload = "require",
       },
-      diagnostics = {
-        disable = {
-          "lowercase-global",
-          "undefined-global",
-          "unused-local",
-          "unused-vararg",
-          "trailing-space",
-        },
-        globals = {
-          "vim",
-          "use",
-          "lowercase-global",
-          "undefined-global",
-          "unused-local",
-          "unused-vararg",
-          "trailing-space",
-          "packer_plugins",
-          "reload",
-        },
-      },
-      completion = {
-        keywordSnippet = "Replace",
-        callSnippet = "Replace",
-      },
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.fn.expand "$VIMRUNTIME",
-          neodev_config.types(),
-        },
-        preloadFileSize = 10000,
-        maxPreload = 5000,
-      },
-      telemetry = {
-        enable = false,
-      },
-      single_file_support = true,
     },
+    diagnostics = {
+      disable = {
+        "lowercase-global",
+        "undefined-global",
+        "unused-local",
+        "unused-vararg",
+        "trailing-space",
+      },
+      globals = {
+        "vim",
+        "use",
+        "lowercase-global",
+        "undefined-global",
+        "unused-local",
+        "unused-vararg",
+        "trailing-space",
+        "packer_plugins",
+        "reload",
+      },
+    },
+    completion = {
+      keywordSnippet = "Replace",
+      callSnippet = "Replace",
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = {
+        vim.fn.expand "$VIMRUNTIME",
+        neodev_config.types(),
+      },
+      preloadFileSize = 10000,
+      maxPreload = 5000,
+    },
+    telemetry = {
+      enable = false,
+    },
+    single_file_support = true,
   },
-  on_attach = utils.common.on_attach,
-  capabilities = capabilities,
 }
 
 return M

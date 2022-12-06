@@ -41,15 +41,6 @@ if present then
       { name = "path" },
       { name = "nvim_lsp" },
       { name = "buffer" },
-      -- {
-      --   name = "spell",
-      --   option = {
-      --     keep_all_entries = false,
-      --     enable_in_context = function()
-      --       return true
-      --     end,
-      --   },
-      -- },
       { name = "nvim_lsp_signature_help" },
       { name = "nvim_lua" },
       { name = "zsh" },

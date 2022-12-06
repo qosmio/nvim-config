@@ -1,4 +1,4 @@
-local icons = {
+return {
   abc = "",
   array = "",
   arrowReturn = "",
@@ -135,5 +135,3 @@ local icons = {
   watch = "",
   wrench = "",
 }
-
-return icons

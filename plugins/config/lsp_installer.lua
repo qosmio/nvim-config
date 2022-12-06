@@ -5,14 +5,9 @@ local ensure_installed = {
   "yamlls",
   "sumneko_lua",
   "tsserver",
-  "tailwindcss",
   "cssls",
   "eslint",
-  "graphql",
   "html",
-  "vuels",
-  "volar",
-  "prismals",
 }
 
 local present, lsp_installer = pcall(require, "nvim-lsp-installer")

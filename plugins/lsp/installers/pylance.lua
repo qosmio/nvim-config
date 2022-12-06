@@ -4,10 +4,8 @@ local configs = require "lspconfig.configs"
 local servers = require "nvim-lsp-installer.servers"
 local server = require "nvim-lsp-installer.server"
 local path = require "nvim-lsp-installer.path"
-local handlers = require "vim.lsp.handlers"
 local platform = require "nvim-lsp-installer.platform"
 local std = require "nvim-lsp-installer.core.managers.std"
--- local fetch = require "nvim-lsp-installer.core.fetch"
 local github_client = require "nvim-lsp-installer.core.managers.github.client"
 
 local server_name = "pylance"
@@ -22,8 +20,6 @@ local restart_server = function()
   local params = { command = "pyright.restartserver", arguments = { vim.uri_from_bufnr(0) } }
   vim.lsp.buf.execute_command(params)
 end
-
--- table.insert(handlers,pylance_handlers)
 
 local extract_method = function()
   local range_params = lsp_util.make_given_range_params(nil, nil)
@@ -44,18 +40,39 @@ local organize_imports = function()
   vim.lsp.buf.execute_command(params)
 end
 
-local on_workspace_executecommand = function(err, actions, ctx)
-  if err ~= nil then
-    handlers[ctx.method](err, actions, ctx)
-  end
+local function on_workspace_executecommand(_, result, ctx)
   if ctx.params.command:match "WithRename" then
     ctx.params.command = ctx.params.command:gsub("WithRename", "")
     vim.lsp.buf.execute_command(ctx.params)
   end
-  handlers[ctx.method](err, actions, ctx)
+  if result then
+    if result.label == "Extract Method" then
+      local old_value = result.data.newSymbolName
+      local file = vim.tbl_keys(result.edits.changes)[1]
+      local range = result.edits.changes[file][1].range.start
+      local params = { textDocument = { uri = file }, position = range }
+      local client = vim.lsp.get_client_by_id(ctx.client_id)
+      local bufnr = ctx.bufnr
+      local prompt_opts = {
+        prompt = "New Method Name: ",
+        default = old_value,
+      }
+      if not old_value:find "new_var" then
+        range.character = range.character + 5
+      end
+      vim.ui.input(prompt_opts, function(input)
+        if not input or #input == 0 then
+          return
+        end
+        params.newName = input
+        local handler = client.handlers["textDocument/rename"] or vim.lsp.handlers["textDocument/rename"]
+        client.request("textDocument/rename", params, handler, bufnr)
+      end)
+    end
+  end
 end
 
-local pylance_handlers = {
+local handlers = {
   ["pyright/beginProgress"] = function(_, _, _, client_id)
     require("lsp-status/util").ensure_init(messages, client_id, "pylance")
     if not messages[client_id].progress[1] then
@@ -99,7 +116,6 @@ configs[server_name] = {
   default_config = {
     filetypes = { "python" },
     root_dir = util.root_pattern(unpack(root_files)),
-    -- cmd                 = {"py"},
     single_file_support = true,
     settings = {
       python = {
@@ -114,7 +130,7 @@ configs[server_name] = {
         experiments = { optInto = { "Experiment1", "Experiment13", "Experiment56", "Experiment106" } },
       },
     },
-    handlers = pylance_handlers,
+    handlers = handlers,
   },
   commands = {
     LspPyrightRestartServer = { restart_server, description = "Restart Server" },
@@ -124,16 +140,6 @@ configs[server_name] = {
   },
 }
 
----@param response string @The `raw html from marketplace output.
----@return table<string> @Key is the version, value is its version.
--- local parse_versions = function(response)
---    for line in response:gmatch "([^\r\n]*)\r?\n?" do
---       for version in line:gmatch [["version":"([%S]+)",]] do
---          return version
---       end
---    end
---    -- return versions[0] or versions[1]
--- end
 local bin_path = path.concat { "extension", "dist", "server.bundle.js" }
 
 local pylance_installer = function(ctx)
@@ -141,19 +147,17 @@ local pylance_installer = function(ctx)
   -- local version = fetch("https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance"):map(parse_versions).value
   local version = ctx.requested_version:or_else_get(function()
     return github_client
-      .fetch_latest_tag(repo)
-      :map(function(tag)
-        if tag.name == "2022.11.21" then
-          tag.name = "2022.11.11"
-        end
-        return tag.name
-      end)
-      :get_or_throw()
+        .fetch_latest_tag(repo)
+        :map(function(tag)
+          return tag.name
+        end)
+        :get_or_throw()
   end)
-  local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"):format(
-    version
-  )
-  -- url = "http://domain/ms-python.vscode-pylance-2022.4.2.vsix"
+  local url = (
+      "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
+      ):format(
+        version
+      )
   local headers = {
     ["Cookie"] = "Gallery-Service-UserIdentifier=31b2287d-bbf7-471c-a5aa-a25c931b1b71",
     ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.68.1 Chrome/98.0.4758.141 Electron/17.4.7 Safari/537.36",

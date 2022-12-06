@@ -3,7 +3,10 @@ local M = {}
 M.user = {
   ["max397574/better-escape.nvim"] = false,
   ["goolord/alpha-nvim"] = false,
-  ["williamboman/mason"] = false,
+  -- ["williamboman/mason.nvim"] = false,
+  ["nvim-telescope/telescope.nvim"] = false,
+  -- ["L3MON4D3/LuaSnip"] = false,
+  -- ["saadparwaiz1/cmp_luasnip"] = false,
   ["NvChad/nvim-colorizer.lua"] = { override_options = require "custom.plugins.config.colorizer" },
   ["lewis6991/gitsigns.nvim"] = { override_options = require "custom.plugins.config.gitsigns" },
   ["nvim-treesitter/nvim-treesitter"] = {
@@ -51,9 +54,7 @@ M.user = {
       require("custom.plugins.lsp").setup_lsp()
     end,
   },
-  ["L3MON4D3/LuaSnip"] = false,
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
-  ["saadparwaiz1/cmp_luasnip"] = false,
   ["folke/neodev.nvim"] = {
     before = { "lspconfig" },
     ft = { "lua" },
@@ -117,6 +118,7 @@ M.user = {
       return { filetypes = { "deoledit", "zsh" } }
     end,
   },
+  ["lvimuser/lsp-inlayhints.nvim"] = {},
 }
 
 return M.user
