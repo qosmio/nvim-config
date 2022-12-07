@@ -3,10 +3,7 @@ local M = {}
 M.user = {
   ["max397574/better-escape.nvim"] = false,
   ["goolord/alpha-nvim"] = false,
-  -- ["williamboman/mason.nvim"] = false,
   ["nvim-telescope/telescope.nvim"] = false,
-  -- ["L3MON4D3/LuaSnip"] = false,
-  -- ["saadparwaiz1/cmp_luasnip"] = false,
   ["NvChad/nvim-colorizer.lua"] = { override_options = require "custom.plugins.config.colorizer" },
   ["lewis6991/gitsigns.nvim"] = { override_options = require "custom.plugins.config.gitsigns" },
   ["nvim-treesitter/nvim-treesitter"] = {
@@ -102,16 +99,6 @@ M.user = {
     end,
   },
   ["hrsh7th/cmp-nvim-lsp-signature-help"] = { after = "null-ls.nvim" }, --  function signature help
-  -- ["github/copilot.vim"] = {
-  --   requires = { "hrsh7th/nvim-cmp" },
-  --   event = "InsertEnter",
-  --   setup = function()
-  --     vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#965f89" })
-  --     vim.g.copilot_no_tab_map = true
-  --     vim.g.copilot_assume_mapped = true
-  --     vim.g.copilot_tab_fallback = ""
-  --   end,
-  -- },
   ["tamago324/cmp-zsh"] = {
     requires = { "Shougo/deol.nvim" },
     setup = function()
