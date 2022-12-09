@@ -4,7 +4,6 @@ if not ok_cmp then
   return
 end
 
-local Pkg = require "mason-core.package"
 local installer = require "mason-core.installer"
 local fetch = require "mason-core.fetch"
 local lsp_util = require "vim.lsp.util"

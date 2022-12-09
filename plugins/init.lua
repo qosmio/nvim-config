@@ -36,26 +36,22 @@ M.user = {
     end,
   },
   ["folke/which-key.nvim"] = { disable = false },
-  ["williamboman/mason.nvim"] = {
-    cmd = require("core.lazy_load").mason_cmds,
-    config = function()
-      require "plugins.configs.mason"
+  ["williamboman/mason-lspconfig.nvim"] = {
+    after = { "mason.nvim", "nvim-lspconfig" },
+    setup = function()
+      require("core.lazy_load").on_file_open "mason-lspconfig.nvim"
     end,
-    requires = { "williamboman/mason-lspconfig.nvim" },
-  },
-  ["neovim/nvim-lspconfig"] = {
-    after = { "mason.nvim", "mason-lspconfig.nvim" },
-    setup = require("core.lazy_load").on_file_open "nvim-lspconfig",
     config = function()
+      require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.servers"
-      require("mason-lspconfig").setup(require "lsp.lspconfig")
       require "custom.plugins.lsp.settings"
+      require("mason-lspconfig").setup(require "lsp.lspconfig")
     end,
   },
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
   ["folke/neodev.nvim"] = {
-    before = { "lspconfig" },
+    -- after = { "lspconfig" },
     ft = { "lua" },
   },
   ["rmagatti/alternate-toggler"] = {},

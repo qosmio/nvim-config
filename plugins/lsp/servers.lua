@@ -13,6 +13,7 @@ local servers = vim.tbl_deep_extend("force", require("mason-lspconfig").get_inst
 for _, server in ipairs(servers) do
   local ok, res = pcall(require, "custom.plugins.lsp.servers." .. server)
   if ok and res ~= true then
+    -- print(vim.inspect(server))
     lspconfig[server].setup(vim.tbl_deep_extend("force", base, res))
   else
     lspconfig[server].setup(base)
