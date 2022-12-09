@@ -1,3 +1,9 @@
+local ok_cmp, Pkg = pcall(require, "mason-core.package")
+
+if not ok_cmp then
+  return
+end
+
 local Pkg = require "mason-core.package"
 local installer = require "mason-core.installer"
 local fetch = require "mason-core.fetch"

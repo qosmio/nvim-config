@@ -47,12 +47,10 @@ M.user = {
     after = { "mason.nvim", "mason-lspconfig.nvim" },
     setup = require("core.lazy_load").on_file_open "nvim-lspconfig",
     config = function()
-      vim.defer_fn(function()
-        require "custom.plugins.lsp.installers.pylance"
-        require "custom.plugins.lsp.servers"
-        require("mason-lspconfig").setup(require "lsp.lspconfig")
-        require "custom.plugins.lsp.settings"
-      end, 250)
+      require "custom.plugins.lsp.installers.pylance"
+      require "custom.plugins.lsp.servers"
+      require("mason-lspconfig").setup(require "lsp.lspconfig")
+      require "custom.plugins.lsp.settings"
     end,
   },
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
