@@ -1,14 +1,6 @@
 local M = {}
 
-M.options = {
-
-  -- NvChad options
-  nvChad = {
-    -- updater
-    update_url = "https://github.com/qosmio/NvChad",
-    update_branch = "main",
-  },
-}
+M.options = {}
 
 ---- UI -----
 
