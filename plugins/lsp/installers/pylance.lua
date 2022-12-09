@@ -158,7 +158,7 @@ if not configs[server_name] then
       cmd = { "pylance", "--stdio" },
       single_file_support = true,
       settings = {
-        -- editor = { formatOnType = true },
+        editor = { formatOnType = true },
         python = {
           analysis = {
             autoImportCompletions = true,
@@ -243,9 +243,11 @@ local pkg = Pkg.new {
   install = pylance_installer,
 }
 
-if not pkg:is_installed() then
-  notify(("[mason-lspconfig.nvim] installing %s"):format(pkg.name))
-  pkg:install()
-end
+pkg:get_installed_version(function(success, _)
+  if not success then
+    notify(("[mason-lspconfig.nvim] Installing %s"):format(pkg.name))
+    pkg:install()
+  end
+end)
 
 return pkg
