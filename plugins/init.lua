@@ -39,7 +39,7 @@ M.user = {
   ["williamboman/mason-lspconfig.nvim"] = {
     after = { "mason.nvim", "nvim-lspconfig" },
     setup = function()
-      require("core.lazy_load").on_file_open "mason-lspconfig.nvim"
+      require("core.lazy_load").on_file_open "mason.nvim"
     end,
     config = function()
       require "plugins.configs.lspconfig"
@@ -116,6 +116,17 @@ M.user = {
       }
     end,
     ext = "nvim-semantic-tokens",
+  },
+  ["jay-babu/mason-null-ls.nvim"] = {
+    after = { "mason.nvim", "null-ls.nvim" },
+    config = function()
+      local mason_null_ls = require "mason-null-ls"
+      mason_null_ls.setup {
+        ensure_installed = nil,
+        automatic_installation = true,
+        automatic_setup = true,
+      }
+    end,
   },
 }
 return M.user

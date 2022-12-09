@@ -1,9 +1,4 @@
-local ok_cmp, Pkg = pcall(require, "mason-core.package")
-
-if not ok_cmp then
-  return
-end
-
+local Pkg = require "mason-core.package"
 local installer = require "mason-core.installer"
 local fetch = require "mason-core.fetch"
 local lsp_util = require "vim.lsp.util"
@@ -11,7 +6,7 @@ local lsputil = require "lspconfig.util"
 local configs = require "lspconfig.configs"
 local path = require "mason-core.path"
 local index = require "mason-registry.index"
-
+local notify = require "mason-core.notify"
 local platform = require "mason-core.platform"
 local std = require "mason-core.managers.std"
 local github = require "mason-core.managers.github"
@@ -239,7 +234,7 @@ local pylance_installer = function(ctx)
   )
 end
 
-return Pkg.new {
+local pkg = Pkg.new {
   name = server_name,
   desc = [[Fast, feature-rich language support for Python]],
   homepage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance",
@@ -247,3 +242,10 @@ return Pkg.new {
   categories = { Pkg.Cat.LSP },
   install = pylance_installer,
 }
+
+if not pkg:is_installed() then
+  notify(("[mason-lspconfig.nvim] installing %s"):format(pkg.name))
+  pkg:install()
+end
+
+return pkg
