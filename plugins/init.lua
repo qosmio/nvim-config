@@ -4,8 +4,12 @@ M.user = {
   ["max397574/better-escape.nvim"] = false,
   ["goolord/alpha-nvim"] = false,
   ["nvim-telescope/telescope.nvim"] = false,
-  ["NvChad/nvim-colorizer.lua"] = { override_options = require "custom.plugins.config.colorizer" },
-  ["lewis6991/gitsigns.nvim"] = { override_options = require "custom.plugins.config.gitsigns" },
+  ["NvChad/nvim-colorizer.lua"] = {
+    override_options = require "custom.plugins.config.colorizer",
+  },
+  ["lewis6991/gitsigns.nvim"] = {
+    override_options = require "custom.plugins.config.gitsigns",
+  },
   ["nvim-treesitter/nvim-treesitter"] = {
     override_options = require "custom.plugins.config.treesitter",
     module = "nvim-treesitter",
@@ -32,23 +36,23 @@ M.user = {
     end,
   },
   ["folke/which-key.nvim"] = { disable = false },
-  ["qosmio/nvim-lsp-installer"] = {
-    setup = function()
-      require("core.lazy_load").on_file_open "nvim-lsp-installer"
-      -- reload the current file so lsp actually starts for it
-      vim.defer_fn(function()
-        vim.cmd 'if &ft =="packer"| echo""| else | silent! e %'
-      end, 0)
+  ["williamboman/mason.nvim"] = {
+    cmd = require("core.lazy_load").mason_cmds,
+    config = function()
+      require "plugins.configs.mason"
     end,
+    requires = { "williamboman/mason-lspconfig.nvim" },
   },
   ["neovim/nvim-lspconfig"] = {
-    setup = function()
-      require("core.lazy_load").on_file_open "nvim-lspconfig"
-    end,
+    after = { "mason.nvim", "mason-lspconfig.nvim" },
+    setup = require("core.lazy_load").on_file_open "nvim-lspconfig",
     config = function()
-      require "plugins.configs.lspconfig"
-      require "custom.plugins.config.lsp_installer"
-      require("custom.plugins.lsp").setup_lsp()
+      vim.defer_fn(function()
+        require "custom.plugins.lsp.installers.pylance"
+        require "custom.plugins.lsp.servers"
+        require("mason-lspconfig").setup(require "lsp.lspconfig")
+        require "custom.plugins.lsp.settings"
+      end, 250)
     end,
   },
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
@@ -100,12 +104,24 @@ M.user = {
   },
   ["hrsh7th/cmp-nvim-lsp-signature-help"] = { after = "null-ls.nvim" }, --  function signature help
   ["tamago324/cmp-zsh"] = {
-    requires = { "Shougo/deol.nvim" },
+    ft = { "zsh" },
     setup = function()
-      return { filetypes = { "deoledit", "zsh" } }
+      require("core.lazy_load").on_file_open "cmp-zsh"
     end,
+    config = {
+      filetypes = { "zsh" },
+    },
   },
   ["lvimuser/lsp-inlayhints.nvim"] = {},
+  ["microsoft/python-type-stubs"] = { opt = true, ft = "python" },
+  ["theHamsta/nvim-semantic-tokens"] = {
+    config = function()
+      require("nvim-semantic-tokens").setup {
+        preset = "default",
+        highlighters = { require "nvim-semantic-tokens.table-highlighter" },
+      }
+    end,
+    ext = "nvim-semantic-tokens",
+  },
 }
-
 return M.user

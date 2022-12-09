@@ -37,6 +37,7 @@ lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_c
   on_new_config = make_on_new_config(lspconfig.util.default_config.on_new_config),
 })
 
+M.name = "sumneko_lua"
 M.settings = {
   Lua = {
     runtime = {
@@ -49,18 +50,10 @@ M.settings = {
       disable = {
         "lowercase-global",
         "undefined-global",
-        "unused-local",
-        "unused-vararg",
-        "trailing-space",
       },
       globals = {
         "vim",
         "use",
-        "lowercase-global",
-        "undefined-global",
-        "unused-local",
-        "unused-vararg",
-        "trailing-space",
         "packer_plugins",
         "reload",
       },

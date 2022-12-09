@@ -1,4 +1,3 @@
-local mappings = require "custom.plugins.lsp.utils.mappings"
 local autocmds = require "custom.plugins.lsp.utils.autocmds"
 
 local M = {}
@@ -46,9 +45,10 @@ M.on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
 
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+  local utils = require "core.utils"
+  utils.load_mappings("lspconfig", { buffer = bufnr })
 
-  mappings.setup(client)
+  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
   if client.server_capabilities.definitionProvider then
     vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
@@ -64,6 +64,12 @@ M.on_attach = function(client, bufnr)
 
   if client.server_capabilities.documentFormattingProvider then
     autocmds.DocumentFormattingAU(bufnr)
+  end
+
+  if client.server_capabilities.signatureHelpProvider then
+    require("base46").load_highlight "lsp"
+    require "nvchad_ui.lsp"
+    require("nvchad_ui.signature").setup(client)
   end
 end
 

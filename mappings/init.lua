@@ -22,7 +22,10 @@ M.misc = {
   n = {
     ["d"] = { '"_d' },
     ["x"] = { '"_x' },
-    ["<C-o>"] = { "<cmd> TSHighlightCapturesUnderCursor <CR>", " Show Highlight Group" },
+    ["<C-o>"] = {
+      "<cmd> TSHighlightCapturesUnderCursor <CR>",
+      " Show Highlight Group",
+    },
   },
   v = {
     ["d"] = { '"_d' },

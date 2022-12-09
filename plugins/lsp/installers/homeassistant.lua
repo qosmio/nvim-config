@@ -76,7 +76,11 @@ local custom_server = server.Server:new {
     }
   end,
   default_options = {
-    cmd = { "node", path.concat { root_dir, "extension", "out", "server", "server.js" }, "--stdio" },
+    cmd = {
+      "node",
+      path.concat { root_dir, "extension", "out", "server", "server.js" },
+      "--stdio",
+    },
     -- root_dir = util.root_pattern(unpack { "~/.homeassistant/*" }),
     root_dir = util.root_pattern(unpack(root_files)),
     settings = {},

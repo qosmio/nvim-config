@@ -1,6 +1,6 @@
 local M = {}
 M.setup = function()
-  local present, path = pcall(require, "nvim-lsp-installer.path")
+  local present, path = pcall(require, "mason-core.path")
   if not present then
     return
   end

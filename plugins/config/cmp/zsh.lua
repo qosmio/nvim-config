@@ -5,7 +5,7 @@ if ok_cmp then
   if ok_cmp then
     cmp.setup.filetype("zsh", {
       sources = cmp.config.sources {
-        { name = 'zsh' },
+        { name = "zsh" },
         { name = "path" },
         { name = "buffer" },
       },

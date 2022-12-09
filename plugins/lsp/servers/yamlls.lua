@@ -1,10 +1,5 @@
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-local utils = require "custom.plugins.lsp.utils"
-
 -- YAML
 return {
-  capabilities = capabilities,
-  on_attach = utils.common.on_attach,
   settings = {
     yaml = {
       customTags = {

@@ -26,7 +26,10 @@ local sources = {
   -- Lua
   -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
   formatting.stylua.with {
-    extra_args = { "--config-path", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/stylua.toml" },
+    extra_args = {
+      "--config-path",
+      vim.fn.stdpath "config" .. "/lua/custom/plugins/config/stylua.toml",
+    },
   },
 
   -- Python

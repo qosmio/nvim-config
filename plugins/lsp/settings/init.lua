@@ -1,8 +1,10 @@
 local M = {}
+local L = {}
 -- UI
-M.icons = require "lsp.settings.icons"
-M.codes = require "lsp.settings.codes"
-M.popup_border = {
+L.icons = require "lsp.settings.icons"
+L.codes = require "lsp.settings.codes"
+L.autocmds = require "lsp.utils.autocmds"
+L.popup_border = {
   { "╭", "FloatBorder" },
   { "─", "FloatBorder" },
   { "╮", "FloatBorder" },
@@ -13,6 +15,54 @@ M.popup_border = {
   { "│", "FloatBorder" },
 }
 
+-- export on_attach & capabilities for custom lspconfigs
+M.on_attach = function(client, bufnr)
+  local function buf_set_option(...)
+    vim.api.nvim_buf_set_option(bufnr, ...)
+  end
+
+  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+
+  local utils = require "core.utils"
+  utils.load_mappings("lspconfig", { buffer = bufnr })
+
+  if client.server_capabilities.definitionProvider then
+    vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+  end
+
+  if client.server_capabilities.documentHighlightProvider then
+    L.autocmds.DocumentHighlightAU(bufnr)
+  end
+
+  if client.server_capabilities.codeLensProvider then
+    L.autocmds.CodeLensAU(bufnr)
+  end
+
+  if client.server_capabilities.documentFormattingProvider then
+    L.autocmds.DocumentFormattingAU(bufnr)
+  end
+
+  if client.server_capabilities.signatureHelpProvider then
+    require("base46").load_highlight "lsp"
+    require "nvchad_ui.lsp"
+    require("nvchad_ui.signature").setup(client)
+  end
+end
+
+-- M.on_attach = function(client, bufnr)
+--   client.server_capabilities.documentFormattingProvider = false
+--   client.server_capabilities.documentRangeFormattingProvider = false
+--
+--   local utils = require "core.utils"
+--   utils.load_mappings("lspconfig", { buffer = bufnr })
+--
+--   if client.server_capabilities.signatureHelpProvider then
+--     require("base46").load_highlight "lsp"
+--     require "nvchad_ui.lsp"
+--     require("nvchad_ui.signature").setup(client)
+--   end
+-- end
+
 M.handlers = {
   ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false, -- if using pop-up window
@@ -21,11 +71,27 @@ M.handlers = {
     update_in_insert = false, -- update diagnostics insert mode
     severity_sort = false,
   }),
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = M.popup_border }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = M.popup_border }),
+  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = L.popup_border }),
+  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = L.popup_border }),
 }
 
-M.define_signs = function(signs)
+M.capabilities = (function()
+  local lspconfig = require "plugins.configs.lspconfig"
+  local ok_s, semantic_tokens = pcall(require, "nvim-semantic-tokens")
+  local ok_c, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  if not (ok_s and ok_c) then
+    return
+  end
+
+  local caps = semantic_tokens.extend_capabilities(vim.lsp.protocol.make_client_capabilities())
+  caps = cmp_nvim_lsp.default_capabilities(caps)
+  caps.textDocument.completion.completionItem.snippetSupport = true
+  caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
+  caps.offsetEncoding = { "utf-16" }
+  return vim.tbl_deep_extend("force", caps, lspconfig.capabilities)
+end)()
+
+local define_signs = function(signs)
   for type, _ in pairs(signs) do
     local hl = "DiagnosticSign" .. type
     vim.fn.sign_define(hl, { text = nil, texthl = nil, numhl = hl })
@@ -33,12 +99,12 @@ M.define_signs = function(signs)
   end
 end
 
-M.setup = function()
-  M.define_signs {
-    Error = M.icons.errorSlash,
-    Warn = M.icons.warningTriangle,
-    Hint = M.icons.lightbulbOutline,
-    Info = M.icons.info,
+local setup = function()
+  define_signs {
+    Error = L.icons.errorSlash,
+    Warn = L.icons.warningTriangle,
+    Hint = L.icons.lightbulbOutline,
+    Info = L.icons.info,
   }
 
   -- Show diagnostics in popup window (using the border above)
@@ -47,49 +113,15 @@ M.setup = function()
   vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     group = group_name,
     callback = function()
-      vim.diagnostic.open_float { source = false, border = M.popup_border, focusable = false, show_header = false }
+      vim.diagnostic.open_float {
+        source = false,
+        border = L.popup_border,
+        focusable = false,
+        show_header = false,
+      }
     end,
   })
-
-  vim.diagnostic.config {
-    signs = true,
-    underline = true,
-    update_in_insert = false,
-    virtual_text = false,
-    float = {
-      header = false,
-      -- source = "always",
-      -- source = false,
-      format = function(diagnostic)
-        if not diagnostic.source then
-          return string.format("%s", diagnostic.message)
-        end
-
-        -- if diagnostic.source ~= "shellcheck" then
-        if diagnostic.user_data and diagnostic.user_data.lsp and diagnostic.user_data.lsp.code then
-          local code = diagnostic.user_data.lsp.code
-
-          if diagnostic.source == "eslint" then
-            for _, table in pairs(M.codes) do
-              if vim.tbl_contains(table, code) then
-                return string.format("%s [%s]", table.icon .. diagnostic.message, code)
-              end
-            end
-            return string.format("%s [%s]", diagnostic.message, code)
-          end
-
-          for _, table in pairs(M.codes) do
-            if vim.tbl_contains(table, code) then
-              return table.message
-            end
-          end
-        end
-
-        return string.format("%s [%s]", diagnostic.message, diagnostic.source)
-      end,
-    },
-    severity_sort = true,
-  }
 end
+setup()
 
 return M

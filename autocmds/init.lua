@@ -148,7 +148,10 @@ aucmd(
   { "BufNewFile", "BufRead", "InsertLeave" },
   { command = "silent! match ExtraWhitespace /\\s\\+$/", group = extra_whitespace }
 )
-aucmd({ "InsertEnter" }, { command = "silent! match ExtraWhitespace /\\s\\+\\%#\\@<!$/", group = extra_whitespace })
+aucmd({ "InsertEnter" }, {
+  command = "silent! match ExtraWhitespace /\\s\\+\\%#\\@<!$/",
+  group = extra_whitespace,
+})
 -- }}}
 
 -- }}}

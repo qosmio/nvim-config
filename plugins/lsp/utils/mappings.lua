@@ -4,7 +4,8 @@ local mappings = {}
 
 local opt = { noremap = true, silent = true }
 
-function mappings.setup(client)
+local M = {}
+M.setup = function(client)
   keymap.set({ "n" }, "ga", vim.lsp.buf.code_action, opt)
   keymap.set({ "v" }, "ga", ":lua vim.lsp.buf.range_code_action()<cr>", opt)
   keymap.set("n", "gD", lsp.buf.declaration, opt)
@@ -30,4 +31,4 @@ function mappings.setup(client)
   end
 end
 
-return mappings
+return M
