@@ -1,29 +1,37 @@
-local ok_cmp, cmp, comp
+local ok_cmp, cmp
 ok_cmp, cmp = pcall(require, "cmp")
 if ok_cmp then
-  ok_cmp, comp = pcall(require, "cmp-under-comparator")
-  if ok_cmp then
-    cmp.setup.filetype("python", {
-      sources = cmp.config.sources {
-        { name = "path" },
-        { name = "nvim_lsp" },
-        { name = "buffer" },
-        { name = "nvim_lsp_signature_help" },
-        -- { name = "calc" },
-        -- { name = "luasnip" },
+  local config = {
+    sources = {
+      {
+        name = "nvim_lsp",
+        priority = 100,
+        group_index = 1,
+        -- keyword_length = 2,
+        max_item_count = 10,
       },
-      sorting = {
-        comparators = {
-          cmp.config.compare.offset,
-          cmp.config.compare.exact,
-          cmp.config.compare.score,
-          comp.under,
-          -- cmp.config.compare.sort_text,
-          cmp.config.compare.length,
-          cmp.config.compare.order,
-          cmp.config.compare.kind,
-        },
+      -- {
+      --   name = "nvim_lsp_signature_help",
+      --   priority = 70,
+      --   group_index = 1,
+      -- },
+      -- {
+      --   name = "buffer",
+      --   priority = 50,
+      --   group_index = 1,
+      --   keyword_length = 2,
+      --   max_item_count = 5,
+      -- },
+    },
+    sorting = {
+      comparators = {
+        cmp.config.compare.locality,
+        cmp.config.compare.score,
+        cmp.config.compare.offset,
+        cmp.config.compare.recently_used,
+        cmp.config.compare.order,
       },
-    })
-  end
+    },
+  }
+  cmp.setup.filetype("python", vim.tbl_deep_extend("force", require "custom.plugins.config.cmp", config))
 end

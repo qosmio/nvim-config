@@ -14,35 +14,58 @@ L.popup_border = {
   { "╰", "FloatBorder" },
   { "│", "FloatBorder" },
 }
+-- Show diagnostics in a pop-up window on hover
+L.lsp_diagnostics_popup_handler = function(client)
+  local current_cursor = vim.api.nvim_win_get_cursor(0)
+  local last_popup_cursor = vim.w.lsp_diagnostics_last_cursor or { nil, nil }
+  -- Show the popup diagnostics window,
+  -- but only once for the current cursor location (unless moved afterwards).
+  if not (current_cursor[1] == last_popup_cursor[1] and current_cursor[2] == last_popup_cursor[2]) then
+    vim.w.lsp_diagnostics_last_cursor = current_cursor
+    vim.diagnostic.open_float(client.buf, {
+      border = L.popup_border,
+      scope = "cursor",
+      focusable = false,
+      source = "always",
+      header = "",
+      prefix = "",
+    })
+  end
+end
 
 -- export on_attach & capabilities for custom lspconfigs
-M.on_attach = function(client, bufnr)
-  local function buf_set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
-  end
+M.on_attach = function(client, bufnr, opts)
+  -- local function buf_set_option(...)
+  --   vim.api.nvim_buf_set_option(bufnr, ...)
+  -- end
+  --
+  -- buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-
+  local caps = client.server_capabilities
   local utils = require "core.utils"
   utils.load_mappings("lspconfig", { buffer = bufnr })
 
-  if client.server_capabilities.definitionProvider then
-    vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
-  end
+  -- if caps.definitionProvider then
+  --   vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+  -- end
 
-  if client.server_capabilities.documentHighlightProvider then
+  if caps.documentHighlightProvider then
     L.autocmds.DocumentHighlightAU(bufnr)
   end
 
-  if client.server_capabilities.codeLensProvider then
+  if caps.codeLensProvider then
     L.autocmds.CodeLensAU(bufnr)
   end
 
-  if client.server_capabilities.documentFormattingProvider then
+  if caps.documentFormattingProvider then
     L.autocmds.DocumentFormattingAU(bufnr)
   end
+  -- Enable semantic tokens if it's available (from the fork at jdrouhard/neovim#lsp_semantic_tokens)
+  -- if vim.lsp.semantic_tokens ~= nil and caps.semanticTokensProvider then
+  --   vim.lsp.semantic_tokens.start(bufnr, client.id, opts)
+  -- end
 
-  if client.server_capabilities.signatureHelpProvider then
+  if caps.signatureHelpProvider then
     require("base46").load_highlight "lsp"
     require "nvchad_ui.lsp"
     require("nvchad_ui.signature").setup(client)
@@ -50,19 +73,18 @@ M.on_attach = function(client, bufnr)
 end
 
 -- M.on_attach = function(client, bufnr)
---   client.server_capabilities.documentFormattingProvider = false
---   client.server_capabilities.documentRangeFormattingProvider = false
+--   caps.documentFormattingProvider = false
+--   caps.documentRangeFormattingProvider = false
 --
 --   local utils = require "core.utils"
 --   utils.load_mappings("lspconfig", { buffer = bufnr })
 --
---   if client.server_capabilities.signatureHelpProvider then
+--   if caps.signatureHelpProvider then
 --     require("base46").load_highlight "lsp"
 --     require "nvchad_ui.lsp"
 --     require("nvchad_ui.signature").setup(client)
 --   end
 -- end
-
 M.handlers = {
   ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false, -- if using pop-up window
@@ -77,13 +99,9 @@ M.handlers = {
 
 M.capabilities = (function()
   local lspconfig = require "plugins.configs.lspconfig"
-  local ok_s, semantic_tokens = pcall(require, "nvim-semantic-tokens")
-  local ok_c, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-  if not (ok_s and ok_c) then
-    return
-  end
+  local cmp_nvim_lsp = require "cmp_nvim_lsp"
 
-  local caps = semantic_tokens.extend_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local caps = vim.lsp.protocol.make_client_capabilities()
   caps = cmp_nvim_lsp.default_capabilities(caps)
   caps.textDocument.completion.completionItem.snippetSupport = true
   caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
@@ -92,36 +110,33 @@ M.capabilities = (function()
 end)()
 
 local define_signs = function(signs)
-  for type, _ in pairs(signs) do
+  for type, icon in pairs(signs) do
     local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = nil, texthl = nil, numhl = hl })
+    vim.fn.sign_define(hl, {
+      text = icon,
+      texthl = hl,
+      numhl = "",
+    })
     -- without icon, but with number highlight
   end
 end
 
-local setup = function()
+M._setup = function()
   define_signs {
-    Error = L.icons.errorSlash,
+    Error = L.icons.error,
     Warn = L.icons.warningTriangle,
     Hint = L.icons.lightbulbOutline,
     Info = L.icons.info,
   }
-
   -- Show diagnostics in popup window (using the border above)
   local group_name = "LspDiagnostics"
   vim.api.nvim_create_augroup(group_name, { clear = true })
-  vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  vim.api.nvim_create_autocmd({ "CursorHold" }, {
     group = group_name,
-    callback = function()
-      vim.diagnostic.open_float {
-        source = false,
-        border = L.popup_border,
-        focusable = false,
-        show_header = false,
-      }
+    callback = function(client)
+      L.lsp_diagnostics_popup_handler(client)
     end,
   })
 end
-setup()
 
 return M

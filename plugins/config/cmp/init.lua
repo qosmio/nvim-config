@@ -1,64 +1,52 @@
-local _present, comparator = pcall(require, "cmp-under-comparator")
-
-if not _present then
-  return
-end
-
-local present, cmp = pcall(require, "cmp")
-if present then
+local function border(hl_name)
   return {
-    style = {
-      winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-    },
-    formatting = {
-      format = function(entry, vim_item)
-        local icons = require "custom.plugins.config.cmp.lspkind_icons"
-        vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
-
-        vim_item.menu = ({
-          nvim_lsp = "[LSP]",
-          nvim_lua = "[Lua]",
-          buffer = "[BUF]",
-        })[entry.source.name]
-
-        return vim_item
-      end,
-      symbol_map = require "custom.plugins.config.cmp.lspkind_icons",
-    },
-    window = {
-      completion = {
-        winhighlight = "Normal:CmpMenu,FloatBorder:CmpMenuBorder,CursorLine:CmpSelection,Search:None",
-      },
-      documentation = {
-        winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-      },
-    },
-    experimental = {
-      native_menu = false,
-      ghost_text = true,
-    },
-    sources = cmp.config.sources {
-      { name = "path" },
-      { name = "nvim_lsp" },
-      { name = "buffer" },
-      { name = "nvim_lsp_signature_help" },
-      { name = "nvim_lua" },
-      { name = "zsh" },
-      -- { name = "luasnip" },
-    },
-    sorting = {
-      comparators = {
-        cmp.config.compare.recently_used,
-        cmp.config.compare.offset,
-        cmp.config.compare.exact,
-        cmp.config.compare.score,
-        comparator.under,
-        cmp.config.compare.kind,
-        cmp.config.compare.sort_text,
-        cmp.config.compare.length,
-        cmp.config.compare.order,
-      },
-    },
-    preselect = cmp.PreselectMode.Item,
+    { "╭", hl_name },
+    { "─", hl_name },
+    { "╮", hl_name },
+    { "│", hl_name },
+    { "╯", hl_name },
+    { "─", hl_name },
+    { "╰", hl_name },
+    { "│", hl_name },
   }
 end
+
+return {
+  window = {
+    completion = {
+      border = border "CmpBorder",
+      winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
+    },
+    documentation = {
+      border = border "CmpDocBorder",
+      winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
+    },
+  },
+  experimental = {
+    ghost_text = true,
+  },
+  sources = {
+    {
+      name = "nvim_lsp",
+      priority = 100,
+      group_index = 1,
+      -- entry_filter = entry_filter_function,
+      keyword_length = 2,
+      -- max_item_count = 5,
+    },
+    { name = "nvim_lua", priority = 5, group_index = 1, max_item_count = 1 },
+    {
+      name = "buffer",
+      priority = 50,
+      group_index = 1,
+      -- entry_filter = entry_filter_function,
+      keyword_length = 2,
+      max_item_count = 5,
+    },
+    -- { name = "spell", priority = 5, group_index = 1, keyword_length = 3, keyword_pattern = [[\w\+]] },
+    -- { name = "calc", priority = 3, group_index = 1, keyword_pattern = [[\d\+\W\{-\}\d]] },
+    { name = "path", priority = 10, group_index = 1 },
+    { name = "zsh" },
+    { name = "luasnip", priority = 30, group_index = 1, max_item_count = 5 },
+  },
+}

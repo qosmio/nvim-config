@@ -53,6 +53,7 @@ M.settings = {
       },
       globals = {
         "vim",
+        "unpack",
         "use",
         "packer_plugins",
         "reload",

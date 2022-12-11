@@ -1,5 +1,8 @@
-local utils = require "custom.utils"
-package.path = utils.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins", "?.lua") .. ";" .. package.path
+local u = require "custom.utils"
+local plugins = u.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins")
+package.path = u.join_paths(plugins, "?.lua") .. ";" .. package.path
+package.path = u.join_paths(plugins, "?", "init.lua") .. ";" .. package.path
+package.path = u.join_paths(plugins, "lsp", "?.lua") .. ";" .. package.path
 -- function M.check_vim_option(option, value)
 --   if opt[option] ~= nil then
 --     -- if M.clean(_value) == M.clean(value) then

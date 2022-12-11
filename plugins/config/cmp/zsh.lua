@@ -3,7 +3,7 @@ ok_cmp, cmp = pcall(require, "cmp")
 if ok_cmp then
   ok_cmp, comp = pcall(require, "cmp-under-comparator")
   if ok_cmp then
-    cmp.setup.filetype("zsh", {
+    local config = {
       sources = cmp.config.sources {
         { name = "zsh" },
         { name = "path" },
@@ -21,6 +21,7 @@ if ok_cmp then
           cmp.config.compare.kind,
         },
       },
-    })
+    }
+    cmp.setup.filetype("zsh", vim.tbl_deep_extend("force", require "config.cmp", config))
   end
 end

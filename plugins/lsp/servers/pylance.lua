@@ -1,18 +1,8 @@
--- Quick note about this language server, it does not provide proper documentation
--- and i also think, though yest it is very fast, it does have issues.
-vim.cmd [[packadd nvim-semantic-tokens]]
-
+local index = require "mason-registry.index"
 local utils = require "custom.plugins.lsp.utils"
--- local path = require("lspconfig/util").path
-local path = require "mason-core.path"
 
-local function organize_imports()
-  local params = {
-    command = "pyright.organizeimports",
-    arguments = { vim.uri_from_bufnr(0) },
-  }
-  vim.lsp.buf.execute_command(params)
-end
+local server_name = "pylance"
+index[server_name] = "custom.plugins.lsp.installers.pylance"
 
 local function extract_variable()
   local pos_params = vim.lsp.util.make_given_range_params()
@@ -37,112 +27,131 @@ local function extract_method()
     },
   }
   vim.lsp.buf.execute_command(params)
+  -- vim.lsp.buf.rename()
 end
+
+local organize_imports = function()
+  local params = { command = "pyright.organizeimports", arguments = { vim.uri_from_bufnr(0) } }
+  vim.lsp.buf.execute_command(params)
+end
+
+local on_workspace_executecommand = function(_, result, ctx)
+  if ctx.params.command:match "WithRename" then
+    ctx.params.command = ctx.params.command:gsub("WithRename", "")
+    vim.lsp.buf.execute_command(ctx.params)
+  end
+  if result then
+    if result.label == "Extract Method" then
+      local old_value = result.data.newSymbolName
+      local file = vim.tbl_keys(result.edits.changes)[1]
+      local range = result.edits.changes[file][1].range.start
+      local params = { textDocument = { uri = file }, position = range }
+      local client = vim.lsp.get_client_by_id(ctx.client_id)
+      local bufnr = ctx.bufnr
+      local prompt_opts = {
+        prompt = "New Method Name: ",
+        default = old_value,
+      }
+      if not old_value:find "new_var" then
+        range.character = range.character + 5
+      end
+      vim.ui.input(prompt_opts, function(input)
+        if not input or #input == 0 then
+          return
+        end
+        params.newName = input
+        local _handler = client.handlers["textDocument/rename"] or vim.lsp.handlers["textDocument/rename"]
+        client.request("textDocument/rename", params, _handler, bufnr)
+      end)
+    end
+  end
+end
+
+local messages = {}
 
 local M = {}
--- local Path = require "plenary.path"
--- local scan = require "plenary.scandir"
 
--- function pathFinder(hidden_file, filename, error)
---   hidden_file = hidden_file or false
---
---   local cwd = vim.fn.getcwd()
---   local current_path = vim.api.nvim_exec(":echo @%", true)
---   local parents = Path:new(current_path):parents()
---   for _, parent in pairs(parents) do
---     local files = scan.scan_dir(parent, { hidden = hidden_file, depth = 1 })
---     for _, file in pairs(files) do
---       if file == parent .. "/" .. filename then
---         return parent, file
---       end
---     end
---
---     if parent == cwd then
---       break
---     end
---   end
---
---   vim.notify(error, vim.log.levels.ERROR, { title = "py.nvim" })
--- end
+M.handlers = {
+  ["pyright/beginProgress"] = function(_, _, _, client_id)
+    require("lsp-status/util").ensure_init(messages, client_id, server_name)
+    if not messages[client_id].progress[1] then
+      messages[client_id].progress[1] = { spinner = 1, title = "Pylance" }
+    end
+  end,
+  ["pyright/reportProgress"] = function(_, _, message, client_id)
+    messages[client_id].progress[1].spinner = messages[client_id].progress[1].spinner + 1
+    messages[client_id].progress[1].title = message[1]
+    vim.api.nvim_command "doautocmd User LspMessageUpdate"
+  end,
+  ["pyright/endProgress"] = function(_, _, _, client_id)
+    messages[client_id].progress[1] = nil
+    vim.api.nvim_command "doautocmd User LspMessageUpdate"
+  end,
+  ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
+    result.diagnostics = vim.tbl_filter(function(diagnostic)
+      -- Allow kwargs to be unused
+      if diagnostic.message == '"kwargs" is not accessed' then
+        return false
+      end
 
-local function get_python_path(workspace)
-  -- Use activated virtualenv.
-  if vim.env.VIRTUAL_ENV then
-    return path.join(vim.env.VIRTUAL_ENV, "bin", "python")
-  end
+      -- Prefix variables with an underscore to ignore
+      if string.match(diagnostic.message, "Unused local `_.+`.") then
+        return false
+      end
 
-  -- Find and use virtualenv via poetry in workspace directory.
-  -- Change this to get it from the root file where git is
-  local match = vim.fn.glob(path.join(workspace, "poetry.lock"))
-  -- local match = pathFinder(false, poetry.lock, "Poetry env not found")
-  if match ~= "" then
-    local venv = vim.fn.trim(vim.fn.system "poetry env info -p")
-    return path.join(venv, "bin", "python")
-  end
+      return true
+    end, result.diagnostics)
 
-  -- Fallback to system Python.
-  return vim.fn.exepath "python3" or vim.fn.exepath "python" or "python"
-end
-
-require("nvim-semantic-tokens").setup {
-  preset = "default",
-  highlighters = { require "nvim-semantic-tokens.table-highlighter" },
+    vim.lsp.handlers["textDocument/publishDiagnostics"](err, result, ctx, config)
+  end,
+  ["workspace/executeCommand"] = on_workspace_executecommand,
 }
 
-M.attach_config = function(client, bufnr)
-  local caps = client.server_capabilities
-  if caps.semanticTokensProvider and caps.semanticTokensProvider.full then
-    vim.cmd [[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.buf.semantic_tokens_full()]]
-  end
-
-  client.commands["pylance.extractVariableWithRename"] = function(command, _)
-    command.command = "pylance.extractVariable"
-    vim.lsp.buf.execute_command(command)
-  end
-
-  client.commands["pylance.extractMethodWithRename"] = function(command, _)
-    command.command = "pylance.extractMethod"
-    vim.lsp.buf.execute_command(command)
-  end
-
-  vim.api.nvim_buf_create_user_command(bufnr, "PylanceOrganizeImports", organize_imports, { desc = "Organize Imports" })
-
-  vim.api.nvim_buf_create_user_command(
-    bufnr,
-    "PylanceExtractVariable",
-    extract_variable,
-    { range = true, desc = "Extract variable" }
-  )
-
-  vim.api.nvim_buf_create_user_command(
-    bufnr,
-    "PylanceExtractMethod",
-    extract_method,
-    { range = true, desc = "Extract methdod" }
-  )
-
-  utils.autocmds.InlayHintsAU()
-  utils.autocmds.SemanticTokensAU()
-end
-
 M.settings = {
+  editor = { {
+    formatOnType = true,
+    insertSpaces = true,
+    tabSize = 2,
+  } },
+  ["[python]"] = { editor = {
+    formatOnType = true,
+    insertSpaces = true,
+    tabSize = 2,
+  } },
   python = {
+    formatting = { provider = "black" },
     analysis = {
+      disableLanguageServices = false,
+      openFilesOnly = true,
+      useLibraryCodeForTypes = true,
+      watchForSourceChanges = true,
+      watchForLibraryChanges = false,
+      watchForConfigChanges = false,
+      autoImportCompletions = true,
+      includeUserSymbolsInAutoImport = false,
+      enableExtractCodeAction = true,
+      variableInlayTypeHints = true,
+      functionReturnInlayTypeHints = true,
+      importFormat = "relative",
       completeFunctionParens = true,
       indexing = true,
-      typeCheckingMode = "none",
+      typeCheckingMode = "basic",
       diagnosticMode = "openFilesOnly",
       inlayHints = {
         variableTypes = true,
         functionReturnTypes = true,
       },
+      autoSearchPaths = true,
       -- Honestly just shut this thing up , its actually very annoying
       -- when it just keeps giving pointless error messages.
       diagnosticSeverityOverrides = {
         --felse: this can get very anonying
         reportMissingTypeStubs = false,
         -- stuff from top
-        reportGeneralTypeIssues = false,
+        reportUnusedImport = "information",
+        reportUnusedFunction = "information",
+        reportUnusedVariable = "information",
+        reportGeneralTypeIssues = "none",
         reportUnboundVariable = false,
         reportUndefinedVariable = "error",
         reportUntypedClassDecorator = "none",
@@ -161,16 +170,107 @@ M.settings = {
         reportOptionalCall = "none",
       },
     },
+    -- experiments = { optInto = { "Experiment1", "Experiment13", "Experiment56", "Experiment106" } },
   },
 }
-M.before_init = function(_, config)
-  local stub_path =
-    require("lspconfig/util").path.join(vim.fn.stdpath "data", "site", "pack", "packer", "opt", "python-type-stubs")
-  config.settings.python.analysis.stubPath = stub_path
-end
 
-M.on_init = function(client)
-  client.config.settings.python.pythonPath = get_python_path(client.config.root_dir)
+M.commands = {
+  PylanceExtractVariableWithRename = {
+    extract_variable,
+    description = "Extract Variable",
+  },
+  PylanceExtractMethodWithRename = {
+    extract_method,
+    description = "Extract Method",
+  },
+  PylanceExtractMethod = {
+    extract_method,
+    description = "Extract Method",
+  },
+  PylanceExtractVariable = {
+    extract_variable,
+    description = "Extract Variable",
+  },
+  PylanceOrganizeImports = {
+    organize_imports,
+    description = "Organize Imports",
+  },
+}
+
+-- M.capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+M.on_attach = function(client, bufnr)
+  -- local caps = client.server_capabilities
+  -- caps.semanticTokensProvider = {
+  --   legend = {
+  --     tokenTypes = {
+  --       "comment",
+  --       "keyword",
+  --       "string",
+  --       "number",
+  --       "regexp",
+  --       "type",
+  --       "class",
+  --       "interface",
+  --       "enum",
+  --       "enumMember",
+  --       "typeParameter",
+  --       "function",
+  --       "method",
+  --       "property",
+  --       "variable",
+  --       "parameter",
+  --       "module",
+  --       "intrinsic",
+  --       "selfParameter",
+  --       "clsParameter",
+  --       "magicFunction",
+  --       "builtinConstant",
+  --     },
+  --     tokenModifiers = {
+  --       "declaration",
+  --       "static",
+  --       "abstract",
+  --       "async",
+  --       "documentation",
+  --       "typeHint",
+  --       "typeHintComment",
+  --       "readonly",
+  --       "decorator",
+  --       "builtin",
+  --     },
+  --   },
+  --   range = true,
+  --   -- full = {
+  --   --   delta = true,
+  --   -- },
+  -- }
+  -- client.server_capabilities = caps
+  client.server_capabilities.semanticTokensProvider = false
+  -- require("lsp.settings").on_attach(client, bufnr)
+
+  vim.api.nvim_buf_create_user_command(bufnr, "PylanceOrganizeImports", organize_imports, { desc = "Organize Imports" })
+
+  vim.api.nvim_buf_create_user_command(
+    bufnr,
+    "PylanceExtractVariable",
+    extract_variable,
+    { range = true, desc = "Extract variable" }
+  )
+
+  vim.api.nvim_buf_create_user_command(
+    bufnr,
+    "PylanceExtractMethod",
+    extract_method,
+    { range = true, desc = "Extract methdod" }
+  )
+  vim.lsp.handlers["workspace/diagnostic/refresh"] = function(_, _, ctx)
+    local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
+    pcall(vim.diagnostic.reset, ns)
+    return true
+  end
+  utils.autocmds.InlayHintsAU()
+  require("lsp.settings").on_attach(client, bufnr)
 end
 
 return M

@@ -1,4 +1,4 @@
-local autocmds = require "custom.plugins.lsp.utils.autocmds"
+-- local autocmds = require "custom.plugins.lsp.utils.autocmds"
 
 local M = {}
 
@@ -40,37 +40,37 @@ M.has_exec = function(filename)
   end
 end
 
-M.on_attach = function(client, bufnr)
-  local function buf_set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
-  end
-
-  local utils = require "core.utils"
-  utils.load_mappings("lspconfig", { buffer = bufnr })
-
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-
-  if client.server_capabilities.definitionProvider then
-    vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
-  end
-
-  if client.server_capabilities.documentHighlightProvider then
-    autocmds.DocumentHighlightAU(bufnr)
-  end
-
-  if client.server_capabilities.codeLensProvider then
-    autocmds.CodeLensAU(bufnr)
-  end
-
-  if client.server_capabilities.documentFormattingProvider then
-    autocmds.DocumentFormattingAU(bufnr)
-  end
-
-  if client.server_capabilities.signatureHelpProvider then
-    require("base46").load_highlight "lsp"
-    require "nvchad_ui.lsp"
-    require("nvchad_ui.signature").setup(client)
-  end
-end
+-- M.on_attach = function(client, bufnr)
+--   local function buf_set_option(...)
+--     vim.api.nvim_buf_set_option(bufnr, ...)
+--   end
+--
+--   local utils = require "core.utils"
+--   utils.load_mappings("lspconfig", { buffer = bufnr })
+--
+--   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+--
+--   if client.server_capabilities.definitionProvider then
+--     vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+--   end
+--
+--   if client.server_capabilities.documentHighlightProvider then
+--     autocmds.DocumentHighlightAU(bufnr)
+--   end
+--
+--   if client.server_capabilities.codeLensProvider then
+--     autocmds.CodeLensAU(bufnr)
+--   end
+--
+--   if client.server_capabilities.documentFormattingProvider then
+--     autocmds.DocumentFormattingAU(bufnr)
+--   end
+--
+--   if client.server_capabilities.signatureHelpProvider then
+--     require("base46").load_highlight "lsp"
+--     require "nvchad_ui.lsp"
+--     require("nvchad_ui.signature").setup(client)
+--   end
+-- end
 
 return M

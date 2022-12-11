@@ -223,6 +223,14 @@ return {
     ctermbg = "NONE",
     bold = true,
   },
+  CmpBorder = {
+    fg = "#115064",
+    bg = "NONE",
+  },
+  CmpDocBorder = {
+    fg = "#115064",
+    bg = "NONE",
+  },
   Constant = {
     fg = "#d56af5",
     bg = "NONE",
