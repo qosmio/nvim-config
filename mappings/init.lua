@@ -23,7 +23,7 @@ M.misc = {
     ["d"] = { '"_d' },
     ["x"] = { '"_x' },
     ["<C-o>"] = {
-      "<cmd> TSHighlightCapturesUnderCursor <CR>",
+      "<cmd> lua require('custom.highlights.utils').show_hl_captures() <CR>",
       " Show Highlight Group",
     },
   },
@@ -56,7 +56,7 @@ M.lsp = {
     },
     ["<leader>lr"] = {
       function()
-        vim.lsp.buf.rename {}
+        vim.lsp.buf.rename()
       end,
       "Rename",
     },
@@ -77,6 +77,12 @@ M.lsp = {
         vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line "$", 0 })
       end,
       "Format code",
+    },
+    ["<leader>j"] = {
+      function()
+        require("lsp_lines").toggle {}
+      end,
+      "Toggle lsp_lines",
     },
   },
 }

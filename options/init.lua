@@ -57,9 +57,9 @@ opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff: ,eob: "
 opt.list = true --> show whitespace characters
 
 -- MatchUp
-vim.g.matchup_matchparen_deferred = 1 -- defer the matchparen highlighting
-vim.g.matchup_mappings_enabled = 1 -- enable the mappings
-vim.g.matchup_override_vimtex = 1 -- override vimtex
+-- vim.g.matchup_matchparen_deferred = 1 -- defer the matchparen highlighting
+-- vim.g.matchup_mappings_enabled = 1 -- enable the mappings
+-- vim.g.matchup_override_vimtex = 1 -- override vimtex
 
 -- Fix common typo commands
 vim.cmd "command! -nargs=* W w"

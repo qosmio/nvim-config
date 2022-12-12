@@ -1,4 +1,16 @@
 return {
+  luaFunc = {
+    bg = "NONE",
+    ctermbg = "NONE",
+    ctermfg = 197,
+    fg = "#5F87AF",
+  },
+  luaTableBlock = {
+    bg = "NONE",
+    ctermbg = "NONE",
+    ctermfg = 197,
+    fg = "#5F87AF",
+  },
   DiffAdd = {
     bg = "#253B22",
     ctermbg = 22,

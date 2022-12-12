@@ -61,9 +61,11 @@ M.on_attach = function(client, bufnr, opts)
     L.autocmds.DocumentFormattingAU(bufnr)
   end
   -- Enable semantic tokens if it's available (from the fork at jdrouhard/neovim#lsp_semantic_tokens)
-  -- if vim.lsp.semantic_tokens ~= nil and caps.semanticTokensProvider then
-  --   vim.lsp.semantic_tokens.start(bufnr, client.id, opts)
-  -- end
+  if vim.lsp.semantic_tokens ~= nil and caps.semanticTokensProvider then
+    if client.name ~= "pylance" then
+      vim.lsp.semantic_tokens.start(bufnr, client.id, opts)
+    end
+  end
 
   if caps.signatureHelpProvider then
     require("base46").load_highlight "lsp"

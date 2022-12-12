@@ -200,53 +200,53 @@ M.commands = {
 -- M.capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 M.on_attach = function(client, bufnr)
-  -- local caps = client.server_capabilities
-  -- caps.semanticTokensProvider = {
-  --   legend = {
-  --     tokenTypes = {
-  --       "comment",
-  --       "keyword",
-  --       "string",
-  --       "number",
-  --       "regexp",
-  --       "type",
-  --       "class",
-  --       "interface",
-  --       "enum",
-  --       "enumMember",
-  --       "typeParameter",
-  --       "function",
-  --       "method",
-  --       "property",
-  --       "variable",
-  --       "parameter",
-  --       "module",
-  --       "intrinsic",
-  --       "selfParameter",
-  --       "clsParameter",
-  --       "magicFunction",
-  --       "builtinConstant",
-  --     },
-  --     tokenModifiers = {
-  --       "declaration",
-  --       "static",
-  --       "abstract",
-  --       "async",
-  --       "documentation",
-  --       "typeHint",
-  --       "typeHintComment",
-  --       "readonly",
-  --       "decorator",
-  --       "builtin",
-  --     },
-  --   },
-  --   range = true,
-  --   -- full = {
-  --   --   delta = true,
-  --   -- },
-  -- }
-  -- client.server_capabilities = caps
-  client.server_capabilities.semanticTokensProvider = false
+  local caps = client.server_capabilities
+  caps.semanticTokensProvider = {
+    legend = {
+      tokenTypes = {
+        "comment",
+        "keyword",
+        "string",
+        "number",
+        "regexp",
+        "type",
+        "class",
+        "interface",
+        "enum",
+        "enumMember",
+        "typeParameter",
+        "function",
+        "method",
+        "property",
+        "variable",
+        "parameter",
+        "module",
+        "intrinsic",
+        "selfParameter",
+        "clsParameter",
+        "magicFunction",
+        "builtinConstant",
+      },
+      tokenModifiers = {
+        "declaration",
+        "static",
+        "abstract",
+        "async",
+        "documentation",
+        "typeHint",
+        "typeHintComment",
+        "readonly",
+        "decorator",
+        "builtin",
+      },
+    },
+    range = true,
+    full = {
+      delta = true,
+    },
+  }
+  client.server_capabilities = caps
+  -- client.server_capabilities.semanticTokensProvider = false
   -- require("lsp.settings").on_attach(client, bufnr)
 
   vim.api.nvim_buf_create_user_command(bufnr, "PylanceOrganizeImports", organize_imports, { desc = "Organize Imports" })

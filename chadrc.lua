@@ -5,10 +5,10 @@ M.options = {}
 ---- UI -----
 
 M.ui = {
-  hl_override = require "custom.highlights.monokai-phoenix",
-  hl_add = require "custom.highlights.monokai-phoenix",
-  -- hl_override = require "custom.highlights.hl_override",
-  -- hl_add = require "custom.highlights.hl_add",
+  -- hl_override = require "custom.highlights.monokai-phoenix",
+  -- hl_add = require "custom.highlights.monokai-phoenix",
+  -- hl_override = require "custom.highlights.hl",
+  hl_add = require "custom.highlights.hl_add",
   changed_themes = {
     onedark = require "custom.themes.onedark-deep",
   },

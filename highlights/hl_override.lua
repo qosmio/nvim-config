@@ -1,4 +1,4 @@
-return {
+local syntax = {
   ColorColumn = {
     bg = "#383A3E",
     ctermbg = 236,
@@ -319,3 +319,5 @@ return {
     sp = "none",
   },
 }
+--echo $HOME/.config/nvim/lua/?.lua;/usr/share/nvim/runtime/lua/?.lua; .. package.path
+return require("custom.highlights.utils").gui_syntax_to_cterm(syntax)

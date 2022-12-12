@@ -1,4 +1,40 @@
-return {
+local function hex2rgb(hex)
+  hex = hex:gsub("#", "")
+  return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+end
+
+local function websafe(color)
+  local r, g, b = hex2rgb(color)
+  local bit = require "bit"
+  -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
+  -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
+  local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
+    + bit.lshift(math.floor(g * 7 / 255), 2)
+    + math.floor((b * 3 / 255))
+  return encodedData
+end
+
+local function theme_gen(theme)
+  for i, x in pairs(theme) do
+    if x.bg ~= "NONE" then
+      theme[i].ctermbg = websafe(x.bg)
+    else
+      theme[i].ctermbg = "NONE"
+    end
+    if x.fg ~= "NONE" then
+      theme[i].ctermfg = websafe(x.fg)
+    else
+      theme[i].ctermfg = "NONE"
+    end
+  end
+  return theme
+end
+
+local theme = {
+  DiagnosticVirtualTextError = {
+    fg = "#ff0017",
+    bg = "#2b0000",
+  },
   Pmenu = {
     fg = "#F8F8F8",
     bg = "#223344",
@@ -961,3 +997,5 @@ return {
     ctermbg = 103,
   },
 }
+
+return theme_gen(theme)

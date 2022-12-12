@@ -14,18 +14,22 @@ M.user = {
   ["lewis6991/gitsigns.nvim"] = {
     override_options = require "custom.plugins.config.gitsigns",
   },
+  ["nvim-treesitter/playground"] = {
+    keys = { "gh" },
+    event = "InsertEnter",
+  },
   ["nvim-treesitter/nvim-treesitter"] = {
-    requires = { "nvim-treesitter/playground" },
-    override_options = require "custom.plugins.config.treesitter",
+    -- requires = { "nvim-treesitter/playground" },
     module = "nvim-treesitter",
     setup = function()
       require("core.lazy_load").on_file_open "nvim-treesitter"
     end,
     cmd = require("core.lazy_load").treesitter_cmds,
     run = ":TSUpdate",
+    override_options = require "custom.plugins.config.treesitter",
     config = function()
-      require "plugins.configs.treesitter"
       require "custom.plugins.config.treesitter_parsers"
+      require "plugins.configs.treesitter"
     end,
   },
   ["numToStr/Comment.nvim"] = {
@@ -67,7 +71,7 @@ M.user = {
       require("custom.plugins.config.null_ls").setup()
     end,
   },
-  ["lambdalisue/suda.vim"] = {},
+  ["lambdalisue/suda.vim"] = { event = {"CmdlineEnter"} },
   ["machakann/vim-sandwich"] = {
     event = "InsertEnter",
   },
@@ -116,7 +120,52 @@ M.user = {
       }
     end,
   },
+  ["ms-jpq/coq_nvim"] = {
+    after = { "mason-lspconfig.nvim" },
+    branch = "coq",
+    requires = {
+      "ms-jpq/coq.artifacts",
+      "ms-jpq/coq.thirdparty",
+    },
+  },
+  -- ["Maan2003/lsp_lines.nvim"] = {
+  --   after = { "nvim-cmp", "nvim-lspconfig" },
+  --   config = function()
+  --     require("lsp_lines").setup {}
+  --     require("lsp_lines").toggle {}
+  --     -- require("lsp_lines").setup {}
+  --     vim.diagnostic.config {
+  --       virtual_text = false,
+  --       virtual_lines = {
+  --         only_current_line = true,
+  --       },
+  --     }
+  --   end,
+  -- },
+  -- ["Yagua/nebulous.nvim"] = {
+  --   after = { "ui" },
+  --   disable = true,
+  --   setup = function()
+  --     require("core.lazy_load").on_file_open "nebulous.nvim"
+  --   end,
+  --   config = function()
+  --     --Put this lines inside your vimrc to set the colorscheme
+  --     require("nebulous").setup {
+  --       variant = "twilight",
+  --       -- disable = {
+  --       --   background = true,
+  --       --   endOfBuffer = false,
+  --       --   terminal_colors = false,
+  --       -- },
+  --       italic = {
+  --         comments = true,
+  --         keywords = false,
+  --         functions = false,
+  --         variables = true,
+  --       },
+  --     }
+  --   end,
+  -- },
 }
--- print(vim.inspect(function() require "custom.plugins.config.cmp" end)())
 -- print(vim.inspect(M.user))
 return M.user

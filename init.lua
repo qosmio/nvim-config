@@ -3,6 +3,8 @@ local plugins = u.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins"
 package.path = u.join_paths(plugins, "?.lua") .. ";" .. package.path
 package.path = u.join_paths(plugins, "?", "init.lua") .. ";" .. package.path
 package.path = u.join_paths(plugins, "lsp", "?.lua") .. ";" .. package.path
+-- local base46 = require("base46")
+-- print(vim.inspect(base46))
 -- function M.check_vim_option(option, value)
 --   if opt[option] ~= nil then
 --     -- if M.clean(_value) == M.clean(value) then

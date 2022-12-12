@@ -18,6 +18,9 @@ M.base_16 = {
   base0E = "#c678dd",
   base0F = "#f92782",
 }
+-- vim.cmd [[ hi jsonKeyword guifg='#ca2168' ]]
+-- vim.cmd [[ hi jsonKeywordMatch guifg='#ca2168' ]]
+-- vim.cmd [[ hi jsonFold guifg='#ca2168' ]]
 
 M.base_30 = {
   white = "#417d9c",

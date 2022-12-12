@@ -1,3 +1,4 @@
+-- print(require("path").path)
 local lspconfig = require "lspconfig"
 local config = require "custom.plugins.lsp.settings"
 local base = {
