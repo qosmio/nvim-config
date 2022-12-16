@@ -26,6 +26,7 @@ M.misc = {
       "<cmd> lua require('custom.highlights.utils').show_hl_captures() <CR>",
       " Show Highlight Group",
     },
+    ["<C-x>"] = { "<cmd> lua print(vim.inspect(require('custom.highlights.utils').color.colors 'Diff')) <CR> " },
   },
   v = {
     ["d"] = { '"_d' },

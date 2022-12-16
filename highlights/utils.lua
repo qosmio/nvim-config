@@ -1,4 +1,11 @@
 local M = {}
+local u = require "custom.utils"
+local plugins = u.join_paths(vim.fn.stdpath "config", "lua", "custom", "lmburns", "lua")
+package.path = u.join_paths(plugins, "?.lua") .. ";" .. package.path
+package.path = u.join_paths(plugins, "?", "init.lua") .. ";" .. package.path
+-- package.path = u.join_paths(plugins, "lsp", "?.lua") .. ";" .. package.path
+--
+-- M.color = require("custom.lmburns.lua.common.color")
 
 M.clearEmptyTables = function(t)
   for k, v in pairs(t) do
@@ -11,11 +18,13 @@ M.clearEmptyTables = function(t)
   end
   return t
 end
+
 M.get_hl = function(hl)
-  -- print(vim.inspect(hl))
   local hl_group = vim.api.nvim_get_hl_by_name(hl, true)
   for k, color in pairs(hl_group) do
-    hl_group[k] = string.format("#%06x", color)
+    if type(color) ~= "boolean" then
+      hl_group[k] = string.format("#%06x", color)
+    end
   end
   return hl_group
 end
@@ -64,7 +73,79 @@ M.show_hl_captures = function()
     local matches = M.get_syntax_hl()
     result["Syntax"] = matches
   end
-  print(vim.inspect(result))
+  -- print(vim.inspect(result))
+end
+
+M._hex_to_rgb = function(hex)
+  hex = hex:gsub("#", "")
+  return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+end
+
+M._hex_to_8bit = function(color)
+  local r, g, b = M.hex_to_rgb(color)
+  local bit = require "bit"
+  -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
+  -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
+  local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
+    + bit.lshift(math.floor(g * 7 / 255), 2)
+    + math.floor((b * 3 / 255))
+  return encodedData
+end
+
+M.turn_str_to_color = function(tb_in)
+  local tb = vim.deepcopy(tb_in)
+  local colors = M.get_theme_tb "base_30"
+
+  for _, groups in pairs(tb) do
+    for k, v in pairs(groups) do
+      if k == "fg" or k == "bg" then
+        if v:sub(1, 1) == "#" then
+          tb_in["cterm" .. k] = M.hex_to_8bit(v)
+        else
+          groups[k] = colors[v]
+        end
+      end
+    end
+  end
+
+  return tb
+end
+
+M.gui_syntax_to_cterm = function(syntax)
+  local tb = vim.deepcopy(syntax)
+  for syn, groups in pairs(tb) do
+    for k, v in pairs(groups) do
+      if k == "fg" or k == "bg" then
+        if v:sub(1, 1) == "#" then
+          v = M.hex_to_8bit(v)
+        end
+        if syntax[syn]["cterm" .. k] == nil then
+          syntax[syn]["cterm" .. k] = v
+        end
+      end
+    end
+    -- if syn == "St_ConfirmMode" then
+    --   print(vim.inspect(syntax[syn]))
+    -- end
+  end
+  return syntax
+end
+
+-- convert table into string
+M.nvim_set_hl = function(tb)
+  for hlgroupName, hlgroup_vals in pairs(tb) do
+    vim.api.nvim_set_hl(0, hlgroupName, hlgroup_vals)
+  end
+end
+
+M.get_component = function(comp)
+  if comp > 125 then
+    return (comp - 138) / 40 + 2
+  elseif comp > 46 then
+    return 1
+  else
+    return 0
+  end
 end
 
 M.hex_to_rgb = function(hex)
@@ -73,30 +154,19 @@ M.hex_to_rgb = function(hex)
 end
 
 M.hex_to_8bit = function(color)
+  local rterm, bterm, gterm
+  -- print(M.hex_to_rgb(color))
   local r, g, b = M.hex_to_rgb(color)
-  local bit = require "bit"
-  -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
-  -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
-  local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
-      + bit.lshift(math.floor(g * 7 / 255), 2)
-      + math.floor((b * 3 / 255))
-  return encodedData
+  rterm = M.get_component(r)
+  gterm = M.get_component(g)
+  bterm = M.get_component(b)
+  return math.floor((16 + 36 * rterm + 31 * gterm + bterm))
+  -- local bit = require "bit"
+  -- -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
+  -- -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
+  -- local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
+  --   + bit.lshift(math.floor(g * 7 / 255), 2)
+  --   + math.floor((b * 6 / 255))
+  -- return encodedData
 end
-
-M.gui_syntax_to_cterm = function(syntax)
-  for i, x in pairs(syntax) do
-    if x.bg ~= "NONE" then
-      syntax[i].ctermbg = M.hex_to_8bit(x.bg)
-    else
-      syntax[i].ctermbg = "NONE"
-    end
-    if x.fg ~= "NONE" then
-      syntax[i].ctermfg = M.hex_to_8bit(x.fg)
-    else
-      syntax[i].ctermfg = "NONE"
-    end
-  end
-  return syntax
-end
-
 return M

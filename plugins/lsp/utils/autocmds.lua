@@ -1,4 +1,5 @@
 local M = {}
+local L = {}
 
 M.augroup = function(name, commands)
   assert(name ~= "User", "The name of an augroup CANNOT be User")
@@ -35,15 +36,15 @@ M.DocumentHighlightAU = function(bufnr)
   })
 end
 
--- M.SemanticTokensAU = function(bufnr)
---   M.augroup("SemanticTokens", {
---     {
---       event = { "BufEnter", "CursorHold", "InsertLeave" },
---       buffer = bufnr,
---       command = vim.lsp.semantic_tokens.start,
---     },
---   })
--- end
+M.SemanticTokensAU = function(bufnr)
+  M.augroup("SemanticTokens", {
+    {
+      event = { "BufEnter", "CursorHold", "InsertLeave" },
+      buffer = bufnr,
+      command = vim.lsp.semantic_tokens.start,
+    },
+  })
+end
 
 M.DocumentFormattingAU = function(bufnr)
   M.augroup("Formatting", {
@@ -75,6 +76,34 @@ M.CodeLensAU = function(bufnr)
     event = { "BufEnter", "CursorHold", "InsertLeave" },
     buffer = bufnr,
     callback = vim.lsp.codelens.refresh,
+  })
+end
+
+M.DiagPopup = function(bufnr)
+  L.lsp_diagnostics_popup = function(client)
+    local current_cursor = vim.api.nvim_win_get_cursor(0)
+    local last_popup_cursor = vim.w.lsp_diagnostics_last_cursor or { nil, nil }
+    -- Show the popup diagnostics window,
+    -- but only once for the current cursor location (unless moved afterwards).
+    if not (current_cursor[1] == last_popup_cursor[1] and current_cursor[2] == last_popup_cursor[2]) then
+      vim.w.lsp_diagnostics_last_cursor = current_cursor
+      vim.diagnostic.open_float(client.buf, {
+        border = require "lsp.settings.popup_border" "LspInfoBorder",
+        scope = "cursor",
+        focusable = true,
+        source = "always",
+        header = "",
+        prefix = "",
+      })
+    end
+  end
+
+  M.augroup("LspDiagnostics", {
+    {
+      event = { "CursorHold" },
+      buffer = bufnr,
+      command = L.lsp_diagnostics_popup,
+    },
   })
 end
 
