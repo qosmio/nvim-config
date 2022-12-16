@@ -12,13 +12,15 @@ local function border(hl_name)
 end
 
 return {
+  -- enabled = vim.bo.filetype ~= "python" and true or false,
   window = {
     completion = {
-      border = border "CmpBorder",
+      side_padding = 1,
+      border = border "FloatBorder",
       winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
     },
     documentation = {
-      border = border "CmpDocBorder",
+      border = border "FloatBorder",
       winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
     },
   },

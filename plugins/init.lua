@@ -1,10 +1,17 @@
 local M = {}
 M.user = {
+  ["kyazdani42/nvim-tree.lua"] = false,
   ["max397574/better-escape.nvim"] = false,
   ["goolord/alpha-nvim"] = false,
-  ["nvim-telescope/telescope.nvim"] = false,
+  -- ["nvim-telescope/telescope.nvim"] = false,
+  -- ["hrsh7th/cmp-nvim-lsp"] = false,
   -- ["L3MON4D3/LuaSnip"] = false,
+  -- ["windwp/nvim-autopairs"] = false,
+  -- ["hrsh7th/cmp-nvim-lua"] = false,
   -- ["saadparwaiz1/cmp_luasnip"] = false,
+  -- ["hrsh7th/nvim-cmp"] = false,
+  -- ["hrsh7th/cmp-buffer"] = false,
+  -- ["hrsh7th/cmp-path"] = false,
   ["hrsh7th/nvim-cmp"] = {
     override_options = require "custom.plugins.config.cmp",
   },
@@ -22,9 +29,9 @@ M.user = {
     -- requires = { "nvim-treesitter/playground" },
     module = "nvim-treesitter",
     setup = function()
-      require("core.lazy_load").on_file_open "nvim-treesitter"
+      require("core.utils").lazy_load "nvim-treesitter"
     end,
-    cmd = require("core.lazy_load").treesitter_cmds,
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSEnable", "TSDisable", "TSModuleInfo" },
     run = ":TSUpdate",
     override_options = require "custom.plugins.config.treesitter",
     config = function()
@@ -43,22 +50,39 @@ M.user = {
     end,
   },
   ["folke/which-key.nvim"] = { disable = false },
-  ["williamboman/mason-lspconfig.nvim"] = {
-    after = { "mason.nvim", "nvim-lspconfig" },
+  ["neovim/nvim-lspconfig"] = {
+    opt = true,
     setup = function()
-      require("core.lazy_load").on_file_open "mason.nvim"
+      require("core.utils").lazy_load "nvim-lspconfig"
     end,
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.servers"
-      require("custom.plugins.lsp.settings")._setup()
       require("mason-lspconfig").setup(require "lsp.lspconfig")
     end,
+    after = "mason-lspconfig.nvim",
+  },
+  ["williamboman/mason-lspconfig.nvim"] = {
+    after = { "mason.nvim" },
+    -- setup = function()
+    --   require("core.utils").lazy_load "mason.nvim"
+    -- end,
+    -- config = function()
+    --   -- require "plugins.configs.lspconfig"
+    --   -- require "custom.plugins.lsp.installers.pylance"
+    --   -- require "custom.plugins.lsp.servers"
+    --   -- require("custom.plugins.lsp.settings")
+    --   require("mason-lspconfig").setup(require "lsp.lspconfig")
+    -- end,
   },
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
   ["folke/neodev.nvim"] = {
     ft = { "lua" },
+    config = function()
+      local statusline = require "base46.integrations.statusline"
+      -- write(statusline,"/tmp/out.txt")
+    end,
   },
   ["rmagatti/alternate-toggler"] = {},
   ["chr4/nginx.vim"] = { ft = "nginx" },
@@ -71,7 +95,7 @@ M.user = {
       require("custom.plugins.config.null_ls").setup()
     end,
   },
-  ["lambdalisue/suda.vim"] = { event = {"CmdlineEnter"} },
+  ["lambdalisue/suda.vim"] = { event = { "CmdlineEnter" } },
   ["machakann/vim-sandwich"] = {
     event = "InsertEnter",
   },
@@ -79,17 +103,42 @@ M.user = {
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
-  ["lukas-reineke/cmp-under-comparator"] = { -- make the sorting of completion results smarter
-    -- requires = { "hrsh7th/nvim-cmp" },
-    after = { "null-ls.nvim", "nvim-cmp" },
-    config = function()
-      require "custom.plugins.config.cmp.python"
-      -- require "custom.plugins.config.cmp.zsh"
-    end,
-  },
+  -- ["lukas-reineke/cmp-under-comparator"] = { -- make the sorting of completion results smarter
+  --   -- requires = { "hrsh7th/nvim-cmp" },
+  --   after = { "null-ls.nvim", "nvim-cmp" },
+  --   config = function()
+  --     require "custom.plugins.config.cmp.python"
+  --     -- require "custom.plugins.config.cmp.zsh"
+  --   end,
+  -- },
   ["reewr/vim-monokai-phoenix"] = {
+    -- requires = { "patstockwell/vim-monokai-tasty" },
+    after = { "ui", "indent-blankline.nvim" },
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
+    end,
+    event = { "VimEnter" },
+    config = function()
+      vim.opt.termguicolors = false
+      local timer = vim.loop.new_timer()
+      timer:start(
+        10,
+        0,
+        vim.schedule_wrap(function()
+          vim.cmd [[colo monokai-phoenix]]
+          -- vim.cmd [[colorscheme vim-monokai-tasty]]
+          vim.cmd [[hi Normal ctermbg=0]]
+          local highlight = require("custom.highlights.hlo").highlight
+          local statusline = require("custom.highlights.hlo").statusline
+          -- local statusline = require "base46.integrations.statusline"
+          -- pprint(statusline)
+          local cterm = require("custom.highlights.utils").gui_syntax_to_cterm(highlight)
+          require("custom.highlights.utils").nvim_set_hl(cterm)
+          require("custom.highlights.utils").nvim_set_hl(statusline)
+
+          vim.cmd [[hi IndentBlankLineChar ctermfg=237]]
+        end)
+      )
     end,
   },
   ["anuvyklack/pretty-fold.nvim"] = {
@@ -101,7 +150,7 @@ M.user = {
   ["tamago324/cmp-zsh"] = {
     ft = { "zsh" },
     setup = function()
-      require("core.lazy_load").on_file_open "cmp-zsh"
+      require("core.utils").lazy_load "cmp-zsh"
     end,
     config = {
       filetypes = { "zsh" },
@@ -120,14 +169,22 @@ M.user = {
       }
     end,
   },
-  ["ms-jpq/coq_nvim"] = {
-    after = { "mason-lspconfig.nvim" },
-    branch = "coq",
-    requires = {
-      "ms-jpq/coq.artifacts",
-      "ms-jpq/coq.thirdparty",
-    },
-  },
+  -- ["ms-jpq/coq_nvim"] = {
+  --   -- after = { "mason-lspconfig.nvim" },
+  --   -- setup = function()
+  --   -- vim.g.coq_settings = require "custom.plugins.config.coq"
+  --   -- end,
+  --   ft = { "python" },
+  --   branch = "coq",
+  --   requires = {
+  --     "ms-jpq/coq.artifacts",
+  --     "ms-jpq/coq.thirdparty",
+  --   },
+  --   config = function()
+  --     vim.g.coq_settings = require "custom.plugins.config.coq"
+  --     -- require("custom.highlights.utils").nvim_set_hl(require("custom.highlights.hlo").highlight)
+  --   end,
+  -- },
   -- ["Maan2003/lsp_lines.nvim"] = {
   --   after = { "nvim-cmp", "nvim-lspconfig" },
   --   config = function()
@@ -138,30 +195,6 @@ M.user = {
   --       virtual_text = false,
   --       virtual_lines = {
   --         only_current_line = true,
-  --       },
-  --     }
-  --   end,
-  -- },
-  -- ["Yagua/nebulous.nvim"] = {
-  --   after = { "ui" },
-  --   disable = true,
-  --   setup = function()
-  --     require("core.lazy_load").on_file_open "nebulous.nvim"
-  --   end,
-  --   config = function()
-  --     --Put this lines inside your vimrc to set the colorscheme
-  --     require("nebulous").setup {
-  --       variant = "twilight",
-  --       -- disable = {
-  --       --   background = true,
-  --       --   endOfBuffer = false,
-  --       --   terminal_colors = false,
-  --       -- },
-  --       italic = {
-  --         comments = true,
-  --         keywords = false,
-  --         functions = false,
-  --         variables = true,
   --       },
   --     }
   --   end,

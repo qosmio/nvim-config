@@ -1,51 +1,5 @@
 local M = {}
 
-M.base_16 = {
-  base00 = "#070a0f",
-  base01 = "#1e2532",
-  base02 = "#21283b",
-  base03 = "#4f5f7e",
-  base04 = "#596988",
-  base05 = "#6c7d9c",
-  base06 = "#b6bdca",
-  base07 = "#c8ccd4",
-  base08 = "#f65866",
-  base09 = "#ea8912",
-  base0A = "#ebc275",
-  base0B = "#8bcd5b",
-  base0C = "#52a0e0",
-  base0D = "#41a7fc",
-  base0E = "#c678dd",
-  base0F = "#f65866",
-}
-M.deep = {
-  black = "#0c0e15",
-  bg0 = "#1a212e",
-  bg1 = "#21283b",
-  bg2 = "#283347",
-  bg3 = "#2a324a",
-  bg_d = "#141b24",
-  bg_blue = "#54b0fd",
-  bg_yellow = "#f2cc81",
-  fg = "#93a4c3",
-  purple = "#c75ae8",
-  green = "#8bcd5b",
-  orange = "#dd9046",
-  blue = "#41a7fc",
-  yellow = "#efbd5d",
-  cyan = "#34bfd0",
-  red = "#f65866",
-  grey = "#455574",
-  light_grey = "#6c7d9c",
-  dark_cyan = "#1b6a73",
-  dark_red = "#992525",
-  dark_yellow = "#8f610d",
-  dark_purple = "#862aa1",
-  diff_add = "#27341c",
-  diff_delete = "#331c1e",
-  diff_change = "#102b40",
-  diff_text = "#1c4a6e",
-}
 M.base_30 = {
   white = "#6c7d9c",
   darker_black = "#141b28",
@@ -75,10 +29,63 @@ M.base_30 = {
   cyan = "#56b6c2",
   statusline_bg = "#1e2532",
   lightbg = "#2f333b",
-  lightbg2 = "#292d35",
   pmenu_bg = "#98c379",
+  lightbg2 = "#292d35",
   folder_bg = "#41a7fc",
 }
 
--- print(vim.inspect(custom))
+local b = {
+  baby_pink = "#f92782",
+  black = "#050505",
+  darker_black = "#111111",
+  grey_bg = "#0b0f17",
+  maroon = "#420E09",
+  one_bg = "#142b38",
+  one_bg2 = "#1d3441",
+  pink = "#ca2168",
+  purple = "#d56af5",
+  vibrant_green = "#22ca6c",
+  white = "#417d9c",
+  yellow = "#e6db74",
+}
+
+M.base_16 = {
+  base00 = "#070a0f",
+  base01 = "#1e2532",
+  base02 = "#21283b",
+  base03 = "#4f5f7e",
+  base04 = "#596988",
+  base05 = "#6c7d9c",
+  base06 = "#b6bdca",
+  base07 = "#c8ccd4",
+  base08 = "#f65866",
+  base09 = "#ea8912",
+  base0A = "#ebc275",
+  base0B = "#8bcd5b",
+  base0C = "#52a0e0",
+  base0D = "#41a7fc",
+  base0E = "#c678dd",
+  base0F = "#ff5864",
+}
+
+M.type = "dark"
+
+local diff = { diff_add = "#27341c", diff_delete = "#331c1e", diff_change = "#102b40", diff_text = "#1c4a6e" }
+
+M.polish_hl = {
+  luaTSField = { fg = M.base_16.base0D },
+  ["@variable"] = { fg = M.base_30.yellow },
+  ["@tag.delimiter"] = { fg = M.base_30.cyan, bold = true },
+  ["@function"] = { fg = M.base_30.blue },
+  ["@parameter"] = { fg = M.base_16.base0F },
+  ["@punctuation.bracket"] = { fg = M.base_30.purple, bold = true },
+  ["@constructor"] = { fg = M.base_30.purple, bold = true },
+  ["@tag.attribute"] = { fg = M.base_30.nord_blue },
+  ["@operator"] = { fg = "#6c7d9c" },
+  ["@constant"] = { fg = M.base_30.yellow, bold = true },
+  ["@boolean"] = { fg = M.base_30.purple, bold = true },
+}
+
+M.base_30 = vim.tbl_deep_extend("force", vim.tbl_deep_extend("force", M.base_30, b), diff)
+
 return M
