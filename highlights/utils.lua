@@ -78,7 +78,79 @@ M.show_hl_captures = function()
     local matches = M.get_syntax_hl()
     result["Syntax"] = matches
   end
-  print(vim.inspect(result))
+  -- print(vim.inspect(result))
+end
+
+M._hex_to_rgb = function(hex)
+  hex = hex:gsub("#", "")
+  return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+end
+
+M._hex_to_8bit = function(color)
+  local r, g, b = M.hex_to_rgb(color)
+  local bit = require "bit"
+  -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
+  -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
+  local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
+    + bit.lshift(math.floor(g * 7 / 255), 2)
+    + math.floor((b * 3 / 255))
+  return encodedData
+end
+
+M.turn_str_to_color = function(tb_in)
+  local tb = vim.deepcopy(tb_in)
+  local colors = M.get_theme_tb "base_30"
+
+  for _, groups in pairs(tb) do
+    for k, v in pairs(groups) do
+      if k == "fg" or k == "bg" then
+        if v:sub(1, 1) == "#" then
+          tb_in["cterm" .. k] = M.hex_to_8bit(v)
+        else
+          groups[k] = colors[v]
+        end
+      end
+    end
+  end
+
+  return tb
+end
+
+M.gui_syntax_to_cterm = function(syntax)
+  local tb = vim.deepcopy(syntax)
+  for syn, groups in pairs(tb) do
+    for k, v in pairs(groups) do
+      if k == "fg" or k == "bg" then
+        if v:sub(1, 1) == "#" then
+          v = M.hex_to_8bit(v)
+        end
+        if syntax[syn]["cterm" .. k] == nil then
+          syntax[syn]["cterm" .. k] = v
+        end
+      end
+    end
+    -- if syn == "St_ConfirmMode" then
+    --   print(vim.inspect(syntax[syn]))
+    -- end
+  end
+  return syntax
+end
+
+-- convert table into string
+M.nvim_set_hl = function(tb)
+  for hlgroupName, hlgroup_vals in pairs(tb) do
+    vim.api.nvim_set_hl(0, hlgroupName, hlgroup_vals)
+  end
+end
+
+M.get_component = function(comp)
+  if comp > 125 then
+    return (comp - 138) / 40 + 2
+  elseif comp > 46 then
+    return 1
+  else
+    return 0
+  end
 end
 
 ---Convert RGB decimal (RGB) to hexadecimal (#RRGGBB)
