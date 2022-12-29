@@ -1,49 +1,80 @@
 local M = {}
 
-M.base_30 = {
-  white = "#6c7d9c",
-  darker_black = "#141b28",
-  black = "#1a212e", --  nvim bg
-  black2 = "#202734",
-  one_bg = "#242b38", -- real bg of onedark
-  one_bg2 = "#2d3441",
-  one_bg3 = "#353c49",
-  grey = "#455574",
-  grey_fg = "#4f5f7e",
-  grey_fg2 = "#596988",
-  light_grey = "#617190",
-  red = "#f65866",
-  baby_pink = "#e06c75",
-  pink = "#ff75a0",
-  line = "#29303d", -- for lines like vertsplit
-  green = "#8bcd5b",
-  vibrant_green = "#98c379",
-  nord_blue = "#52a0e0",
-  blue = "#41a7fc",
-  yellow = "#ebc275",
-  sun = "#e5c07b",
-  purple = "#c678dd",
-  dark_purple = "#c678dd",
-  teal = "#34bfd0",
-  orange = "#ea8912",
-  cyan = "#56b6c2",
-  statusline_bg = "#1e2532",
-  lightbg = "#2f333b",
-  pmenu_bg = "#98c379",
-  lightbg2 = "#292d35",
-  folder_bg = "#41a7fc",
+M.cterm_base_30 = {
+  baby_pink = 198, -- #ff0087
+  black = 16, -- #000000
+  black2 = 233, -- #121212
+  blue = 75, -- #5fafff
+  cyan = 73, -- #5feeaf
+  dark_purple = 176, -- #d787d7
+  darker_black = 16, -- #000000
+  diff_add = 22, -- #005f00
+  diff_change = 6, -- #008080
+  diff_delete = 52, -- #5f0000
+  diff_text = 23, -- #005f5f
+  folder_bg = 75, -- #5fafff
+  green = 113, -- #87d75f
+  grey = 60, -- #5f5f87
+  grey_bg = 102, -- #878787
+  grey_fg = 60, -- #5f5f87
+  grey_fg2 = 60, -- #5f5f87
+  light_grey = 60, -- #5f5f87
+  lightbg = 23, -- #005f5f
+  lightbg2 = 234, -- #1c1c1c
+  line = 23, -- #005f5f
+  maroon = 52, -- #5f0000
+  nord_blue = 74, -- #5fafd7
+  one_bg = 233, -- #121212
+  one_bg2 = 23, -- #005f5f
+  one_bg3 = 59, -- #5f5f5f
+  orange = 172, -- #d78700
+  pink = 161, -- #d7005f
+  pmenu_bg = 114, -- #87d787
+  purple = 200, -- #ff00d7
+  red = 203, -- #ff5f5f
+  statusline_bg = 60, -- #5f5f87
+  sun = 190, -- #d7ff00
+  teal = 74, -- #5fafd7
+  vibrant_green = 41, -- #00d75f
+  white = 188, -- #d7d7d7
+  yellow = 11, -- #ffff00
 }
 
-local b = {
+M.base_30 = {
   baby_pink = "#f92782",
   black = "#050505",
+  black2 = "#202734",
+  blue = "#41a7fc",
+  cyan = "#5feeaf",
+  dark_purple = "#a300d3",
   darker_black = "#111111",
-  grey_bg = "#0a0f16",
+  diff_add = "#27341c",
+  diff_change = "#102b40",
+  diff_delete = "#331c1e",
+  diff_text = "#1c4a6e",
+  folder_bg = "#41a7fc",
+  green = "#8bcd5b",
+  grey = "#455574",
+  grey_bg = "#13151a",
+  grey_fg = "#647cab",
+  grey_fg2 = "#596988",
+  light_grey = "#617190",
+  lightbg = "#2f333b",
+  lightbg2 = "#292d35",
+  line = "#29303d",
   maroon = "#420E09",
+  nord_blue = "#52a0e0",
   one_bg = "#142b38",
   one_bg2 = "#1d3441",
+  one_bg3 = "#353c49",
+  orange = "#ea8912",
   pink = "#ca2168",
-  purple = "#d56af5",
+  pmenu_bg = "#98c379",
+  purple = "#ff00de",
+  red = "#f65866",
+  statusline_bg = "#1e2532",
+  sun = "#e5c07b",
+  teal = "#34bfd0",
   vibrant_green = "#22ca6c",
   white = "#c8ccd4",
   yellow = "#e6db74",
@@ -62,17 +93,13 @@ M.base_16 = {
   base09 = "#ea8912",
   base0A = "#ebc275",
   base0B = "#8bcd5b",
-  base0C = "#52a0e0",
-  base0D = "#41a7fc",
-  base0E = "#c678dd",
-  base0F = "#f65866",
+  base0C = "#6499ff",
+  base0D = "#28b1ff",
+  base0E = "#dc14f4",
+  base0F = "#ff6464",
 }
 
 M.type = "dark"
-
-local deep = { diff_add = "#27341c", diff_delete = "#331c1e", diff_change = "#102b40", diff_text = "#1c4a6e" }
-
-M.base_30 = vim.tbl_deep_extend("force", vim.tbl_deep_extend("force", M.base_30, b), deep)
 
 M.polish_hl = {
   luaTSField = { fg = M.base_16.base0D },
@@ -93,34 +120,39 @@ local syntax = { -- LSP References
   Number = { fg = M.base_30.blue },
   MasonNormal = { bg = M.base_30.darker_black },
 
-  LspReferenceText = { fg = M.base_30.darker_black, bg = "#6c7d9c" },
-  LspReferenceRead = { fg = M.base_30.darker_black, bg = "#6c7d9c" },
-  LspReferenceWrite = { fg = M.base_30.darker_black, bg = "#6c7d9c" },
+  LspReferenceText = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
+  LspReferenceRead = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
+  LspReferenceWrite = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
 
   -- Lsp Diagnostics
   DiagnosticHint = { fg = M.base_30.purple },
   DiagnosticError = { fg = M.base_30.red },
   DiagnosticWarn = { fg = M.base_30.yellow },
   DiagnosticInformation = { fg = M.base_30.green },
-  DiagnosticUnderlineError = { undercurl = true, sp = M.base_30.red },
-  DiagnosticUnderlineHint = { undercurl = true, sp = M.base_30.purple },
-  DiagnosticUnderlineInfo = { undercurl = true, sp = M.base_30.blue },
-  DiagnosticUnderlineWarn = { undercurl = true, sp = M.base_30.yellow },
+  -- DiagnosticUnderlineError = { undercurl = true, sp = M.base_30.red },
+  -- DiagnosticUnderlineHint = { undercurl = true, sp = M.base_30.purple },
+  -- DiagnosticUnderlineInfo = { undercurl = true, sp = M.base_30.blue },
+  -- DiagnosticUnderlineWarn = { undercurl = true, sp = M.base_30.yellow },
   LspSignatureActiveParameter = { fg = M.base_30.black, bg = M.base_30.green },
 
   RenamerTitle = { fg = M.base_30.black, bg = M.base_30.red },
   RenamerBorder = { fg = M.base_30.red },
   DevIconDiff = { fg = "#41535b" },
-  DiffAdd = { bg = "#1F2A17" },
-  DiffAdded = { fg = "#8bcd5b" },
+
+  DiffAdd = { bg = M.base_30.diff_add, fg = "#D2EBBE" },
+  DiffAdded = { fg = M.base_30.vibrant_green },
+  DiffRemoved = { fg = M.base_30.red },
+  DiffChange = { fg = M.base_30.diff_change, underline = true, bold = true },
+  GitSignsChange = { fg = M.base_30.yellow, underline = false, bold = true },
+  DiffDelete = { bg = M.base_30.diff_delete, fg = "#54292e" },
+  DiffText = { bg = M.base_30.diff_text, fg = "#8fbfdc" },
+
   -- DiffChange = { bg = "#102b40", },
-  -- DiffChangeDelete = {},
-  DiffDelete = { bg = "#331c1e" },
   DiffFile = { fg = "#34bfd0" },
   DiffIndexLine = { fg = "#455574" },
-  -- DiffModified = {},
-  DiffRemoved = { fg = "#f65866" },
-  DiffText = { ctermbg = 23, bg = "#1c4a6e" },
+  -- DiffText = { ctermbg = 23, bg = "#1c4a6e" },
+  -- DiffMdified = {},
+  -- DiffChangeDelete = {},
   DiffviewCursorLine = { bg = "#21283b" },
   DiffviewEndOfBuffer = { bg = "#1a212e", fg = "#1a212e" },
   DiffviewFilePanelCounter = { fg = "#c75ae8", bold = true },
@@ -145,6 +177,31 @@ local syntax = { -- LSP References
   DiffviewStatusUnmerged = { fg = "#41a7fc" },
   DiffviewStatusUntracked = { fg = "#41a7fc" },
   DiffviewVertSplit = { fg = "#2a324a" },
+
+  DiagnosticUnderlineError = { bg = "NONE", fg = M.base_30.red, sp = M.base_30.red, undercurl = true },
+  DiagnosticUnderlineWarn = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
+  DiagnosticUnderlineInfo = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
+  DiagnosticUnderlineHint = { bg = "NONE", fg = M.base_30.blue, sp = M.base_30.blue, undercurl = true },
+  DiagnosticSignError = { fg = M.base_30.red },
+  DiagnosticSignWarn = { fg = M.base_30.yellow },
+  DiagnosticSignInfo = { fg = M.base_30.yellow },
+  DiagnosticSignHint = { fg = M.base_30.blue },
+  DiagnosticVirtualTextError = { fg = M.base_30.red },
+  DiagnosticVirtualTextWarn = { fg = M.base_30.yellow },
+  DiagnosticVirtualTextInfo = { fg = M.base_30.yellow },
+  DiagnosticVirtualTextHint = { fg = M.base_30.blue },
+  LspDiagnosticsUnderlineError = { bg = "NONE", fg = M.base_30.red, sp = M.base_30.red, undercurl = true },
+  LspDiagnosticsUnderlineWarning = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
+  LspDiagnosticsUnderlineInformation = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
+  LspDiagnosticsUnderlineHint = { bg = "NONE", fg = M.base_30.blue, sp = M.base_30.blue, undercurl = true },
+  LspDiagnosticsSignError = { fg = M.base_30.red },
+  LspDiagnosticsSignWarning = { fg = M.base_30.yellow },
+  LspDiagnosticsSignInformation = { fg = M.base_30.yellow },
+  LspDiagnosticsSignHint = { fg = M.base_30.blue },
+  LspDiagnosticsVirtualTextError = { fg = M.base_30.red },
+  LspDiagnosticsVirtualTextWarning = { fg = M.base_30.yellow },
+  LspDiagnosticsVirtualTextInformation = { fg = M.base_30.yellow },
+  LspDiagnosticsVirtualTextHint = { fg = M.base_30.blue },
 
   FloatBorder = { fg = M.base_30.blue, bg = M.base_30.grey_bg, bold = true },
   NormalFloat = { bg = M.base_30.grey_bg },
@@ -173,7 +230,22 @@ local syntax = { -- LSP References
   CmpItemKindVariable = { fg = "#9CDCFE", bg = "NONE" },
   CmpItemMenu = { fg = "#9C5A56", bg = "#56989c" },
   IndentBlankLineChar = { ctermfg = 237 },
+
+  gitconfigSection = { fg = M.base_30.green, bold = true, ctermfg = 181 },
+
+  Keyword = { bold = true },
+  Define = { bold = true },
+
+  Conditional = { bold = true },
+  zshOptStart = { fg = M.base_30.cyan, bold = false, nocombine = true },
+  zshCasePattern = { fg = M.base_30.orange },
+  zshParentheses = { nocombine = true, fg = M.base_30.yellow },
+  zshFunction = { fg = M.base_30.vibrant_green, bold = true },
+  zshDeref = { fg = M.base_30.red },
+  zshCase = { fg = "#294cfd" },
+  zshVariableDef = { fg = M.base_30.nord_blue, bold = true },
 }
+
 local statusline = {
   IndentBlankLineChar = { ctermfg = 237 },
   DiffText = { ctermbg = 23 },
@@ -298,4 +370,6 @@ hl.theme = M
 hl.highlight = highlight
 -- M.theme.highlight = nil
 -- print(vim.inspect(hl))
+_G.colors = hl.theme.base_30
+
 return hl

@@ -36,15 +36,15 @@ M.DocumentHighlightAU = function(bufnr)
   })
 end
 
-M.SemanticTokensAU = function(bufnr)
-  M.augroup("SemanticTokens", {
-    {
-      event = { "BufEnter", "CursorHold", "InsertLeave" },
-      buffer = bufnr,
-      command = vim.lsp.semantic_tokens.start,
-    },
-  })
-end
+-- M.SemanticTokensAU = function(bufnr)
+--   M.augroup("SemanticTokens", {
+--     {
+--       event = { "BufEnter", "CursorHold", "InsertLeave" },
+--       buffer = bufnr,
+--       command = vim.lsp.semantic_tokens.start,
+--     },
+--   })
+-- end
 
 M.DocumentFormattingAU = function(bufnr)
   M.augroup("Formatting", {
@@ -90,7 +90,7 @@ M.DiagPopup = function(bufnr)
       vim.diagnostic.open_float(client.buf, {
         border = require "lsp.settings.popup_border" "LspInfoBorder",
         scope = "cursor",
-        focusable = true,
+        focusable = false,
         source = "always",
         header = "",
         prefix = "",

@@ -52,7 +52,7 @@ opt.scrolloff = 10 -- number of lines to scroll
 -- opt.wrap = true -- wrap lines, if possible (not on a terminal)
 opt.fixendofline = true -- fix end of line characters
 -- vim.opt.characters for after foldtext, eof, foldcolumn
-opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff: ,eob: "
+opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff:/,eob: "
 
 opt.list = true --> show whitespace characters
 

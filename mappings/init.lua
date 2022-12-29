@@ -23,10 +23,19 @@ M.misc = {
     ["d"] = { '"_d' },
     ["x"] = { '"_x' },
     ["<C-o>"] = {
-      "<cmd> lua require('custom.highlights.utils').show_hl_captures() <CR>",
+      -- "<cmd> lua require('custom.highlights.utils').show_hl_captures() <CR>",
+      "<cmd>Inspect<CR>",
       " Show Highlight Group",
     },
-    ["<C-x>"] = { "<cmd> lua print(vim.inspect(require('custom.highlights.utils').colors 'Diff')) <CR> " },
+    ["<C-x>"] = {
+      -- "<cmd> lua print(vim.inspect(require('custom.highlights.utils').colors 'Diff')) <CR> " ,
+      function()
+        vim.ui.input({ prompt = "Highlight (pattern): " }, function(condition)
+          vim.notify(vim.inspect(require("custom.highlights.utils").colors(condition)))
+          -- vim.cmd [[messages]]
+        end)
+      end,
+    },
   },
   v = {
     ["d"] = { '"_d' },

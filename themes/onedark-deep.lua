@@ -1,51 +1,42 @@
 local M = {}
 
 M.base_30 = {
-  white = "#6c7d9c",
-  darker_black = "#141b28",
-  black = "#1a212e", --  nvim bg
-  black2 = "#202734",
-  one_bg = "#242b38", -- real bg of onedark
-  one_bg2 = "#2d3441",
-  one_bg3 = "#353c49",
-  grey = "#455574",
-  grey_fg = "#4f5f7e",
-  grey_fg2 = "#596988",
-  light_grey = "#617190",
-  red = "#f65866",
-  baby_pink = "#e06c75",
-  pink = "#ff75a0",
-  line = "#29303d", -- for lines like vertsplit
-  green = "#8bcd5b",
-  vibrant_green = "#98c379",
-  nord_blue = "#52a0e0",
-  blue = "#41a7fc",
-  yellow = "#ebc275",
-  sun = "#e5c07b",
-  purple = "#c678dd",
-  dark_purple = "#c678dd",
-  teal = "#34bfd0",
-  orange = "#ea8912",
-  cyan = "#56b6c2",
-  statusline_bg = "#1e2532",
-  lightbg = "#2f333b",
-  pmenu_bg = "#98c379",
-  lightbg2 = "#292d35",
-  folder_bg = "#41a7fc",
-}
-
-local b = {
   baby_pink = "#f92782",
   black = "#050505",
+  black2 = "#202734",
+  blue = "#41a7fc",
+  cyan = "#5feeaf",
+  dark_purple = "#a300d3",
   darker_black = "#111111",
-  grey_bg = "#0b0f17",
+  diff_add = "#27341c",
+  diff_change = "#102b40",
+  diff_delete = "#331c1e",
+  diff_text = "#1c4a6e",
+  folder_bg = "#41a7fc",
+  green = "#8bcd5b",
+  grey = "#455574",
+  grey_bg = "#13151a",
+  grey_fg = "#647cab",
+  grey_fg2 = "#596988",
+  light_grey = "#617190",
+  lightbg = "#2f333b",
+  lightbg2 = "#292d35",
+  line = "#29303d",
   maroon = "#420E09",
+  nord_blue = "#52a0e0",
   one_bg = "#142b38",
   one_bg2 = "#1d3441",
+  one_bg3 = "#353c49",
+  orange = "#ea8912",
   pink = "#ca2168",
-  purple = "#d56af5",
+  pmenu_bg = "#98c379",
+  purple = "#ff00de",
+  red = "#f65866",
+  statusline_bg = "#1e2532",
+  sun = "#e5c07b",
+  teal = "#34bfd0",
   vibrant_green = "#22ca6c",
-  white = "#417d9c",
+  white = "#c8ccd4",
   yellow = "#e6db74",
 }
 
@@ -85,7 +76,5 @@ M.polish_hl = {
   ["@constant"] = { fg = M.base_30.yellow, bold = true },
   ["@boolean"] = { fg = M.base_30.purple, bold = true },
 }
-
-M.base_30 = vim.tbl_deep_extend("force", vim.tbl_deep_extend("force", M.base_30, b), diff)
 
 return M

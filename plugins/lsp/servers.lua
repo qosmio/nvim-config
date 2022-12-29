@@ -20,11 +20,14 @@ local function opts(merged, _ok)
   end
 end
 
--- local v = vim.cmd[[hi]]
+-- local syntax = vim.tbl_extend("keep", require("custom.highlights.hlo").highlight, require "custom.highlights.lsp_hi")
+
+--require("custom.highlights.base46").compile()
 -- local v = require("base46.integrations.statusline")
 -- local v = vim.bo.filetype ~= "python" and true or false
 -- print("V IS", v)
-local servers = vim.tbl_deep_extend("force", require("mason-lspconfig").get_installed_servers(), { "pylance" })
+local servers =
+  vim.tbl_deep_extend("force", require("mason-lspconfig").get_installed_servers(), { "pylance", "ccls", "pylsp" })
 -- local v = require("custom.highlights.utils").gui_syntax_to_cterm(require "custom.highlights.hl")
 -- print(vim.inspect(require("custom.highlights.utils").color.colors "Diff"))
 -- local servers = require("mason-lspconfig").get_installed_servers()
@@ -34,14 +37,18 @@ for _, server in ipairs(servers) do
   if ok and res ~= true then
     local merged = opts(vim.tbl_deep_extend("force", base, res), ok_coq)
     merged.on_attach = custom.on_attach
-    -- if server == "sumneko_lua" then
-      --   local diff = ltdiff.diff(merged, opts)
-      --   -- print("this = " .. vim.inspect(merged))
-      --   -- print("other = " .. vim.inspect(opts))
-      --   print("diff = " .. vim.inspect(diff))
-      -- local m = assert(io.open("/tmp/luac.out", "wb"))
-      -- assert(m:write(string.dump(merged.on_attach)))
-      -- assert(m:close())
+    if server == "pylance" then
+      --   local m = assert(io.open("/tmp/pylance2.lua", "wb"))
+      --   assert(m:write(vim.inspect(merged)))
+      merged.capabilities.textDocument.semanticTokens = nil
+    end
+    --   local diff = ltdiff.diff(merged, opts)
+    --   -- print("this = " .. vim.inspect(merged))
+    --   -- print("other = " .. vim.inspect(opts))
+    --   print("diff = " .. vim.inspect(diff))
+    -- local m = assert(io.open("/tmp/luac.out", "wb"))
+    -- assert(m:write(string.dump(merged.on_attach)))
+    -- assert(m:close())
     -- end
     -- local patched = ltdiff.patch(merged, diff)
     -- print("patched = " .. vim.inspect(patched))

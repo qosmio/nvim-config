@@ -35,7 +35,8 @@ local sources = {
   -- Python
   -- pip install reorder-python-imports black yapf
   formatting.reorder_python_imports,
-  formatting.black,
+  formatting.blue,
+  diagnostics.pylama,
   -- formatting.yapf,
 
   -- Nginx

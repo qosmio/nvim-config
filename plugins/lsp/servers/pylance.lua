@@ -104,6 +104,56 @@ M.handlers = {
 
     vim.lsp.handlers["textDocument/publishDiagnostics"](err, result, ctx, config)
   end,
+  -- ["textDocument/semanticTokensProvider"] = false,
+  -- ["textDocument/semanticTokensProvider"] = {
+  --   legend = {
+  --     tokenTypes = {
+  --       "comment",
+  --       "keyword",
+  --       "string",
+  --       "number",
+  --       "regexp",
+  --       "type",
+  --       "class",
+  --       "interface",
+  --       "enum",
+  --       "enumMember",
+  --       "typeParameter",
+  --       "function",
+  --       "method",
+  --       "property",
+  --       "variable",
+  --       "parameter",
+  --       "module",
+  --       "intrinsic",
+  --       "selfParameter",
+  --       "clsParameter",
+  --       "magicFunction",
+  --       "builtinConstant",
+  --     },
+  --     tokenModifiers = {
+  --       "declaration",
+  --       "static",
+  --       "abstract",
+  --       "async",
+  --       "documentation",
+  --       "typeHint",
+  --       "typeHintComment",
+  --       "readonly",
+  --       "decorator",
+  --       "builtin",
+  --     },
+  --   },
+  --   range = true,
+  --   full = {
+  --     delta = true,
+  --   },
+  -- },
+  ["workspace/diagnostic/refresh"] = function(_, _, ctx)
+    local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
+    pcall(vim.diagnostic.reset, ns)
+    return true
+  end,
   ["workspace/executeCommand"] = on_workspace_executecommand,
 }
 
@@ -197,57 +247,15 @@ M.commands = {
   },
 }
 
--- M.capabilities = require("cmp_nvim_lsp").default_capabilities()
+-- M.capabilities.textDocument.semanticTokensProvider = false
 
 M.on_attach = function(client, bufnr)
-  local caps = client.server_capabilities
-  caps.semanticTokensProvider = {
-    legend = {
-      tokenTypes = {
-        "comment",
-        "keyword",
-        "string",
-        "number",
-        "regexp",
-        "type",
-        "class",
-        "interface",
-        "enum",
-        "enumMember",
-        "typeParameter",
-        "function",
-        "method",
-        "property",
-        "variable",
-        "parameter",
-        "module",
-        "intrinsic",
-        "selfParameter",
-        "clsParameter",
-        "magicFunction",
-        "builtinConstant",
-      },
-      tokenModifiers = {
-        "declaration",
-        "static",
-        "abstract",
-        "async",
-        "documentation",
-        "typeHint",
-        "typeHintComment",
-        "readonly",
-        "decorator",
-        "builtin",
-      },
-    },
-    range = true,
-    full = {
-      delta = true,
-    },
-  }
-  client.server_capabilities = caps
-  -- client.server_capabilities.semanticTokensProvider = false
-  -- require("lsp.settings").on_attach(client, bufnr)
+
+  if client.server_capabilities.semanticTokensProvider and client.server_capabilities.semanticTokensProvider.full then
+    client.server_capabilities.semanticTokensProvider = false
+  end
+
+  require("lsp.settings").on_attach(client, bufnr)
 
   vim.api.nvim_buf_create_user_command(bufnr, "PylanceOrganizeImports", organize_imports, { desc = "Organize Imports" })
 
@@ -264,13 +272,8 @@ M.on_attach = function(client, bufnr)
     extract_method,
     { range = true, desc = "Extract methdod" }
   )
-  vim.lsp.handlers["workspace/diagnostic/refresh"] = function(_, _, ctx)
-    local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
-    pcall(vim.diagnostic.reset, ns)
-    return true
-  end
   utils.autocmds.InlayHintsAU()
-  require("lsp.settings").on_attach(client, bufnr)
+  -- require("lsp.settings").on_attach(client, bufnr)
 end
 
 return M

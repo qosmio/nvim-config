@@ -39,7 +39,7 @@ return {
     { name = "nvim_lua", priority = 5, group_index = 1, max_item_count = 5 },
     {
       name = "buffer",
-      priority = 50,
+      priority = 550,
       group_index = 1,
       -- entry_filter = entry_filter_function,
       -- keyword_length = 2,

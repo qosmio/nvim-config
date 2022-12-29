@@ -21,12 +21,12 @@ M.user = {
   ["lewis6991/gitsigns.nvim"] = {
     override_options = require "custom.plugins.config.gitsigns",
   },
-  ["nvim-treesitter/playground"] = {
-    keys = { "gh" },
-    event = "InsertEnter",
-  },
+  -- ["nvim-treesitter/playground"] = {
+  --   keys = { "gh" },
+  --   event = "InsertEnter",
+  -- },
   ["nvim-treesitter/nvim-treesitter"] = {
-    -- requires = { "nvim-treesitter/playground" },
+    requires = { "nvim-treesitter/playground" },
     module = "nvim-treesitter",
     setup = function()
       require("core.utils").lazy_load "nvim-treesitter"
@@ -79,10 +79,10 @@ M.user = {
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
   ["folke/neodev.nvim"] = {
     ft = { "lua" },
-    config = function()
-      local statusline = require "base46.integrations.statusline"
-      -- write(statusline,"/tmp/out.txt")
-    end,
+    -- config = function()
+    --   local statusline = require "base46.integrations.statusline"
+    --   write(statusline,"/tmp/out.txt")
+    -- end,
   },
   ["rmagatti/alternate-toggler"] = {},
   ["chr4/nginx.vim"] = { ft = "nginx" },
@@ -112,7 +112,7 @@ M.user = {
   --   end,
   -- },
   ["reewr/vim-monokai-phoenix"] = {
-    -- requires = { "patstockwell/vim-monokai-tasty" },
+    requires = { "jacoborus/tender.vim", "nielsmadan/harlequin", "patstockwell/vim-monokai-tasty" },
     after = { "ui", "indent-blankline.nvim" },
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
@@ -126,6 +126,7 @@ M.user = {
         0,
         vim.schedule_wrap(function()
           vim.cmd [[colo monokai-phoenix]]
+          -- vim.cmd [[colo tender]]
           -- vim.cmd [[colorscheme vim-monokai-tasty]]
           vim.cmd [[hi Normal ctermbg=0]]
           local highlight = require("custom.highlights.hlo").highlight
@@ -135,7 +136,6 @@ M.user = {
           local cterm = require("custom.highlights.utils").gui_syntax_to_cterm(highlight)
           require("custom.highlights.utils").nvim_set_hl(cterm)
           require("custom.highlights.utils").nvim_set_hl(statusline)
-
           vim.cmd [[hi IndentBlankLineChar ctermfg=237]]
         end)
       )
@@ -167,6 +167,24 @@ M.user = {
         automatic_installation = true,
         automatic_setup = true,
       }
+    end,
+  },
+  ["gelguy/wilder.nvim"] = {
+    config = function()
+      local wilder = require "wilder"
+      -- wilder.setup { modes = { ":", "/", "?" } }
+
+      wilder.set_option("pipeline", { wilder.branch(wilder.cmdline_pipeline(), wilder.search_pipeline()) })
+
+      wilder.set_option(
+        "renderer",
+        wilder.popupmenu_renderer(
+          { highlighter = wilder.basic_highlighter() },
+          wilder.popupmenu_border_theme {
+            border = "rounded",
+          }
+        )
+      )
     end,
   },
   -- ["ms-jpq/coq_nvim"] = {

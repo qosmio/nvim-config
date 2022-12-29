@@ -7,7 +7,7 @@ package.path = u.join_paths(plugins, "lsp", "?.lua") .. ";" .. package.path
 -- print(vim.inspect(base46))
 
 function _G.pprint(data)
-  print(vim.inspect(data))
+  vim.pretty_print(data)
 end
 
 function _G.write(fun, file)
