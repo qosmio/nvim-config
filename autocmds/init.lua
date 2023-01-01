@@ -115,8 +115,29 @@ end
 
 local function process_yank()
   vim.highlight.on_yank { timeout = 200, on_visual = false }
-  if vim.g.loaded_oscyank == 1 and vim.v.event.operator == "y" and vim.v.event.regname == "" then
-    vim.cmd "OSCYankReg +"
+  local ok, osc52, yank_data
+  ok, osc52 = pcall(require, "osc52")
+  if not ok then
+    return
+  end
+  if not vim.v.event.operator == "y" then
+    return
+  else
+    ok, yank_data = pcall(vim.fn.getreg, "")
+    if ok then
+      if vim.fn.has "clipboard" == 1 then
+        pcall(vim.fn.setreg, "+", yank_data)
+      end
+      if vim.env.SSH_CONNECTION then
+        osc52.copy(yank_data)
+      end
+    end
+  end
+  if vim.tbl_contains({ "", "+", "*" }, vim.v.event.regname) then
+    osc52.copy_register ""
+  end
+  if vim.v.event.regname == "c" then
+    osc52.copy_register "c"
   end
 end
 
@@ -124,7 +145,12 @@ local group_name = "init"
 vim.api.nvim_create_augroup(group_name, { clear = true })
 aucmd("FileType", { group = group_name, command = "set formatoptions-=o" })
 aucmd("TermOpen", { group = group_name, callback = init_term })
-aucmd("TextYankPost", { group = group_name, callback = process_yank })
+
+aucmd("TextYankPost", {
+  desc = "[osc52] Copy to clipboard/OSC52",
+  group = group_name,
+  callback = process_yank,
+})
 
 aucmd({ "BufEnter" }, {
   group = group_name,

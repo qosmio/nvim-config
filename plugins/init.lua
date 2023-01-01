@@ -87,7 +87,11 @@ M.user = {
   ["rmagatti/alternate-toggler"] = {},
   ["chr4/nginx.vim"] = { ft = "nginx" },
   -- Native terminal copying using OCS52
-  ["ojroques/vim-oscyank"] = {},
+  ["ojroques/nvim-osc52"] = {
+    config = function()
+      require("osc52").setup { trim = false }
+    end,
+  },
   ["jose-elias-alvarez/null-ls.nvim"] = {
     after = { "nvim-cmp" },
     requires = { "nvim-lua/plenary.nvim" },
@@ -187,22 +191,51 @@ M.user = {
       )
     end,
   },
-  -- ["ms-jpq/coq_nvim"] = {
-  --   -- after = { "mason-lspconfig.nvim" },
-  --   -- setup = function()
-  --   -- vim.g.coq_settings = require "custom.plugins.config.coq"
-  --   -- end,
-  --   ft = { "python" },
-  --   branch = "coq",
-  --   requires = {
-  --     "ms-jpq/coq.artifacts",
-  --     "ms-jpq/coq.thirdparty",
-  --   },
-  --   config = function()
-  --     vim.g.coq_settings = require "custom.plugins.config.coq"
-  --     -- require("custom.highlights.utils").nvim_set_hl(require("custom.highlights.hlo").highlight)
-  --   end,
-  -- },
+  ["jackMort/ChatGPT.nvim"] = {
+    cmd = "ChatGPT",
+    requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    config = function()
+      require("chatgpt").setup {
+        welcome_message = "",
+        question_sign = "",
+        answer_sign = "ﮧ",
+        max_line_length = 80,
+        keymaps = {
+          close = "<Esc>", -- removes ability to use normal mode
+          yank_last = "<D-c>",
+          scroll_up = "<S-Up>",
+          scroll_down = "<S-Down>",
+        },
+        chat_window = {
+          border = { style = borderStyle },
+        },
+        chat_input = {
+          prompt = " > ",
+          border = { style = borderStyle },
+        },
+      }
+    end,
+  },
+  ["dense-analysis/neural"] = {
+    cmd = "NeuralCode",
+    requires = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
+    config = function()
+      require("neural").setup {
+        mappings = {
+          swift = nil,
+          -- prompt = nil,
+        },
+        open_ai = {
+          api_key = vim.env.OPENAI_API_KEY, -- not committed, defined in config/private-settings.lua outside of repo
+          max_tokens = 1000,
+          temperature = 0.1,
+          presence_penalty = 0.5,
+          frequency_penalty = 0.5,
+        },
+        ui = { icon = "ﮧ" },
+      }
+    end,
+  },
   -- ["Maan2003/lsp_lines.nvim"] = {
   --   after = { "nvim-cmp", "nvim-lspconfig" },
   --   config = function()

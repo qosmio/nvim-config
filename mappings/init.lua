@@ -97,7 +97,14 @@ M.lsp = {
   },
 }
 -- local opts = { silent = true, nowait = true, expr = true }
-
+M.neural = {
+  n = {
+    ["<leader>."] = {
+      "<cmd>NeuralCode<cr>",
+      "Run OpenAI Codex Code Completion",
+    },
+  },
+}
 -- M.copilot = {
 --   i = {
 --     ["<C-j>"] = {

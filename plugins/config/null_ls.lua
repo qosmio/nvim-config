@@ -73,6 +73,8 @@ local sources = {
   formatting.jq,
   -- TOML
   formatting.taplo,
+  -- YAML
+  formatting.yamlfmt,
 }
 
 local M = {}
