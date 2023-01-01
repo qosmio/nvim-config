@@ -53,6 +53,7 @@ M.user = {
   ["neovim/nvim-lspconfig"] = {
     opt = true,
     setup = function()
+      require("core.utils").lazy_load "mason-lspconfig.nvim"
       require("core.utils").lazy_load "nvim-lspconfig"
     end,
     config = function()
@@ -61,28 +62,13 @@ M.user = {
       require "custom.plugins.lsp.servers"
       require("mason-lspconfig").setup(require "lsp.lspconfig")
     end,
-    after = "mason-lspconfig.nvim",
   },
   ["williamboman/mason-lspconfig.nvim"] = {
     after = { "mason.nvim" },
-    -- setup = function()
-    --   require("core.utils").lazy_load "mason.nvim"
-    -- end,
-    -- config = function()
-    --   -- require "plugins.configs.lspconfig"
-    --   -- require "custom.plugins.lsp.installers.pylance"
-    --   -- require "custom.plugins.lsp.servers"
-    --   -- require("custom.plugins.lsp.settings")
-    --   require("mason-lspconfig").setup(require "lsp.lspconfig")
-    -- end,
   },
   ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
   ["folke/neodev.nvim"] = {
     ft = { "lua" },
-    -- config = function()
-    --   local statusline = require "base46.integrations.statusline"
-    --   write(statusline,"/tmp/out.txt")
-    -- end,
   },
   ["rmagatti/alternate-toggler"] = {},
   ["chr4/nginx.vim"] = { ft = "nginx" },
