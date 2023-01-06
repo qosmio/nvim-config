@@ -4,16 +4,16 @@ local custom = require "custom.plugins.lsp.settings"
 local ok_coq, ok, coq, res
 ok_coq, coq = pcall(require, "coq")
 
----@private
+---@public
 --- Sends an async request to all active clients attached to the current
 --- buffer.
 ---
 ---@param merged (table|nil) Parameters to send to the server
----@param _ok (boolean)
+---@param isok (boolean)
 --
 ---@returns table
-local function opts(merged, _ok)
-  if _ok then
+local function opts(merged, isok)
+  if isok then
     return coq.lsp_ensure_capabilities(merged)
   else
     return merged
@@ -21,25 +21,14 @@ local function opts(merged, _ok)
 end
 
 -- local syntax = vim.tbl_extend("keep", require("custom.highlights.hlo").highlight, require "custom.highlights.lsp_hi")
-
---require("custom.highlights.base46").compile()
--- local v = require("base46.integrations.statusline")
--- local v = vim.bo.filetype ~= "python" and true or false
--- print("V IS", v)
-local servers =
-  vim.tbl_deep_extend("force", require("mason-lspconfig").get_installed_servers(), { "pylance", "ccls", "pylsp" })
--- local v = require("custom.highlights.utils").gui_syntax_to_cterm(require "custom.highlights.hl")
--- print(vim.inspect(require("custom.highlights.utils").color.colors "Diff"))
--- local servers = require("mason-lspconfig").get_installed_servers()
+local servers = vim.tbl_deep_extend("force", require("mason-lspconfig").get_installed_servers(), { "pylance", "ccls" })
 for _, server in ipairs(servers) do
   ok, res = pcall(require, "custom.plugins.lsp.servers." .. server)
   -- print(vim.inspect(require "custom.plugins.config.cmp"))
   if ok and res ~= true then
     local merged = opts(vim.tbl_deep_extend("force", base, res), ok_coq)
     merged.on_attach = custom.on_attach
-    if server == "pylance" then
-      --   local m = assert(io.open("/tmp/pylance2.lua", "wb"))
-      --   assert(m:write(vim.inspect(merged)))
+    if server == "pylance" and merged ~= nil and merged.capabilities.textDocument.semanticTokens == true then
       merged.capabilities.textDocument.semanticTokens = nil
     end
     --   local diff = ltdiff.diff(merged, opts)

@@ -117,7 +117,7 @@ M.polish_hl = {
 
 local syntax = { -- LSP References
   Boolean = { fg = "#c75ae8", bold = true },
-  Number = { fg = M.base_30.blue },
+  Number = { fg = M.base_16.base06 },
   MasonNormal = { bg = M.base_30.darker_black },
 
   LspReferenceText = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
@@ -186,10 +186,10 @@ local syntax = { -- LSP References
   DiagnosticSignWarn = { fg = M.base_30.yellow },
   DiagnosticSignInfo = { fg = M.base_30.yellow },
   DiagnosticSignHint = { fg = M.base_30.blue },
-  DiagnosticVirtualTextError = { fg = M.base_30.red },
-  DiagnosticVirtualTextWarn = { fg = M.base_30.yellow },
-  DiagnosticVirtualTextInfo = { fg = M.base_30.yellow },
-  DiagnosticVirtualTextHint = { fg = M.base_30.blue },
+  DiagnosticVirtualTextError = { fg = M.base_30.red, bg = M.base_30.statusline_bg },
+  DiagnosticVirtualTextWarn = { fg = M.base_30.yellow, bg = M.base_30.diff_delete },
+  DiagnosticVirtualTextInfo = { fg = M.base_30.yellow, bg = M.base_30.diff_change },
+  DiagnosticVirtualTextHint = { fg = M.base_30.blue, bg = M.base_30.diff_text },
   LspDiagnosticsUnderlineError = { bg = "NONE", fg = M.base_30.red, sp = M.base_30.red, undercurl = true },
   LspDiagnosticsUnderlineWarning = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
   LspDiagnosticsUnderlineInformation = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
@@ -228,7 +228,7 @@ local syntax = { -- LSP References
   CmpItemAbbrMatchFuzzy = { fg = "White", bg = "NONE" },
   CmpItemKindInterface = { fg = "#f90c71", bg = "NONE" },
   CmpItemKindVariable = { fg = "#9CDCFE", bg = "NONE" },
-  CmpItemMenu = { fg = "#9C5A56", bg = "#56989c" },
+  CmpItemMenu = { fg = "#ffffff" },
   IndentBlankLineChar = { ctermfg = 237 },
 
   gitconfigSection = { fg = M.base_30.green, bold = true, ctermfg = 181 },

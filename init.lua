@@ -22,10 +22,10 @@ function _G.write(fun, file)
 end
 
 function _G.check_vim_option(option, value)
-  if opt[option] ~= nil then
+  if vim.opt[option] ~= nil then
     -- if M.clean(_value) == M.clean(value) then
-    if value ~= opt[option]._value then
-      print("opt." .. option .. " = " .. tostring(opt[option]._value) .. " -- " .. tostring(value))
+    if value ~= vim.opt[option]._value then
+      print("opt." .. option .. " = " .. tostring(vim.opt[option]._value) .. " -- " .. tostring(value))
     end
     -- print(string.format("%s=%s -- %s", option, opt[option]._value, value))
   end

@@ -1,3 +1,14 @@
+function _G.writee(fun, file)
+  local m = assert(io.open(file, "wb"))
+  if type(fun) == "function" then
+    assert(m:write(string.dump(fun)))
+  else
+    assert(m:write(vim.inspect(fun)))
+  end
+  assert(m:close())
+  vim.notify("wrote " .. type(fun) .. " to " .. file)
+end
+
 local M = {}
 -- don't yank text on cut ( x )
 -- map({ "n", "v" }, "x", '"_x')
@@ -78,13 +89,13 @@ M.lsp = {
     },
     ["<leader>ll"] = {
       function()
-        vim.lsp.buf.format {}
+        vim.lsp.buf.format { timeout = 2000 }
       end,
       "Format code",
     },
     ["<leader>lk"] = {
       function()
-        vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line "$", 0 })
+        vim.lsp.buf.range_formatting({ timeout = 2000 }, { 0, 0 }, { vim.fn.line "$", 0 })
       end,
       "Format code",
     },
@@ -143,4 +154,9 @@ M.packer = {
     ["<leader>pl"] = { "<cmd>PackerClean<cr>", "Clean" },
   },
 }
+
+-- writee(require "core.mappings", "/tmp/core.lua")
+local J = vim.tbl_deep_extend("force", require("core.mappings").lspconfig, M.lsp)
+J.plugin = nil
+M.lsp = J
 return M

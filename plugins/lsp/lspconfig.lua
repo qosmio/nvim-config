@@ -5,7 +5,7 @@ local servers = {
   "yamlls",
   "sumneko_lua",
   "tsserver",
-  "eslint",
+  -- "eslint",
   "html",
 }
 

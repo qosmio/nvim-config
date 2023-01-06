@@ -61,6 +61,7 @@ M.user = {
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.servers"
       require("mason-lspconfig").setup(require "lsp.lspconfig")
+      -- vim.lsp.set_log_level "debug"
     end,
   },
   ["williamboman/mason-lspconfig.nvim"] = {
@@ -83,6 +84,7 @@ M.user = {
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("custom.plugins.config.null_ls").setup()
+      -- require("custom.plugins.lsp.formatters.prettier_d").setup()
     end,
   },
   ["lambdalisue/suda.vim"] = { event = { "CmdlineEnter" } },
@@ -154,9 +156,10 @@ M.user = {
       local mason_null_ls = require "mason-null-ls"
       mason_null_ls.setup {
         ensure_installed = nil,
-        automatic_installation = true,
+        automatic_installation = false,
         automatic_setup = true,
       }
+      mason_null_ls.setup_handlers()
     end,
   },
   ["gelguy/wilder.nvim"] = {
@@ -193,11 +196,11 @@ M.user = {
           scroll_down = "<S-Down>",
         },
         chat_window = {
-          border = { style = borderStyle },
+          border = { style = require "lsp.settings.popup_border" "FloatBorder" },
         },
         chat_input = {
           prompt = " > ",
-          border = { style = borderStyle },
+          border = { style = require "lsp.settings.popup_border" "FloatBorder" },
         },
       }
     end,
@@ -220,6 +223,12 @@ M.user = {
         },
         ui = { icon = "ﮧ" },
       }
+    end,
+  },
+  ["tzachar/cmp-tabnine"] = {
+    after = "cmp-path",
+    config = function()
+      require("custom.plugins.config.cmp.tabnine").setup()
     end,
   },
   -- ["Maan2003/lsp_lines.nvim"] = {

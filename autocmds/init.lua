@@ -120,7 +120,7 @@ local function process_yank()
   if not ok then
     return
   end
-  if not vim.v.event.operator == "y" then
+  if vim.v.event.operator ~= "y" then
     return
   else
     ok, yank_data = pcall(vim.fn.getreg, "")
@@ -240,29 +240,31 @@ aucmd("BufWritePost", { pattern = { "*.bin", "*.dat" }, command = "set nomod | e
 -- }}}
 
 --- WinBar {{{
-function _G.WinBar()
-  local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-  local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":p")
-  local cwd = string.gsub(vim.loop.cwd(), "([^%w])", "%%%1") -- escape non-word characters
-  path = path:gsub(cwd, ".")
-  path = path:gsub(os.getenv "HOME", "~")
-  local elems = vim.split(path, "/", { trimempty = true })
-  return "%#WinBarPath#" .. table.concat(elems, " %#WinBarSep# %#WinBarPath#") .. " %#WinBar#"
-end
-
-vim.opt.winbar = ""
-
-aucmd("BufWinEnter", {
-  callback = function()
-    local buf = tonumber(vim.fn.expand "<abuf>")
-    local winbar = ""
-    if vim.api.nvim_buf_get_option(buf, "buftype") == "" then
-      winbar = "%!v:lua.WinBar()"
-    end
-    local win = vim.fn.bufwinid(buf)
-    vim.api.nvim_win_set_option(win, "winbar", winbar)
-  end,
-})
+-- function _G.WinBar()
+--   local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+--   local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":p")
+--   local cwd = string.gsub(vim.loop.cwd(), "([^%w])", "%%%1") -- escape non-word characters
+--   path = path:gsub(cwd, ".")
+--   path = path:gsub(os.getenv "HOME", "~")
+--   local elems = vim.split(path, "/", { trimempty = true })
+--   return "%#WinBarPath#" .. table.concat(elems, " %#WinBarSep# %#WinBarPath#") .. " %#WinBar#"
+-- end
+--
+-- vim.opt.winbar = ""
+--
+-- aucmd("BufWinEnter", {
+--   callback = function()
+--     local buf = tonumber(vim.fn.expand "<abuf>")
+--     local winbar = ""
+--     if buf ~= nil then
+--       if vim.api.nvim_buf_get_option(buf, "buftype") == "" then
+--         winbar = "%!v:lua.WinBar()"
+--       end
+--       local win = vim.fn.bufwinid(buf)
+--       vim.api.nvim_win_set_option(win, "winbar", winbar)
+--     end
+--   end,
+-- })
 -- }}}
 
 -- Code Folding {{{

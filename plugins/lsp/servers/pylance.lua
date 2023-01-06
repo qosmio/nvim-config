@@ -72,6 +72,7 @@ local messages = {}
 local M = {}
 
 M.handlers = {
+  ["client/registerCapability"] = false,
   ["pyright/beginProgress"] = function(_, _, _, client_id)
     require("lsp-status/util").ensure_init(messages, client_id, server_name)
     if not messages[client_id].progress[1] then
@@ -250,7 +251,6 @@ M.commands = {
 -- M.capabilities.textDocument.semanticTokensProvider = false
 
 M.on_attach = function(client, bufnr)
-
   if client.server_capabilities.semanticTokensProvider and client.server_capabilities.semanticTokensProvider.full then
     client.server_capabilities.semanticTokensProvider = false
   end

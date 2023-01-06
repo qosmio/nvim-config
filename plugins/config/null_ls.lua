@@ -2,41 +2,42 @@ local null_ls_status_ok, null_ls = pcall(require, "null-ls")
 if not null_ls_status_ok then
   return
 end
-
+local command_resolver = require "null-ls.helpers.command_resolver"
 local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
-
 local sources = {
   -- SQL
   -- diagnostics.sqlfluff.with { extra_args = { "--dialect", "postgres" } },
   formatting.sqlfluff.with { extra_args = { "--dialect", "sqlite" } },
 
   -- Javascript
-  formatting.prettier.with {
-    extra_args = "--no-editorconfig",
-    "--single-quote",
-    "true",
-    "--tab-width",
-    2,
-    "--use-tabs",
-    "false",
+  diagnostics.eslint_d,
+  formatting.prettier_d_slim.with {
+    dynamic_command = command_resolver.from_node_modules(),
+    command = "prettier_d",
+    args = {
+      "--config-path",
+      vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.prettierrc.json",
+      "--stdin",
+      "$FILENAME",
+    },
   },
-
+  --
   -- Lua
   -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
   formatting.stylua.with {
     extra_args = {
       "--config-path",
-      vim.fn.stdpath "config" .. "/lua/custom/plugins/config/stylua.toml",
+      vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.stylua.toml",
     },
   },
 
   -- Python
   -- pip install reorder-python-imports black yapf
   formatting.reorder_python_imports,
-  formatting.blue,
-  diagnostics.pylama,
+  formatting.black,
+  -- diagnostics.pylama,
   -- formatting.yapf,
 
   -- Nginx
@@ -49,8 +50,8 @@ local sources = {
   -- diagnostics.php,
 
   -- C/Clang
-  -- formatting.clang_format,
-  formatting.uncrustify,
+  formatting.clang_format,
+  -- formatting.uncrustify,
 
   -- ZSH
   diagnostics.zsh,
@@ -75,6 +76,7 @@ local sources = {
   formatting.taplo,
   -- YAML
   formatting.yamlfmt,
+  diagnostics.yamllint,
 }
 
 local M = {}
@@ -83,10 +85,11 @@ M.setup = function()
   null_ls.setup {
     debug = false,
     sources = sources,
-    debounce = 1250,
-    default_timeout = 5000,
+    debounce = 250,
+    -- default_timeout = 15000,
     -- diagnostics_format = "[#{c}] #{m} (#{s})",
-    log = { enable = true, level = "error", use_console = "async" },
+    log_level = "warn",
+    -- log = { enable = true, level = "info", use_console = "async" },
   }
 end
 

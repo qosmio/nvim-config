@@ -69,7 +69,7 @@ function M.strip_trailing_whitespace()
 end
 
 -----------------------------------------------------------
--- Tooggles windows zoom.
+-- Toggles windows zoom.
 -----------------------------------------------------------
 function M.zoom_toggle()
   if vim.t.zoomed and vim.t.zoom_winrestcmd then
@@ -80,6 +80,12 @@ function M.zoom_toggle()
     vim.cmd "resize | vertical resize"
     vim.t.zoomed = true
   end
+end
+
+-- @param mod char: mapping mode (n, v, i, ..)
+-- @param buffer num: buffer id
+M.dump = function(mod)
+  vim.notify(vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf()))))
 end
 
 return M

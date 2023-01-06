@@ -61,8 +61,6 @@ M.base_16 = {
 
 M.type = "dark"
 
-local diff = { diff_add = "#27341c", diff_delete = "#331c1e", diff_change = "#102b40", diff_text = "#1c4a6e" }
-
 M.polish_hl = {
   luaTSField = { fg = M.base_16.base0D },
   ["@variable"] = { fg = M.base_30.yellow },
