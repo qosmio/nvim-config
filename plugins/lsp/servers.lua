@@ -21,7 +21,8 @@ local function opts(merged, isok)
 end
 
 -- local syntax = vim.tbl_extend("keep", require("custom.highlights.hlo").highlight, require "custom.highlights.lsp_hi")
-local servers = vim.tbl_deep_extend("force", require("mason-lspconfig").get_installed_servers(), { "pylance", "ccls" })
+local servers =
+vim.tbl_deep_extend("force", require("mason-lspconfig").get_installed_servers(), { "pylance", "ccls", "gopls" })
 for _, server in ipairs(servers) do
   ok, res = pcall(require, "custom.plugins.lsp.servers." .. server)
   -- print(vim.inspect(require "custom.plugins.config.cmp"))

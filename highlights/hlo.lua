@@ -117,7 +117,7 @@ M.polish_hl = {
 
 local syntax = { -- LSP References
   Boolean = { fg = "#c75ae8", bold = true },
-  Number = { fg = M.base_16.base06 },
+  Number = { ctermfg = 196, fg = M.base_16.base06 },
   MasonNormal = { bg = M.base_30.darker_black },
 
   LspReferenceText = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },

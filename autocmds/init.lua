@@ -51,6 +51,17 @@ M.ft_aucmd({
   "Dockerfile*",
 }, "dockerfile")
 
+-- Dockerfile filetype
+M.ft_aucmd({
+  "*nft*.conf",
+}, "nftables")
+
+-- PHP ini
+M.ft_aucmd({
+  "*etc/php/*",
+  "php*conf",
+}, "dosini")
+
 --{{ FileType Indentation
 vim.api.nvim_create_augroup("extension file", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
@@ -62,7 +73,7 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.softtabstop = 2
     vim.opt.tabstop = 4
     vim.opt.shiftwidth = 4
-    vim.opt.expandtab = false
+    vim.opt.expandtab = true
   end,
 })
 vim.api.nvim_create_autocmd("FileType", {

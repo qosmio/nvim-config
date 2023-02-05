@@ -35,8 +35,8 @@ local sources = {
 
   -- Python
   -- pip install reorder-python-imports black yapf
-  formatting.reorder_python_imports,
-  formatting.black,
+  formatting.reorder_python_imports.with { extra_args = { "--py310-plus" } },
+  formatting.blue.with { timeout = 20000 },
   -- diagnostics.pylama,
   -- formatting.yapf,
 
@@ -59,7 +59,7 @@ local sources = {
   -- Bash
   -- diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
   -- diagnostics.shellcheck,
-  code_actions.shellcheck,
+  -- code_actions.shellcheck.with { extra_args =  SC2154,SC2169,SC2034},
   -- go install mvdan.cc/sh/v3/cmd/shfmt@latest
   formatting.beautysh.with {
     extra_args = { "--indent-size", 2, "--force-function-style", "paronly" },

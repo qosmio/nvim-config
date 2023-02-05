@@ -80,6 +80,7 @@ M.user = {
     end,
   },
   ["jose-elias-alvarez/null-ls.nvim"] = {
+    lazy = false,
     after = { "nvim-cmp" },
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
@@ -231,6 +232,7 @@ M.user = {
       require("custom.plugins.config.cmp.tabnine").setup()
     end,
   },
+  ["nfnty/vim-nftables"] = {},
   -- ["Maan2003/lsp_lines.nvim"] = {
   --   after = { "nvim-cmp", "nvim-lspconfig" },
   --   config = function()

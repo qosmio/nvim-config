@@ -88,4 +88,16 @@ M.dump = function(mod)
   vim.notify(vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf()))))
 end
 
+function M.matches(str, list)
+  return #vim.tbl_filter(function(item)
+    return item == str or string.match(str, item)
+  end, list) > 0
+end
+
+function M.not_matches(str, list)
+  return #vim.tbl_filter(function(item)
+    return item ~= str and not string.match(str, item)
+  end, list) > 0
+end
+
 return M
