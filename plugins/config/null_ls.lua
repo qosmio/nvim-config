@@ -36,7 +36,8 @@ local sources = {
   -- Python
   -- pip install reorder-python-imports black yapf
   formatting.reorder_python_imports,
-  formatting.black,
+  -- formatting.black,
+  formatting.blue,
   -- diagnostics.pylama,
   -- formatting.yapf,
 
@@ -50,7 +51,7 @@ local sources = {
   -- diagnostics.php,
 
   -- C/Clang
-  formatting.clang_format,
+  formatting.clang_format.with { offsetEncoding = { "utf-32" } },
   -- formatting.uncrustify,
 
   -- ZSH
@@ -58,8 +59,16 @@ local sources = {
 
   -- Bash
   -- diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
-  -- diagnostics.shellcheck,
   code_actions.shellcheck,
+  diagnostics.shellcheck.with {
+    extra_args = {
+      "-a",
+      "-s",
+      "bash",
+      "-e",
+      "SC2154,SC2169,SC2034,SC2086,SC2039,SC2166,SC2154,SC1091,SC2174,SC3043,SC3013,SC3045",
+    },
+  },
   -- go install mvdan.cc/sh/v3/cmd/shfmt@latest
   formatting.beautysh.with {
     extra_args = { "--indent-size", 2, "--force-function-style", "paronly" },
@@ -75,8 +84,15 @@ local sources = {
   -- TOML
   formatting.taplo,
   -- YAML
-  formatting.yamlfmt,
-  diagnostics.yamllint,
+  formatting.yamlfmt.with {
+    timeout = 15000,
+    extra_args = { "-conf", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamlfmt.yml" },
+  },
+  diagnostics.yamllint.with {
+    extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamllint.yml" },
+  },
+  -- Golang
+  formatting.gofumpt,
 }
 
 local M = {}
@@ -85,8 +101,8 @@ M.setup = function()
   null_ls.setup {
     debug = false,
     sources = sources,
-    debounce = 250,
-    -- default_timeout = 15000,
+    -- debounce = 250,
+    default_timeout = 15000,
     -- diagnostics_format = "[#{c}] #{m} (#{s})",
     log_level = "warn",
     -- log = { enable = true, level = "info", use_console = "async" },

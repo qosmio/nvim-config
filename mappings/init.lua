@@ -34,12 +34,10 @@ M.misc = {
     ["d"] = { '"_d' },
     ["x"] = { '"_x' },
     ["<C-o>"] = {
-      -- "<cmd> lua require('custom.highlights.utils').show_hl_captures() <CR>",
       "<cmd>Inspect<CR>",
       " Show Highlight Group",
     },
     ["<C-x>"] = {
-      -- "<cmd> lua print(vim.inspect(require('custom.highlights.utils').colors 'Diff')) <CR> " ,
       function()
         vim.ui.input({ prompt = "Highlight (pattern): " }, function(condition)
           vim.notify(vim.inspect(require("custom.highlights.utils").colors(condition)))
@@ -91,19 +89,15 @@ M.lsp = {
       function()
         vim.lsp.buf.format { timeout = 2000 }
       end,
-      "Format code",
+      "Format Code",
     },
-    ["<leader>lk"] = {
+  },
+  v = {
+    ["<leader>ll"] = {
       function()
-        vim.lsp.buf.range_formatting({ timeout = 2000 }, { 0, 0 }, { vim.fn.line "$", 0 })
+        vim.lsp.buf.format { timeout = 2000 }
       end,
-      "Format code",
-    },
-    ["<leader>j"] = {
-      function()
-        require("lsp_lines").toggle {}
-      end,
-      "Toggle lsp_lines",
+      "Format Code Range",
     },
   },
 }
@@ -147,15 +141,23 @@ M.toggle_alternate = {
 
 M.packer = {
   n = {
-    ["<leader>ps"] = { "<cmd>PackerStatus<cr>", "Status" },
-    ["<leader>pp"] = { "<cmd>PackerSync<cr>", "Sync" },
-    ["<leader>pi"] = { "<cmd>PackerInstall<cr>", "Install" },
-    ["<leader>pc"] = { "<cmd>PackerCompile<cr>", "Compile" },
-    ["<leader>pl"] = { "<cmd>PackerClean<cr>", "Clean" },
+    ["<leader>ps"] = { "<cmd>Lazy show<cr>", "Status" },
+    ["<leader>pp"] = { "<cmd>Lazy sync<cr>", "Sync" },
+    ["<leader>pc"] = { "<cmd>Lazy health<cr>", "Health" },
   },
 }
 
--- writee(require "core.mappings", "/tmp/core.lua")
+M.comment = {
+  v = {
+    ["<leader>'"] = {
+      function()
+        require("Comment.api").toggle.blockwise(vim.fn.visualmode())
+      end,
+      "toggle comment",
+    },
+  },
+}
+
 local J = vim.tbl_deep_extend("force", require("core.mappings").lspconfig, M.lsp)
 J.plugin = nil
 M.lsp = J

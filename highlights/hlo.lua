@@ -4,7 +4,6 @@ M.cterm_base_30 = {
   baby_pink = 198, -- #ff0087
   black = 16, -- #000000
   black2 = 233, -- #121212
-  blue = 75, -- #5fafff
   cyan = 73, -- #5feeaf
   dark_purple = 176, -- #d787d7
   darker_black = 16, -- #000000
@@ -12,7 +11,7 @@ M.cterm_base_30 = {
   diff_change = 6, -- #008080
   diff_delete = 52, -- #5f0000
   diff_text = 23, -- #005f5f
-  folder_bg = 75, -- #5fafff
+  blue = 75, -- #5fafff
   green = 113, -- #87d75f
   grey = 60, -- #5f5f87
   grey_bg = 102, -- #878787
@@ -52,7 +51,6 @@ M.base_30 = {
   diff_change = "#102b40",
   diff_delete = "#331c1e",
   diff_text = "#1c4a6e",
-  folder_bg = "#41a7fc",
   green = "#8bcd5b",
   grey = "#455574",
   grey_bg = "#13151a",
@@ -80,6 +78,8 @@ M.base_30 = {
   yellow = "#e6db74",
 }
 
+local c = M.base_30
+
 M.base_16 = {
   base00 = "#070a0f",
   base01 = "#1e2532",
@@ -99,53 +99,55 @@ M.base_16 = {
   base0F = "#ff6464",
 }
 
+local c16 = M.base_16
+
 M.type = "dark"
 
 M.polish_hl = {
-  luaTSField = { fg = M.base_16.base0D },
+  luaTSField = { fg = c16.base0D },
   ["@variable"] = { fg = "#F6DB74", bold = true },
-  ["@tag.delimiter"] = { fg = M.base_30.cyan },
-  ["@function"] = { fg = M.base_16.base0D },
-  ["@parameter"] = { fg = M.base_16.base0F },
-  ["@punctuation.bracket"] = { fg = M.base_30.purple, bold = true },
-  ["@constructor"] = { fg = M.base_30.folder_bg, bold = true },
-  ["@tag.attribute"] = { fg = M.base_30.orange },
+  ["@tag.delimiter"] = { fg = c.cyan },
+  ["@function"] = { fg = c16.base0D },
+  ["@parameter"] = { fg = c16.base0F },
+  ["@punctuation.bracket"] = { fg = c.purple, bold = true },
+  ["@constructor"] = { fg = c.blue, bold = true },
+  ["@tag.attribute"] = { fg = c.orange },
   ["@operator"] = { fg = "#6c7d9c" },
-  ["@constant"] = { fg = M.base_30.yellow, bold = true },
-  ["@boolean"] = { fg = M.base_30.purple, bold = true },
+  ["@constant"] = { fg = c.yellow, bold = true },
+  ["@boolean"] = { fg = c.purple, bold = true },
 }
 
 local syntax = { -- LSP References
   Boolean = { fg = "#c75ae8", bold = true },
-  Number = { fg = M.base_16.base06 },
-  MasonNormal = { bg = M.base_30.darker_black },
+  Number = { fg = c16.base06 },
+  MasonNormal = { bg = c.darker_black },
 
-  LspReferenceText = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
-  LspReferenceRead = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
-  LspReferenceWrite = { fg = M.base_30.darker_black, bg = M.base_30.folder_bg },
+  LspReferenceText = { fg = c.darker_black, bg = c.blue },
+  LspReferenceRead = { fg = c.darker_black, bg = c.blue },
+  LspReferenceWrite = { fg = c.darker_black, bg = c.blue },
 
   -- Lsp Diagnostics
-  DiagnosticHint = { fg = M.base_30.purple },
-  DiagnosticError = { fg = M.base_30.red },
-  DiagnosticWarn = { fg = M.base_30.yellow },
-  DiagnosticInformation = { fg = M.base_30.green },
-  -- DiagnosticUnderlineError = { undercurl = true, sp = M.base_30.red },
-  -- DiagnosticUnderlineHint = { undercurl = true, sp = M.base_30.purple },
-  -- DiagnosticUnderlineInfo = { undercurl = true, sp = M.base_30.blue },
-  -- DiagnosticUnderlineWarn = { undercurl = true, sp = M.base_30.yellow },
-  LspSignatureActiveParameter = { fg = M.base_30.black, bg = M.base_30.green },
+  DiagnosticHint = { fg = c.purple },
+  DiagnosticError = { fg = c.red },
+  DiagnosticWarn = { fg = c.yellow },
+  DiagnosticInformation = { fg = c.green },
+  -- DiagnosticUnderlineError = { undercurl = true, sp = c.red },
+  -- DiagnosticUnderlineHint = { undercurl = true, sp = c.purple },
+  -- DiagnosticUnderlineInfo = { undercurl = true, sp = c.blue },
+  -- DiagnosticUnderlineWarn = { undercurl = true, sp = c.yellow },
+  LspSignatureActiveParameter = { fg = c.black, bg = c.green },
 
-  RenamerTitle = { fg = M.base_30.black, bg = M.base_30.red },
-  RenamerBorder = { fg = M.base_30.red },
+  RenamerTitle = { fg = c.black, bg = c.red },
+  RenamerBorder = { fg = c.red },
   DevIconDiff = { fg = "#41535b" },
 
-  DiffAdd = { bg = M.base_30.diff_add, fg = "#D2EBBE" },
-  DiffAdded = { fg = M.base_30.vibrant_green },
-  DiffRemoved = { fg = M.base_30.red },
-  DiffChange = { fg = M.base_30.diff_change, underline = true, bold = true },
-  GitSignsChange = { fg = M.base_30.yellow, underline = false, bold = true },
-  DiffDelete = { bg = M.base_30.diff_delete, fg = "#54292e" },
-  DiffText = { bg = M.base_30.diff_text, fg = "#8fbfdc" },
+  DiffAdd = { bg = c.diff_add, fg = "#D2EBBE" },
+  DiffAdded = { fg = c.vibrant_green },
+  DiffRemoved = { fg = c.red },
+  DiffChange = { fg = c.diff_change, underline = true, bold = true },
+  GitSignsChange = { fg = c.yellow, underline = false, bold = true },
+  DiffDelete = { bg = c.diff_delete, fg = "#54292e" },
+  DiffText = { bg = c.diff_text, fg = "#8fbfdc" },
 
   -- DiffChange = { bg = "#102b40", },
   DiffFile = { fg = "#34bfd0" },
@@ -178,43 +180,43 @@ local syntax = { -- LSP References
   DiffviewStatusUntracked = { fg = "#41a7fc" },
   DiffviewVertSplit = { fg = "#2a324a" },
 
-  DiagnosticUnderlineError = { bg = "NONE", fg = M.base_30.red, sp = M.base_30.red, undercurl = true },
-  DiagnosticUnderlineWarn = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
-  DiagnosticUnderlineInfo = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
-  DiagnosticUnderlineHint = { bg = "NONE", fg = M.base_30.blue, sp = M.base_30.blue, undercurl = true },
-  DiagnosticSignError = { fg = M.base_30.red },
-  DiagnosticSignWarn = { fg = M.base_30.yellow },
-  DiagnosticSignInfo = { fg = M.base_30.yellow },
-  DiagnosticSignHint = { fg = M.base_30.blue },
-  DiagnosticVirtualTextError = { fg = M.base_30.red, bg = M.base_30.statusline_bg },
-  DiagnosticVirtualTextWarn = { fg = M.base_30.yellow, bg = M.base_30.diff_delete },
-  DiagnosticVirtualTextInfo = { fg = M.base_30.yellow, bg = M.base_30.diff_change },
-  DiagnosticVirtualTextHint = { fg = M.base_30.blue, bg = M.base_30.diff_text },
-  LspDiagnosticsUnderlineError = { bg = "NONE", fg = M.base_30.red, sp = M.base_30.red, undercurl = true },
-  LspDiagnosticsUnderlineWarning = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
-  LspDiagnosticsUnderlineInformation = { bg = "NONE", fg = M.base_30.yellow, sp = M.base_30.yellow, undercurl = true },
-  LspDiagnosticsUnderlineHint = { bg = "NONE", fg = M.base_30.blue, sp = M.base_30.blue, undercurl = true },
-  LspDiagnosticsSignError = { fg = M.base_30.red },
-  LspDiagnosticsSignWarning = { fg = M.base_30.yellow },
-  LspDiagnosticsSignInformation = { fg = M.base_30.yellow },
-  LspDiagnosticsSignHint = { fg = M.base_30.blue },
-  LspDiagnosticsVirtualTextError = { fg = M.base_30.red },
-  LspDiagnosticsVirtualTextWarning = { fg = M.base_30.yellow },
-  LspDiagnosticsVirtualTextInformation = { fg = M.base_30.yellow },
-  LspDiagnosticsVirtualTextHint = { fg = M.base_30.blue },
+  DiagnosticUnderlineError = { bg = "NONE", fg = c.red, sp = c.red, undercurl = true },
+  DiagnosticUnderlineWarn = { bg = "NONE", fg = c.yellow, sp = c.yellow, undercurl = true },
+  DiagnosticUnderlineInfo = { bg = "NONE", fg = c.yellow, sp = c.yellow, undercurl = true },
+  DiagnosticUnderlineHint = { bg = "NONE", fg = c.blue, sp = c.blue, undercurl = true },
+  DiagnosticSignError = { fg = c.red },
+  DiagnosticSignWarn = { fg = c.yellow },
+  DiagnosticSignInfo = { fg = c.yellow },
+  DiagnosticSignHint = { fg = c.blue },
+  DiagnosticVirtualTextError = { fg = c.red, bg = c.statusline_bg },
+  DiagnosticVirtualTextWarn = { fg = c.yellow, bg = c.diff_delete },
+  DiagnosticVirtualTextInfo = { fg = c.yellow, bg = c.diff_change },
+  DiagnosticVirtualTextHint = { fg = c.blue, bg = c.diff_text },
+  LspDiagnosticsUnderlineError = { bg = "NONE", fg = c.red, sp = c.red, undercurl = true },
+  LspDiagnosticsUnderlineWarning = { bg = "NONE", fg = c.yellow, sp = c.yellow, undercurl = true },
+  LspDiagnosticsUnderlineInformation = { bg = "NONE", fg = c.yellow, sp = c.yellow, undercurl = true },
+  LspDiagnosticsUnderlineHint = { bg = "NONE", fg = c.blue, sp = c.blue, undercurl = true },
+  LspDiagnosticsSignError = { fg = c.red },
+  LspDiagnosticsSignWarning = { fg = c.yellow },
+  LspDiagnosticsSignInformation = { fg = c.yellow },
+  LspDiagnosticsSignHint = { fg = c.blue },
+  LspDiagnosticsVirtualTextError = { fg = c.red },
+  LspDiagnosticsVirtualTextWarning = { fg = c.yellow },
+  LspDiagnosticsVirtualTextInformation = { fg = c.yellow },
+  LspDiagnosticsVirtualTextHint = { fg = c.blue },
 
-  FloatBorder = { fg = M.base_30.blue, bg = M.base_30.grey_bg, bold = true },
-  NormalFloat = { bg = M.base_30.grey_bg },
+  FloatBorder = { fg = c.blue, bg = c.grey_bg, bold = true },
+  NormalFloat = { bg = c.grey_bg },
 
-  Pmenu = { bg = M.base_30.black, fg = M.base_30.nord_blue },
-  PmenuSbar = { bg = M.base_30.black },
-  PmenuSel = { bg = M.base_30.green, fg = M.base_30.black },
-  PmenuThumb = { bg = M.base_30.grey },
-  CmpMenuBorder = { bg = "NONE", fg = M.base_30.nord_blue },
-  CmpPmenu = { bg = M.base_30.black },
-  CmpMenu = { bg = M.base_30.black, fg = M.base_16.green },
+  Pmenu = { bg = c.black, fg = c.nord_blue },
+  PmenuSbar = { bg = c.black },
+  PmenuSel = { bg = c.green, fg = c.black },
+  PmenuThumb = { bg = c.grey },
+  CmpMenuBorder = { bg = "NONE", fg = c.nord_blue },
+  CmpPmenu = { bg = c.black },
+  CmpMenu = { bg = c.black, fg = c16.green },
   CmpSelection = { bg = "#263341" },
-  CmpItemKindClass = { fg = M.base_30.orange },
+  CmpItemKindClass = { fg = c.orange },
   CmpItemKindConstructor = { fg = "#ae43f0" },
   CmpItemKindFolder = { fg = "#2986cc" },
   CmpItemKindFunction = { fg = "#f90c71", bold = true },
@@ -223,27 +225,28 @@ local syntax = { -- LSP References
   CmpItemKindReference = { fg = "#922b21" },
   CmpItemKindSnippet = { fg = "#565c64" },
   CmpItemKindText = { fg = "LightGrey" },
-  CmpItemAbbr = { fg = M.base_30.nord_blue, bg = "NONE" },
-  CmpItemAbbrMatch = { fg = M.base_30.yellow, bold = true, bg = "NONE" },
+  CmpItemAbbr = { fg = c.nord_blue, bg = "NONE" },
+  CmpItemAbbrMatch = { fg = c.yellow, bold = true, bg = "NONE" },
   CmpItemAbbrMatchFuzzy = { fg = "White", bg = "NONE" },
   CmpItemKindInterface = { fg = "#f90c71", bg = "NONE" },
   CmpItemKindVariable = { fg = "#9CDCFE", bg = "NONE" },
   CmpItemMenu = { fg = "#ffffff" },
   IndentBlankLineChar = { ctermfg = 237 },
 
-  gitconfigSection = { fg = M.base_30.green, bold = true, ctermfg = 181 },
+  gitconfigSection = { fg = c.green, bold = true, ctermfg = 181 },
 
   Keyword = { bold = true },
   Define = { bold = true },
-
+  -- Search = { bg = c.yellow, reverse = true },
+  -- CurSearch = { bg = c.nord_blue, fg = c.white },
   Conditional = { bold = true },
-  zshOptStart = { fg = M.base_30.cyan, bold = false, nocombine = true },
-  zshCasePattern = { fg = M.base_30.orange },
-  zshParentheses = { nocombine = true, fg = M.base_30.yellow },
-  zshFunction = { fg = M.base_30.vibrant_green, bold = true },
-  zshDeref = { fg = M.base_30.red },
+  zshOptStart = { fg = c.cyan, bold = false, nocombine = true },
+  zshCasePattern = { fg = c.orange },
+  zshParentheses = { nocombine = true, fg = c.yellow },
+  zshFunction = { fg = c.vibrant_green, bold = true },
+  zshDeref = { fg = c.red },
   zshCase = { fg = "#294cfd" },
-  zshVariableDef = { fg = M.base_30.nord_blue, bold = true },
+  zshVariableDef = { fg = c.nord_blue, bold = true },
 }
 
 local statusline = {

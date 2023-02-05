@@ -51,6 +51,15 @@ M.ft_aucmd({
   "Dockerfile*",
 }, "dockerfile")
 
+-- Nessus/Tenable filetypes
+M.ft_aucmd({
+  "*.audit",
+}, "audit")
+
+M.ft_aucmd({
+  "*.cnf",
+}, "dosini")
+
 --{{ FileType Indentation
 vim.api.nvim_create_augroup("extension file", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
@@ -59,10 +68,10 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt.autoindent = true
     vim.opt.cindent = true
-    vim.opt.softtabstop = 2
-    vim.opt.tabstop = 4
+    vim.opt.softtabstop = 4
+    vim.opt.tabstop = 2
     vim.opt.shiftwidth = 4
-    vim.opt.expandtab = false
+    vim.opt.expandtab = true
   end,
 })
 vim.api.nvim_create_autocmd("FileType", {
@@ -160,11 +169,20 @@ aucmd({ "BufEnter" }, {
   end,
 })
 
+aucmd("FileType", {
+  group = group_name,
+  callback = function()
+    if vim.bo.commentstring == nil or vim.bo.commentstring == "" then
+      vim.bo.commentstring = "# %s"
+      return
+    end
+  end,
+})
 -- Coding {{{
 -- Auto-format *.files prior to saving them{{{
 aucmd("BufWritePre", {
   pattern = { "*.go", "*.rs" },
-  command = "lua vim.lsp.buf.formatting_sync(nil, 1000)",
+  command = "lua vim.lsp.buf.format(nil, 1000)",
 })
 -- }}}
 

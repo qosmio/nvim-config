@@ -1,17 +1,6 @@
 local M = {}
 M.user = {
   ["kyazdani42/nvim-tree.lua"] = false,
-  ["max397574/better-escape.nvim"] = false,
-  ["goolord/alpha-nvim"] = false,
-  -- ["nvim-telescope/telescope.nvim"] = false,
-  -- ["hrsh7th/cmp-nvim-lsp"] = false,
-  -- ["L3MON4D3/LuaSnip"] = false,
-  -- ["windwp/nvim-autopairs"] = false,
-  -- ["hrsh7th/cmp-nvim-lua"] = false,
-  -- ["saadparwaiz1/cmp_luasnip"] = false,
-  -- ["hrsh7th/nvim-cmp"] = false,
-  -- ["hrsh7th/cmp-buffer"] = false,
-  -- ["hrsh7th/cmp-path"] = false,
   ["hrsh7th/nvim-cmp"] = {
     override_options = require "custom.plugins.config.cmp",
   },
@@ -21,18 +10,14 @@ M.user = {
   ["lewis6991/gitsigns.nvim"] = {
     override_options = require "custom.plugins.config.gitsigns",
   },
-  -- ["nvim-treesitter/playground"] = {
-  --   keys = { "gh" },
-  --   event = "InsertEnter",
-  -- },
   ["nvim-treesitter/nvim-treesitter"] = {
-    requires = { "nvim-treesitter/playground" },
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring", "nvim-treesitter/playground" },
     module = "nvim-treesitter",
-    setup = function()
+    init = function()
       require("core.utils").lazy_load "nvim-treesitter"
     end,
     cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSEnable", "TSDisable", "TSModuleInfo" },
-    run = ":TSUpdate",
+    build = ":TSUpdate",
     override_options = require "custom.plugins.config.treesitter",
     config = function()
       require "custom.plugins.config.treesitter_parsers"
@@ -40,38 +25,36 @@ M.user = {
     end,
   },
   ["numToStr/Comment.nvim"] = {
-    module = "Comment",
-    keys = { "gc", "gb" },
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+    keys = { "gbc", "gcc" },
     config = function()
-      require("custom.plugins.config.comment").setup()
+      require("Comment").setup {
+        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+      }
     end,
-    setup = function()
+    init = function()
       require("core.utils").load_mappings "comment"
     end,
   },
-  ["folke/which-key.nvim"] = { disable = false },
+  ["folke/which-key.nvim"] = { enabled = true },
   ["neovim/nvim-lspconfig"] = {
-    opt = true,
-    setup = function()
-      require("core.utils").lazy_load "mason-lspconfig.nvim"
-      require("core.utils").lazy_load "nvim-lspconfig"
-    end,
+    dependencies = { "mason-lspconfig.nvim", "nvim-lspconfig" },
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.servers"
       require("mason-lspconfig").setup(require "lsp.lspconfig")
-      -- vim.lsp.set_log_level "debug"
+      vim.lsp.set_log_level "warn"
     end,
   },
   ["williamboman/mason-lspconfig.nvim"] = {
-    after = { "mason.nvim" },
+    dependencies = { "mason.nvim" },
   },
-  ["hrsh7th/cmp-nvim-lua"] = { after = { "nvim-lspconfig", "nvim-cmp" } },
+  ["hrsh7th/cmp-nvim-lua"] = { dependencies = { "nvim-lspconfig", "nvim-cmp" } },
   ["folke/neodev.nvim"] = {
     ft = { "lua" },
   },
-  ["rmagatti/alternate-toggler"] = {},
+  ["rmagatti/alternate-toggler"] = { event = "VimEnter" },
   ["chr4/nginx.vim"] = { ft = "nginx" },
   -- Native terminal copying using OCS52
   ["ojroques/nvim-osc52"] = {
@@ -80,8 +63,8 @@ M.user = {
     end,
   },
   ["jose-elias-alvarez/null-ls.nvim"] = {
-    after = { "nvim-cmp" },
-    requires = { "nvim-lua/plenary.nvim" },
+    event = "VimEnter",
+    dependencies = { "nvim-cmp", "nvim-lua/plenary.nvim" },
     config = function()
       require("custom.plugins.config.null_ls").setup()
       -- require("custom.plugins.lsp.formatters.prettier_d").setup()
@@ -96,16 +79,16 @@ M.user = {
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
   -- ["lukas-reineke/cmp-under-comparator"] = { -- make the sorting of completion results smarter
-  --   -- requires = { "hrsh7th/nvim-cmp" },
-  --   after = { "null-ls.nvim", "nvim-cmp" },
+  --   -- dependencies = { "hrsh7th/nvim-cmp" },
+  --   dependencies = { "null-ls.nvim", "nvim-cmp" },
   --   config = function()
   --     require "custom.plugins.config.cmp.python"
   --     -- require "custom.plugins.config.cmp.zsh"
   --   end,
   -- },
   ["reewr/vim-monokai-phoenix"] = {
-    requires = { "jacoborus/tender.vim", "nielsmadan/harlequin", "patstockwell/vim-monokai-tasty" },
-    after = { "ui", "indent-blankline.nvim" },
+    dependencies = { "jacoborus/tender.vim", "nielsmadan/harlequin", "patstockwell/vim-monokai-tasty" },
+    -- dependencies = { "ui", "indent-blankline.nvim" },
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
     end,
@@ -138,10 +121,10 @@ M.user = {
       require "custom.plugins.config.pretty_fold"
     end,
   },
-  ["hrsh7th/cmp-nvim-lsp-signature-help"] = { after = "null-ls.nvim" }, --  function signature help
+  ["hrsh7th/cmp-nvim-lsp-signature-help"] = { dependencies = "null-ls.nvim" }, --  function signature help
   ["tamago324/cmp-zsh"] = {
     ft = { "zsh" },
-    setup = function()
+    init = function()
       require("core.utils").lazy_load "cmp-zsh"
     end,
     config = {
@@ -149,9 +132,9 @@ M.user = {
     },
   },
   ["lvimuser/lsp-inlayhints.nvim"] = {},
-  ["microsoft/python-type-stubs"] = { opt = true, ft = "python" },
+  ["microsoft/python-type-stubs"] = { ft = "python" },
   ["jay-babu/mason-null-ls.nvim"] = {
-    after = { "mason.nvim", "null-ls.nvim" },
+    dependencies = { "mason.nvim", "null-ls.nvim" },
     config = function()
       local mason_null_ls = require "mason-null-ls"
       mason_null_ls.setup {
@@ -182,7 +165,7 @@ M.user = {
   },
   ["jackMort/ChatGPT.nvim"] = {
     cmd = "ChatGPT",
-    requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     config = function()
       require("chatgpt").setup {
         welcome_message = "",
@@ -207,7 +190,7 @@ M.user = {
   },
   ["dense-analysis/neural"] = {
     cmd = "NeuralCode",
-    requires = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
+    dependencies = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
     config = function()
       require("neural").setup {
         mappings = {
@@ -226,13 +209,16 @@ M.user = {
     end,
   },
   ["tzachar/cmp-tabnine"] = {
-    after = "cmp-path",
+    dependencies = "cmp-path",
     config = function()
       require("custom.plugins.config.cmp.tabnine").setup()
     end,
   },
+  ["cfdrake/vim-pbxproj"] = {
+    event = { "VimEnter" },
+  },
   -- ["Maan2003/lsp_lines.nvim"] = {
-  --   after = { "nvim-cmp", "nvim-lspconfig" },
+  --   dependencies = { "nvim-cmp", "nvim-lspconfig" },
   --   config = function()
   --     require("lsp_lines").setup {}
   --     require("lsp_lines").toggle {}

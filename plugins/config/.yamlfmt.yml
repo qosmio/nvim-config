@@ -1,0 +1,13 @@
+---
+formatter:
+  type: basic
+  indent: 2
+  include_document_start: true
+  line_ending: lf
+  max_line_length: 80
+include:
+  - .yamlfmt
+  - "**/*.yaml"
+  - "**/*.yml"
+exclude:
+  - .direnv/**

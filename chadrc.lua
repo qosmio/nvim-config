@@ -2,7 +2,7 @@ local M = {}
 
 M.options = {
   nvChad = {
-    update_branch = "dev",
+    update_branch = "v2.0",
   },
 }
 ---- UI -----

@@ -54,15 +54,17 @@ local pylance_installer = function(ctx)
     bin_path,
   }
   -- cleanup unnecessary files for other platforms
-  if platform.is_linux then
-    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "win32" })
-    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "darwin" })
-  elseif platform.is_mac then
-    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "linux" })
-    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "win32" })
-  else -- assume windows
-    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "linux" })
-    ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "darwin" })
+  if ctx.fs:dir_exists(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3" }) then
+    if platform.is_linux then
+      ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "win32" })
+      ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "darwin" })
+    elseif platform.is_mac then
+      ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "linux" })
+      ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "win32" })
+    else -- assume windows
+      ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "linux" })
+      ctx.fs:rmrf(path.concat { "extension", "dist", "native", "onnxruntime", "napi-v3", "darwin" })
+    end
   end
   ctx.receipt:with_primary_source {
     type = "github_tag",

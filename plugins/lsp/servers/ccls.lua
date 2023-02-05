@@ -44,5 +44,9 @@ local configs = {
   },
   cmd = { "ccls", "--log-file=/tmp/ccls.log", "-v=3" },
 }
+_ = vim.fn.system "which ccls"
+if vim.v.shell_error ~= 0 then
+  configs.exist = { false }
+end
 
 return configs

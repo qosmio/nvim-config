@@ -14,6 +14,10 @@ local ensure_installed = {
   "cpp",
   "cmake",
   "go",
+  "tsx",
+  "http",
+  "sql",
+  "regex",
 }
 
 return {
@@ -32,9 +36,9 @@ return {
   },
   textobjects = { select = { enable = true } },
   rainbow = { enable = true, extended_mode = true, max_file_lines = 1000 },
-  context_commentstring = { enable = true, enable_autocmd = false },
+  context_commentstring = { enable = true, enable_autocmd = true },
   playground = {
-    enable = true,
+    enable = false,
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions

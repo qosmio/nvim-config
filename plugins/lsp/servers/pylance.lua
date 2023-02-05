@@ -251,6 +251,7 @@ M.commands = {
 -- M.capabilities.textDocument.semanticTokensProvider = false
 
 M.on_attach = function(client, bufnr)
+  -- vim.lsp.set_log_level "info"
   if client.server_capabilities.semanticTokensProvider and client.server_capabilities.semanticTokensProvider.full then
     client.server_capabilities.semanticTokensProvider = false
   end
