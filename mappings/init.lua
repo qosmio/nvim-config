@@ -87,7 +87,7 @@ M.lsp = {
     },
     ["<leader>ll"] = {
       function()
-        vim.lsp.buf.format { timeout = 2000 }
+        vim.lsp.buf.format { timeout = 15000 }
       end,
       "Format Code",
     },

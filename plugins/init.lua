@@ -63,8 +63,9 @@ M.user = {
     end,
   },
   ["jose-elias-alvarez/null-ls.nvim"] = {
-    event = "VimEnter",
-    dependencies = { "nvim-cmp", "nvim-lua/plenary.nvim" },
+    lazy = false,
+    after = { "nvim-cmp" },
+    requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("custom.plugins.config.null_ls").setup()
       -- require("custom.plugins.lsp.formatters.prettier_d").setup()
@@ -217,6 +218,7 @@ M.user = {
   ["cfdrake/vim-pbxproj"] = {
     event = { "VimEnter" },
   },
+  ["nfnty/vim-nftables"] = {},
   -- ["Maan2003/lsp_lines.nvim"] = {
   --   dependencies = { "nvim-cmp", "nvim-lspconfig" },
   --   config = function()

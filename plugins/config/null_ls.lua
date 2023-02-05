@@ -35,9 +35,8 @@ local sources = {
 
   -- Python
   -- pip install reorder-python-imports black yapf
-  formatting.reorder_python_imports,
-  -- formatting.black,
-  formatting.blue,
+  formatting.reorder_python_imports.with { extra_args = { "--py310-plus" } },
+  formatting.black.with { timeout = 20000 },
   -- diagnostics.pylama,
   -- formatting.yapf,
 

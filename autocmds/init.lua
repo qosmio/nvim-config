@@ -60,6 +60,17 @@ M.ft_aucmd({
   "*.cnf",
 }, "dosini")
 
+-- Dockerfile filetype
+M.ft_aucmd({
+  "*nft*.conf",
+}, "nftables")
+
+-- PHP ini
+M.ft_aucmd({
+  "*etc/php/*",
+  "php*conf",
+}, "dosini")
+
 --{{ FileType Indentation
 vim.api.nvim_create_augroup("extension file", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {

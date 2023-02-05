@@ -10,8 +10,9 @@ M.options = {
 M.ui = {
   -- hl_override = require "custom.highlights.monokai-phoenix",
   -- hl_add = require "custom.highlights.monokai-phoenix",
-  hl_override = require("custom.highlights.hlo").highlight,
-  hl_add = require("custom.highlights.hlo").highlight,
+  -- hl_override = require("custom.highlights.hlo").highlight,
+  -- hl_add = require("custom.highlights.hlo").highlight,
+  theme = "onedark", -- default theme
   changed_themes = {
     ["onedark"] = require("custom.highlights.hlo").theme,
   },

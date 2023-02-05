@@ -1,17 +1,22 @@
+local utils = require "custom.utils"
 local servers = {
   "jsonls",
-  "pylance",
   "bashls",
   "yamlls",
   "sumneko_lua",
   "tsserver",
-  -- "eslint",
   "html",
+}
+
+local delay = {
+  "pylance",
+  "nginx-language-server",
+  "eslint_d",
 }
 
 return {
   ensure_installed = vim.tbl_filter(function(d)
-    return d ~= "pylance"
+    return utils.not_matches(d, delay) and d
   end, servers),
   automatic_installation = true,
 
