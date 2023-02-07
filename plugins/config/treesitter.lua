@@ -27,6 +27,10 @@ return {
     if vim.v.shell_error ~= 0 then
       return false
     else
+      _ = vim.fn.system "which tree-sitter"
+      if vim.v.shell_error ~= 0 then
+        require("custom.utils").tbl_filter_inplace(ensure_installed, "sql")
+      end
       return ensure_installed -- only install if gcc is installed
     end
   end)(),
