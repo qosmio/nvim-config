@@ -26,7 +26,6 @@ local servers = vim.tbl_deep_extend(
   require("mason-lspconfig").get_installed_servers(),
   { "pylance", "ccls", "clangd", "sourcekit", "gopls" }
 )
-vim.pretty_print(require "custom.plugins.lsp.lspconfig")
 for _, server in ipairs(servers) do
   ok, res = pcall(require, "custom.plugins.lsp.servers." .. server)
   -- if server == "sourcekit" then

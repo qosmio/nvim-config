@@ -66,7 +66,6 @@ M.user = {
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("custom.plugins.config.null_ls").setup()
-      -- require("custom.plugins.lsp.formatters.prettier_d").setup()
     end,
   },
   ["lambdalisue/suda.vim"] = { event = { "CmdlineEnter" } },
@@ -77,14 +76,6 @@ M.user = {
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   ["AndrewRadev/splitjoin.vim"] = {},
-  -- ["lukas-reineke/cmp-under-comparator"] = { -- make the sorting of completion results smarter
-  --   -- dependencies = { "hrsh7th/nvim-cmp" },
-  --   dependencies = { "null-ls.nvim", "nvim-cmp" },
-  --   config = function()
-  --     require "custom.plugins.config.cmp.python"
-  --     -- require "custom.plugins.config.cmp.zsh"
-  --   end,
-  -- },
   ["reewr/vim-monokai-phoenix"] = {
     dependencies = { "jacoborus/tender.vim", "nielsmadan/harlequin", "patstockwell/vim-monokai-tasty" },
     -- dependencies = { "ui", "indent-blankline.nvim" },
@@ -133,12 +124,12 @@ M.user = {
   ["lvimuser/lsp-inlayhints.nvim"] = {},
   ["microsoft/python-type-stubs"] = { ft = "python" },
   ["jay-babu/mason-null-ls.nvim"] = {
+    lazy = false,
     dependencies = { "mason.nvim", "null-ls.nvim" },
     config = function()
       local mason_null_ls = require "mason-null-ls"
       mason_null_ls.setup {
-        ensure_installed = nil,
-        automatic_installation = false,
+        automatic_installation = { exclude = { "clang-format", "gofumpt" } },
         automatic_setup = true,
       }
       mason_null_ls.setup_handlers()
@@ -240,20 +231,6 @@ M.user = {
   --   end,
   --   config = function()
   --     require("vgit").setup()
-  --   end,
-  -- },
-  -- ["Maan2003/lsp_lines.nvim"] = {
-  --   dependencies = { "nvim-cmp", "nvim-lspconfig" },
-  --   config = function()
-  --     require("lsp_lines").setup {}
-  --     require("lsp_lines").toggle {}
-  --     -- require("lsp_lines").setup {}
-  --     vim.diagnostic.config {
-  --       virtual_text = false,
-  --       virtual_lines = {
-  --         only_current_line = true,
-  --       },
-  --     }
   --   end,
   -- },
 }
