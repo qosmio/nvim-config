@@ -5,6 +5,7 @@ local servers = {
   "yamlls",
   "sumneko_lua",
   "tsserver",
+  "pylance",
   "html",
 }
 
@@ -13,11 +14,10 @@ local delay = {
   "nginx-language-server",
   "eslint_d",
 }
+utils.tbl_filter_inplace(servers, delay)
 
 return {
-  ensure_installed = vim.tbl_filter(function(d)
-    return utils.not_matches(d, delay) and d
-  end, servers),
+  ensure_installed = servers,
   automatic_installation = true,
 
   ui = {

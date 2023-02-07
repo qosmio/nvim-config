@@ -104,9 +104,14 @@ M.lsp = {
 -- local opts = { silent = true, nowait = true, expr = true }
 M.neural = {
   n = {
+    -- 20:37:46 plus 41 minutes
     ["<leader>."] = {
       "<cmd>NeuralCode<cr>",
       "Run OpenAI Codex Code Completion",
+    },
+    ["<leader>.."] = {
+      "<cmd>NeuralText<cr>",
+      "Run OpenAI Text Completion",
     },
   },
 }

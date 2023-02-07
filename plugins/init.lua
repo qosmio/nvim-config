@@ -7,9 +7,7 @@ M.user = {
   ["NvChad/nvim-colorizer.lua"] = {
     override_options = require "custom.plugins.config.colorizer",
   },
-  ["lewis6991/gitsigns.nvim"] = {
-    override_options = require "custom.plugins.config.gitsigns",
-  },
+  ["lewis6991/gitsigns.nvim"] = { override_options = require "custom.plugins.config.gitsigns" },
   ["nvim-treesitter/nvim-treesitter"] = {
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring", "nvim-treesitter/playground" },
     module = "nvim-treesitter",
@@ -190,17 +188,18 @@ M.user = {
     end,
   },
   ["dense-analysis/neural"] = {
+    keys = { "<leader>..", "<leader>." },
     cmd = "NeuralCode",
     dependencies = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
     config = function()
       require("neural").setup {
         mappings = {
-          swift = nil,
-          -- prompt = nil,
+          swift = "<C-n>", -- Context completion
+          prompt = "<C-space>", -- Open prompt
         },
         open_ai = {
           api_key = vim.env.OPENAI_API_KEY, -- not committed, defined in config/private-settings.lua outside of repo
-          max_tokens = 1000,
+          max_tokens = 10000,
           temperature = 0.1,
           presence_penalty = 0.5,
           frequency_penalty = 0.5,
@@ -219,6 +218,30 @@ M.user = {
     event = { "VimEnter" },
   },
   ["nfnty/vim-nftables"] = {},
+  -- ["tanvirtin/vgit.nvim"] = {
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   ft = "gitcommit",
+  --   init = function()
+  --     -- load gitsigns only when a git file is opened
+  --     vim.api.nvim_create_autocmd({ "BufRead" }, {
+  --       group = vim.api.nvim_create_augroup("vgitLazyLoad", { clear = true }),
+  --       callback = function()
+  --         vim.fn.system("git -C " .. vim.fn.expand "%:p:h" .. " rev-parse")
+  --         if vim.v.shell_error == 0 then
+  --           vim.api.nvim_del_augroup_by_name "vgitLazyLoad"
+  --           vim.schedule(function()
+  --             require("lazy").load { plugins = "vgit.nvim" }
+  --           end)
+  --         end
+  --       end,
+  --     })
+  --   end,
+  --   config = function()
+  --     require("vgit").setup()
+  --   end,
+  -- },
   -- ["Maan2003/lsp_lines.nvim"] = {
   --   dependencies = { "nvim-cmp", "nvim-lspconfig" },
   --   config = function()

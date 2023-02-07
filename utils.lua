@@ -84,7 +84,7 @@ end
 
 -- @param mod char: mapping mode (n, v, i, ..)
 -- @param buffer num: buffer id
-M.dump = function(mod)
+function M.dump(mod)
   vim.notify(vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf()))))
 end
 
@@ -98,6 +98,28 @@ function M.not_matches(str, list)
   return #vim.tbl_filter(function(item)
     return item ~= str and not string.match(str, item)
   end, list) > 0
+end
+
+function M.tbl_filter_inplace(tbl, filter)
+  local i = 1
+  while i <= #tbl do
+    local item_found = false
+    if type(filter) == "table" then
+      for j = 1, #filter do
+        if tbl[i] == filter[j] then
+          item_found = true
+          break
+        end
+      end
+    elseif tbl[i] == filter then
+      item_found = true
+    end
+    if item_found then
+      table.remove(tbl, i)
+    else
+      i = i + 1
+    end
+  end
 end
 
 return M
