@@ -152,7 +152,7 @@ function M.get_os_info()
       if key == "NAME" then
         os_info["name"] = value
       elseif key == "VERSION_ID" then
-        os_info["version"] = value
+        os_info["version"] = tonumber(value)/1.0
       elseif key == "ID" then
         os_info["id"] = value
       elseif key == "PRETTY_NAME" then

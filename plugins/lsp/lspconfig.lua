@@ -1,7 +1,6 @@
 local utils = require "custom.utils"
 
 local servers = {
-  "awk-language-server",
   "bash-language-server",
   "beautysh",
   "black",
