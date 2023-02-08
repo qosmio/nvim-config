@@ -36,17 +36,25 @@ M.user = {
   },
   ["folke/which-key.nvim"] = { enabled = true },
   ["neovim/nvim-lspconfig"] = {
-    dependencies = { "mason-lspconfig.nvim", "nvim-lspconfig" },
+    dependencies = { "mason-tool-installer.nvim" },
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.servers"
-      require("mason-lspconfig").setup(require "lsp.lspconfig")
       vim.lsp.set_log_level "warn"
     end,
   },
   ["williamboman/mason-lspconfig.nvim"] = {
-    dependencies = { "mason.nvim" },
+    dependencies = {
+      "mason.nvim",
+      {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        lazy = false,
+        config = function()
+          require("mason-tool-installer").setup(require "lsp.lspconfig")
+        end,
+      },
+    },
   },
   ["hrsh7th/cmp-nvim-lua"] = { dependencies = { "nvim-lspconfig", "nvim-cmp" } },
   ["folke/neodev.nvim"] = {

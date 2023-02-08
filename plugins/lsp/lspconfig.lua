@@ -1,31 +1,59 @@
-local utils = require "custom.utils"
 local servers = {
-  "jsonls",
-  "bashls",
-  "yamlls",
-  "sumneko_lua",
-  "tsserver",
+  "awk-language-server",
+  "bash-language-server",
+  "beautysh",
+  "black",
+  "clangd",
+  "clang-format",
+  "css-lsp",
+  "dockerfile-language-server",
+  "eslint_d",
+  "eslint-lsp",
+  "flake8",
+  "gopls",
+  "html-lsp",
+  "jq",
+  "json-lsp",
+  "nginx-language-server",
+  "perlnavigator",
+  "prettier",
   "pylance",
-  "html",
+  "reorder-python-imports",
+  "rust-analyzer",
+  "rustfmt",
+  "shellcheck",
+  "shellharden",
+  "shfmt",
+  "sqlfluff",
+  "sql-formatter",
+  "stylua",
+  "taplo",
+  "typescript-language-server",
+  "vim-language-server",
+  "xmlformatter",
+  "yamlfmt",
+  "yaml-language-server",
+  "yamllint",
+  "yapf",
 }
 
-local delay = {
-  "pylance",
-  "nginx-language-server",
-  "eslint_d",
-}
-utils.tbl_filter_inplace(servers, delay)
+if vim.loop.os_uname().machine == "aarch64" then
+  servers = {
+    "json-lsp",
+    "shellcheck",
+    "shfmt",
+    "bash-language-server",
+    "yaml-language-server",
+    "typescript-language-server",
+    "pylance",
+    "html-lsp",
+  }
+end
+
+-- utils.tbl_filter_inplace(servers, delay)
 
 return {
   ensure_installed = servers,
   automatic_installation = true,
-
-  ui = {
-    icons = {
-      server_installed = "",
-      server_pending = "",
-      server_uninstalled = "ﮊ",
-    },
-  },
-  max_concurrent_installers = 20,
+  auto_update = true,
 }
