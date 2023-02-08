@@ -1,5 +1,8 @@
 local M = {}
 M.user = {
+  ["williamboman/mason.nvim"] = {
+    override_options = { log_level = vim.log.levels.WARN },
+  },
   ["kyazdani42/nvim-tree.lua"] = false,
   ["hrsh7th/nvim-cmp"] = {
     override_options = require "custom.plugins.config.cmp",

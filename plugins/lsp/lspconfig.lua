@@ -1,3 +1,5 @@
+local utils = require "custom.utils"
+
 local servers = {
   "awk-language-server",
   "bash-language-server",
@@ -50,7 +52,14 @@ if vim.loop.os_uname().machine == "aarch64" then
   }
 end
 
--- utils.tbl_filter_inplace(servers, delay)
+_ = vim.fn.system "which go"
+if vim.v.shell_error ~= 0 then
+  utils.tbl_filter_inplace(servers, "gopls")
+end
+_ = vim.fn.system "which cargo"
+if vim.v.shell_error ~= 0 then
+  utils.tbl_filter_inplace(servers, "shellharden")
+end
 
 return {
   ensure_installed = servers,

@@ -2,7 +2,6 @@
 
 The module is stored in the `core` package in order to minimize the chance of naming clashing
 --]]
-
 local M = {}
 
 -----------------------------------------------------------
@@ -120,6 +119,69 @@ function M.tbl_filter_inplace(tbl, filter)
       i = i + 1
     end
   end
+end
+
+function M.get_os_info()
+  local os_info = {}
+  local os_name = jit and jit.os or "Linux"
+  if os_name == "Windows" then
+    os_info["os"] = "Windows"
+    os_info["version"] = "N/A"
+    os_info["name"] = "Windows"
+    os_info["id"] = "Windows"
+    os_info["pretty_name"] = "Windows"
+    os_info["architecture"] = "N/A"
+    os_info["memory"] = "N/A"
+    os_info["disk"] = "N/A"
+  elseif os_name == "Linux" then
+    local file = io.open("/etc/os-release", "r")
+    if not file then
+      os_info["os"] = "Linux"
+      os_info["version"] = "N/A"
+      os_info["name"] = "Linux (unknown version)"
+      os_info["id"] = "Linux (unknown version)"
+      os_info["pretty_name"] = "Linux (unknown version)"
+      os_info["architecture"] = "N/A"
+      os_info["memory"] = "N/A"
+      os_info["disk"] = "N/A"
+      return os_info
+    end
+
+    for line in file:lines() do
+      local key, value = line:match '^([^=]+)="(.*)"$'
+      if key == "NAME" then
+        os_info["name"] = value
+      elseif key == "VERSION_ID" then
+        os_info["version"] = value
+      elseif key == "ID" then
+        os_info["id"] = value
+      elseif key == "PRETTY_NAME" then
+        os_info["pretty_name"] = value
+      end
+    end
+    file:close()
+
+    os_info["os"] = "Linux"
+    local architecture = io.popen("uname -m"):read "*all"
+    architecture = architecture:gsub("\n", "")
+    os_info["architecture"] = architecture
+    local memory = io.popen("free -m"):read "*all"
+    memory = memory:match "Mem:%s+(%d+)%s"
+    os_info["memory"] = memory .. " MB"
+    local disk = io.popen("df -h / | awk 'NR==2 {print $4}'"):read "*all"
+    disk = disk:gsub("\n", "")
+    os_info["disk"] = disk
+  elseif os_name == "OSX" then
+    os_info["os"] = "macOS"
+    os_info["version"] = "N/A"
+    os_info["name"] = "macOS"
+    os_info["id"] = "macOS"
+    os_info["pretty_name"] = "macOS"
+    os_info["architecture"] = "N/A"
+    os_info["memory"] = "N/A"
+    os_info["disk"] = "N/A"
+  end
+  return os_info
 end
 
 return M
