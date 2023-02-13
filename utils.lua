@@ -1,14 +1,10 @@
---[[ Utility functions for working with nvim configuaration.
-
-The module is stored in the `core` package in order to minimize the chance of naming clashing
---]]
 local M = {}
-
+local uv = vim.loop
 -----------------------------------------------------------
 -- Checks if running under Windows.
 -----------------------------------------------------------
 function M.is_win()
-  if vim.loop.os_uname().version:match "Windows" then
+  if uv.os_uname().version:match "Windows" then
     return true
   else
     return false
@@ -185,6 +181,61 @@ function M.get_os_info()
     os_info["disk"] = "N/A"
   end
   return os_info
+end
+
+function M.file_exists(file)
+  local stat = uv.fs_stat(file)
+  return stat ~= nil and stat.type == "file"
+end
+
+function M.dir_exists(dir)
+  local stat = uv.fs_stat(dir)
+  return stat ~= nil and stat.type == "directory"
+end
+
+function M.dirlist(dir)
+  local items = {}
+  if M.dir_exists(dir) then
+    local handle = uv.fs_scandir(dir)
+    while true do
+      local item = uv.fs_scandir_next(handle)
+      if item ~= nil then
+        table.insert(items, item)
+      else
+        goto last
+      end
+    end
+    ::last::
+  end
+  return items
+end
+
+function M.get_python3_host_prog()
+  -- Get the environment path
+  local path = vim.env.PATH
+
+  -- Split the path into individual directories
+  local path_dirs = vim.split(path, ":")
+
+  -- Find all python3.x executables in the path
+  local python3_executables = {}
+  for _, dir in ipairs(path_dirs) do
+    for _, file in ipairs(M.dirlist(dir)) do
+      if file:match "^python3%.%d+$" then
+        table.insert(python3_executables, vim.fn.fnamemodify(M.join_paths(dir, file), ":p"))
+      end
+    end
+  end
+  -- Sort the list of executables by version number (using a custom comparison function)
+  table.sort(python3_executables, function(a, b)
+    local a_version = a:match "python3%.(%d+)"
+    local b_version = b:match "python3%.(%d+)"
+    return tonumber(a_version) > tonumber(b_version)
+  end)
+
+  -- Set the "python3_host_prog" global variable to the path to the latest executable
+  -- vim.g.python3_host_prog = python3_executables[1]
+  return python3_executables[1]
 end
 
 return M

@@ -3,6 +3,7 @@ local base = require "plugins.configs.lspconfig"
 local custom = require "custom.plugins.lsp.settings"
 local ok_coq, ok, coq, res
 ok_coq, coq = pcall(require, "coq")
+local u = require("custom.utils")
 
 ---@public
 --- Sends an async request to all active clients attached to the current

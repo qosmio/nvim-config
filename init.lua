@@ -42,16 +42,8 @@ if not vim.loop.fs_stat(vim.g.base46_cache .. "defaults") then
   dofile(vim.g.base46_cache .. "defaults")
 end
 
-local os_info = u.get_os_info()
-if os_info.id == "rhel" then
-  if os_info.version >= 8.0 then
-    vim.g.python3_host_prog = "/usr/bin/python3.9"
-  else
-    vim.g.python3_host_prog = "/usr/bin/python3.8"
-  end
-end
+vim.g.python3_host_prog = u.get_python3_host_prog() or vim.g.python3_host_prog
 
--- local M = require "custom.plugins.lsp.servers"
 -- print(vim.inspect(base46.table_to_str(require "custom.highlights")))
 require "custom.options"
 -- AUTOCMDS
