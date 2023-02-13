@@ -148,15 +148,18 @@ function M.get_os_info()
     end
 
     for line in file:lines() do
-      local key, value = line:match '^([^=]+)="(.*)"$'
-      if key == "NAME" then
-        os_info["name"] = value
-      elseif key == "VERSION_ID" then
-        os_info["version"] = tonumber(value)/1.0
-      elseif key == "ID" then
-        os_info["id"] = value
-      elseif key == "PRETTY_NAME" then
-        os_info["pretty_name"] = value
+      local key, value = line:match "^(%S+)%s*=%s*(.*)"
+      if key and value then
+        value = value:match "^[\"']?(.-)[\"']?$"
+        if key == "NAME" then
+          os_info["name"] = value
+        elseif key == "VERSION_ID" then
+          os_info["version"] = tonumber(value) / 1.0
+        elseif key == "ID" then
+          os_info["id"] = value
+        elseif key == "PRETTY_NAME" then
+          os_info["pretty_name"] = value
+        end
       end
     end
     file:close()
