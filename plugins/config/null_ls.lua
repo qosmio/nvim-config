@@ -14,6 +14,23 @@ local sources = {
   -- Javascript
   diagnostics.eslint_d,
   formatting.prettier_d_slim.with {
+    {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "vue",
+      "css",
+      "scss",
+      "less",
+      "html",
+      "json",
+      "jsonc",
+      "markdown",
+      "markdown.mdx",
+      "graphql",
+      "handlebars",
+    },
     dynamic_command = command_resolver.from_node_modules(),
     command = "prettier_d",
     args = {
