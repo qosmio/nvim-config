@@ -65,7 +65,6 @@ local formatter = {
 -- h.make_builtin(formatter)
 local M = {}
 M.setup = function()
-  _G.write(formatter, "/tmp/l.lua")
   -- local f = null_ls.validate_and_transform(formatter)
   -- write(f, "/tmp/f.lua")
   -- null_ls.register(f)

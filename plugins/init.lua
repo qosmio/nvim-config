@@ -12,7 +12,7 @@ M.user = {
   },
   ["lewis6991/gitsigns.nvim"] = { override_options = require "custom.plugins.config.gitsigns" },
   ["nvim-treesitter/nvim-treesitter"] = {
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring", "nvim-treesitter/playground" },
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     module = "nvim-treesitter",
     init = function()
       require("core.utils").lazy_load "nvim-treesitter"
@@ -39,6 +39,7 @@ M.user = {
   },
   ["folke/which-key.nvim"] = { enabled = true },
   ["neovim/nvim-lspconfig"] = {
+    event = { "VimEnter" },
     dependencies = { "mason-tool-installer.nvim" },
     config = function()
       require "plugins.configs.lspconfig"
@@ -140,7 +141,7 @@ M.user = {
     config = function()
       local mason_null_ls = require "mason-null-ls"
       mason_null_ls.setup {
-        automatic_installation = { exclude = { "clang-format", "gofumpt" } },
+        automatic_installation = { exclude = { "jq", "clang-format", "gofumpt" } },
         automatic_setup = true,
       }
       mason_null_ls.setup_handlers()
