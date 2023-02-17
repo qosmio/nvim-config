@@ -220,6 +220,22 @@ M.user = {
     event = { "VimEnter" },
   },
   ["nfnty/vim-nftables"] = {},
+  ["jcdickinson/codeium.nvim"] = {
+    enabled = false,
+    event = "InsertEnter",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    config = function()
+      require("codeium").setup {}
+    end,
+  },
+  ["Exafunction/codeium.vim"] = {
+    dependencies = { "nyngwang/cmp-codeium" },
+    event = "InsertEnter",
+  },
   -- ["tanvirtin/vgit.nvim"] = {
   --   dependencies = {
   --     "nvim-lua/plenary.nvim",

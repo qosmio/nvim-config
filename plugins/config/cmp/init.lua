@@ -27,6 +27,15 @@ return {
   experimental = {
     ghost_text = true,
   },
+  sources = {
+    { name = "codeium" },
+    { name = "luasnip" },
+    { name = "nvim_lua" },
+    { name = "buffer" },
+    { name = "path" },
+    { name = "zsh" },
+    { name = "nvim_lsp" },
+  },
   -- sources = {
   --   {
   --     name = "nvim_lsp",

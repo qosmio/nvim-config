@@ -101,7 +101,6 @@ M.lsp = {
     },
   },
 }
--- local opts = { silent = true, nowait = true, expr = true }
 M.neural = {
   n = {
     -- 20:37:46 plus 41 minutes
@@ -120,20 +119,34 @@ M.neural = {
 --     ["<C-j>"] = {
 --       "copilot#Accept()",
 --       "Accept",
---       opts = opts,
 --     },
 --     ["<C-k>"] = {
 --       "copilot#Next()",
 --       "Next",
---       opts = opts,
 --     },
 --     ["<C-z>"] = {
 --       "Copilot#Previous()",
 --       "Previous",
---       opts = opts,
 --     },
 --   },
 -- }
+
+M.codeium = {
+  i = {
+    ["<C-j>"] = {
+      "codeium#Accept()",
+      "Codeium Accept",
+    },
+    ["<C-k>"] = {
+      "codeium#CycleCompletions(1)",
+      "Codeium Next",
+    },
+    ["<C-h>"] = {
+      "codeium#CycleCompletions(-1)",
+      "Codeium Previous",
+    },
+  },
+}
 
 M.toggle_alternate = {
   n = {
