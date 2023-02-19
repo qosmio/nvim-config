@@ -21,7 +21,7 @@ local function opts(merged, isok)
   end
 end
 
--- local syntax = vim.tbl_extend("keep", require("custom.highlights.hlo").highlight, require "custom.highlights.lsp_hi")
+-- vim.pretty_print(require("mason-lspconfig").get_installed_servers())
 local servers = vim.tbl_deep_extend(
   "force",
   require("mason-lspconfig").get_installed_servers(),

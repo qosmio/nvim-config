@@ -29,7 +29,7 @@ M.ft_aucmd({
 M.ft_aucmd({
   "*.tf",
   "*.tfvars",
-}, "terraform")
+}, "hcl")
 
 -- nginx filetype
 M.ft_aucmd({
@@ -70,6 +70,13 @@ M.ft_aucmd({
   "*etc/php/*",
   "php*conf",
 }, "dosini")
+
+M.ft_aucmd({
+  "playbook*",
+  "role*/*.yml",
+  "roles.yml",
+  "*.yml",
+}, "yaml.ansible")
 
 --{{ FileType Indentation
 vim.api.nvim_create_augroup("extension file", { clear = true })

@@ -30,6 +30,7 @@ local servers = {
   "stylua",
   "taplo",
   "typescript-language-server",
+  "terraform-ls",
   "vim-language-server",
   "xmlformatter",
   "yamlfmt",

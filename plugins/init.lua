@@ -40,7 +40,17 @@ M.user = {
   ["folke/which-key.nvim"] = { enabled = true },
   ["neovim/nvim-lspconfig"] = {
     event = { "VimEnter" },
-    dependencies = { "mason-tool-installer.nvim" },
+    dependencies = {
+      {
+        { "williamboman/mason.nvim" },
+        { "williamboman/mason-lspconfig.nvim" },
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        -- lazy = true,
+        config = function()
+          require("mason-tool-installer").setup(require "lsp.lspconfig")
+        end,
+      },
+    },
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
@@ -51,13 +61,6 @@ M.user = {
   ["williamboman/mason-lspconfig.nvim"] = {
     dependencies = {
       "mason.nvim",
-      {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        lazy = false,
-        config = function()
-          require("mason-tool-installer").setup(require "lsp.lspconfig")
-        end,
-      },
     },
   },
   ["hrsh7th/cmp-nvim-lua"] = { dependencies = { "nvim-lspconfig", "nvim-cmp" } },
@@ -221,22 +224,25 @@ M.user = {
     event = { "VimEnter" },
   },
   ["nfnty/vim-nftables"] = {},
-  ["jcdickinson/codeium.nvim"] = {
-    enabled = false,
-    event = "InsertEnter",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("codeium").setup {}
-    end,
+  ["jvirtanen/vim-hcl"] = {
+    ft = { "hcl" },
   },
-  ["Exafunction/codeium.vim"] = {
-    dependencies = { "nyngwang/cmp-codeium" },
-    event = "InsertEnter",
-  },
+  -- ["jcdickinson/codeium.nvim"] = {
+  --   enabled = false,
+  --   event = "InsertEnter",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     "hrsh7th/nvim-cmp",
+  --   },
+  --   config = function()
+  --     require("codeium").setup {}
+  --   end,
+  -- },
+  -- ["Exafunction/codeium.vim"] = {
+  --   dependencies = { "nyngwang/cmp-codeium" },
+  --   event = "InsertEnter",
+  -- },
   -- ["tanvirtin/vgit.nvim"] = {
   --   dependencies = {
   --     "nvim-lua/plenary.nvim",

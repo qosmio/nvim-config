@@ -123,6 +123,7 @@ M.setup = function()
     log_level = "warn",
     -- log = { enable = true, level = "info", use_console = "async" },
   }
+  require("custom.plugins.lsp.formatters.yamlfix").setup()
 end
 
 return M
