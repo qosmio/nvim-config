@@ -1,31 +1,33 @@
-local M = {}
-M.user = {
-  ["williamboman/mason.nvim"] = {
-    override_options = { log_level = vim.log.levels.WARN },
-  },
-  ["kyazdani42/nvim-tree.lua"] = false,
-  ["hrsh7th/nvim-cmp"] = {
-    override_options = require "custom.plugins.config.cmp",
-  },
-  ["NvChad/nvim-colorizer.lua"] = {
-    override_options = require "custom.plugins.config.colorizer",
-  },
-  ["lewis6991/gitsigns.nvim"] = { override_options = require "custom.plugins.config.gitsigns" },
-  ["nvim-treesitter/nvim-treesitter"] = {
+local plugins = {
+  { "williamboman/mason.nvim", opts = { log_level = vim.log.levels.WARN } },
+  { "nvim-tree/nvim-tree.lua", enabled = false },
+  { "hrsh7th/nvim-cmp", opts = require "custom.plugins.config.cmp" },
+  { "NvChad/nvim-colorizer.lua", opts = require "custom.plugins.config.colorizer" },
+  { "lewis6991/gitsigns.nvim", opts = require "custom.plugins.config.gitsigns" },
+  {
+    "nvim-treesitter/nvim-treesitter",
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     module = "nvim-treesitter",
     init = function()
       require("core.utils").lazy_load "nvim-treesitter"
     end,
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSEnable", "TSDisable", "TSModuleInfo" },
+    cmd = {
+      "TSInstall",
+      "TSBufEnable",
+      "TSBufDisable",
+      "TSEnable",
+      "TSDisable",
+      "TSModuleInfo",
+    },
     build = ":TSUpdate",
-    override_options = require "custom.plugins.config.treesitter",
+    opts = require "custom.plugins.config.treesitter",
     config = function()
       require "custom.plugins.config.treesitter_parsers"
       require "plugins.configs.treesitter"
     end,
   },
-  ["numToStr/Comment.nvim"] = {
+  {
+    "numToStr/Comment.nvim",
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     keys = { "gbc", "gcc" },
     config = function()
@@ -37,8 +39,9 @@ M.user = {
       require("core.utils").load_mappings "comment"
     end,
   },
-  ["folke/which-key.nvim"] = { enabled = true },
-  ["neovim/nvim-lspconfig"] = {
+  { "folke/which-key.nvim", enabled = true },
+  {
+    "neovim/nvim-lspconfig",
     event = { "VimEnter" },
     dependencies = {
       {
@@ -55,27 +58,24 @@ M.user = {
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.servers"
+      require("base46").load_all_highlights()
       vim.lsp.set_log_level "warn"
     end,
   },
-  ["williamboman/mason-lspconfig.nvim"] = {
-    dependencies = {
-      "mason.nvim",
-    },
-  },
-  ["hrsh7th/cmp-nvim-lua"] = { dependencies = { "nvim-lspconfig", "nvim-cmp" } },
-  ["folke/neodev.nvim"] = {
-    ft = { "lua" },
-  },
-  ["rmagatti/alternate-toggler"] = { event = "VimEnter" },
-  ["chr4/nginx.vim"] = { ft = "nginx" },
+  { "williamboman/mason-lspconfig.nvim", dependencies = { "mason.nvim" } },
+  { "hrsh7th/cmp-nvim-lua", dependencies = { "nvim-lspconfig", "nvim-cmp" } },
+  { "folke/neodev.nvim", ft = { "lua" } },
+  { "rmagatti/alternate-toggler", event = { "VimEnter" } },
+  { "chr4/nginx.vim", ft = "nginx" },
   -- Native terminal copying using OCS52
-  ["ojroques/nvim-osc52"] = {
+  {
+    "ojroques/nvim-osc52",
     config = function()
       require("osc52").setup { trim = false }
     end,
   },
-  ["jose-elias-alvarez/null-ls.nvim"] = {
+  {
+    "jose-elias-alvarez/null-ls.nvim",
     lazy = false,
     after = { "nvim-cmp" },
     requires = { "nvim-lua/plenary.nvim" },
@@ -83,16 +83,19 @@ M.user = {
       require("custom.plugins.config.null_ls").setup()
     end,
   },
-  ["lambdalisue/suda.vim"] = { event = { "CmdlineEnter" } },
-  ["machakann/vim-sandwich"] = {
-    event = "InsertEnter",
-  },
+  { "lambdalisue/suda.vim", event = { "CmdlineEnter" } },
+  { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
-  ["AndrewRadev/splitjoin.vim"] = {},
-  ["reewr/vim-monokai-phoenix"] = {
-    dependencies = { "jacoborus/tender.vim", "nielsmadan/harlequin", "patstockwell/vim-monokai-tasty" },
+  { "AndrewRadev/splitjoin.vim" },
+  {
+    "reewr/vim-monokai-phoenix",
+    dependencies = {
+      "jacoborus/tender.vim",
+      "nielsmadan/harlequin",
+      "patstockwell/vim-monokai-tasty",
+    },
     -- dependencies = { "ui", "indent-blankline.nvim" },
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
@@ -121,24 +124,25 @@ M.user = {
       )
     end,
   },
-  ["anuvyklack/pretty-fold.nvim"] = {
+  {
+    "anuvyklack/pretty-fold.nvim",
     config = function()
       require "custom.plugins.config.pretty_fold"
     end,
   },
-  ["hrsh7th/cmp-nvim-lsp-signature-help"] = { dependencies = "null-ls.nvim" }, --  function signature help
-  ["tamago324/cmp-zsh"] = {
+  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = "null-ls.nvim" }, --  function signature help
+  {
+    "tamago324/cmp-zsh",
     ft = { "zsh" },
     init = function()
       require("core.utils").lazy_load "cmp-zsh"
     end,
-    config = {
-      filetypes = { "zsh" },
-    },
+    config = { filetypes = { "zsh" } },
   },
-  ["lvimuser/lsp-inlayhints.nvim"] = {},
-  ["microsoft/python-type-stubs"] = { ft = "python" },
-  ["jay-babu/mason-null-ls.nvim"] = {
+  { "lvimuser/lsp-inlayhints.nvim" },
+  { "microsoft/python-type-stubs", ft = "python" },
+  {
+    "jay-babu/mason-null-ls.nvim",
     lazy = false,
     dependencies = { "mason.nvim", "null-ls.nvim" },
     config = function()
@@ -150,25 +154,27 @@ M.user = {
       mason_null_ls.setup_handlers()
     end,
   },
-  ["gelguy/wilder.nvim"] = {
+  {
+    "gelguy/wilder.nvim",
     config = function()
       local wilder = require "wilder"
       -- wilder.setup { modes = { ":", "/", "?" } }
 
-      wilder.set_option("pipeline", { wilder.branch(wilder.cmdline_pipeline(), wilder.search_pipeline()) })
+      wilder.set_option("pipeline", {
+        wilder.branch(wilder.cmdline_pipeline(), wilder.search_pipeline()),
+      })
 
       wilder.set_option(
         "renderer",
         wilder.popupmenu_renderer(
           { highlighter = wilder.basic_highlighter() },
-          wilder.popupmenu_border_theme {
-            border = "rounded",
-          }
+          wilder.popupmenu_border_theme { border = "rounded" }
         )
       )
     end,
   },
-  ["jackMort/ChatGPT.nvim"] = {
+  {
+    "jackMort/ChatGPT.nvim",
     cmd = "ChatGPT",
     dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     config = function()
@@ -193,7 +199,8 @@ M.user = {
       }
     end,
   },
-  ["dense-analysis/neural"] = {
+  {
+    "dense-analysis/neural",
     keys = { "<leader>..", "<leader>." },
     cmd = "NeuralCode",
     dependencies = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
@@ -214,20 +221,17 @@ M.user = {
       }
     end,
   },
-  ["tzachar/cmp-tabnine"] = {
+  {
+    "tzachar/cmp-tabnine",
     dependencies = "cmp-path",
     config = function()
       require("custom.plugins.config.cmp.tabnine").setup()
     end,
   },
-  ["cfdrake/vim-pbxproj"] = {
-    event = { "VimEnter" },
-  },
-  ["nfnty/vim-nftables"] = {},
-  ["jvirtanen/vim-hcl"] = {
-    ft = { "hcl" },
-  },
-  -- ["jcdickinson/codeium.nvim"] = {
+  { "cfdrake/vim-pbxproj", event = { "VimEnter" } },
+  { "nfnty/vim-nftables" },
+  { "jvirtanen/vim-hcl", ft = { "hcl" } },
+  -- {"jcdickinson/codeium.nvim",
   --   enabled = false,
   --   event = "InsertEnter",
   --   dependencies = {
@@ -239,34 +243,10 @@ M.user = {
   --     require("codeium").setup {}
   --   end,
   -- },
-  -- ["Exafunction/codeium.vim"] = {
+  -- {"Exafunction/codeium.vim",
   --   dependencies = { "nyngwang/cmp-codeium" },
   --   event = "InsertEnter",
   -- },
-  -- ["tanvirtin/vgit.nvim"] = {
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --   },
-  --   ft = "gitcommit",
-  --   init = function()
-  --     -- load gitsigns only when a git file is opened
-  --     vim.api.nvim_create_autocmd({ "BufRead" }, {
-  --       group = vim.api.nvim_create_augroup("vgitLazyLoad", { clear = true }),
-  --       callback = function()
-  --         vim.fn.system("git -C " .. vim.fn.expand "%:p:h" .. " rev-parse")
-  --         if vim.v.shell_error == 0 then
-  --           vim.api.nvim_del_augroup_by_name "vgitLazyLoad"
-  --           vim.schedule(function()
-  --             require("lazy").load { plugins = "vgit.nvim" }
-  --           end)
-  --         end
-  --       end,
-  --     })
-  --   end,
-  --   config = function()
-  --     require("vgit").setup()
-  --   end,
-  -- },
 }
+return plugins
 -- print(vim.inspect(M.user))
-return M.user
