@@ -82,10 +82,22 @@ M.ft_aucmd({
 vim.api.nvim_create_augroup("extension file", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
   group = "extension file",
-  pattern = { "cpp", "c", "python" },
+  pattern = { "cpp", "c" },
   callback = function()
     vim.opt.autoindent = true
     vim.opt.cindent = true
+    vim.opt.softtabstop = 4
+    vim.opt.tabstop = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
+    vim.opt.formatoptions = "croql"
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  group = "extension file",
+  pattern = {  "python" },
+  callback = function()
+    vim.opt.autoindent = true
     vim.opt.softtabstop = 4
     vim.opt.tabstop = 2
     vim.opt.shiftwidth = 4
