@@ -342,4 +342,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
+
+local cmd = vim.api.nvim_create_user_command
+cmd("MasonUpdateAll", function()
+  require("custom.utils").mason.update_all()
+end, { desc = "Update Mason Packages" })
+
+cmd("MasonUpdate", function(opts)
+  require("custom.utils").mason.update(opts.args)
+end, { nargs = 1, desc = "Update Mason Package" })
+
 -- }}}

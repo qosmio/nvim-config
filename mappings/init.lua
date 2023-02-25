@@ -157,7 +157,7 @@ M.toggle_alternate = {
   },
 }
 
-M.packer = {
+M.lazy = {
   n = {
     ["<leader>ps"] = { "<cmd>Lazy show<cr>", "Status" },
     ["<leader>pp"] = { "<cmd>Lazy sync<cr>", "Sync" },
@@ -173,6 +173,12 @@ M.comment = {
       end,
       "toggle comment",
     },
+  },
+}
+
+M.mason = {
+  n = {
+    ["<leader>kk"] = { "<cmd>MasonUpdateAll<cr>", "Mason update all installed servers" },
   },
 }
 

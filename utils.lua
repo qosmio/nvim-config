@@ -80,7 +80,7 @@ end
 -- @param mod char: mapping mode (n, v, i, ..)
 -- @param buffer num: buffer id
 function M.dump(mod)
-  vim.notify(vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf()))))
+  notify(vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf()))))
 end
 
 function M.matches(str, list)
@@ -236,6 +236,100 @@ function M.get_python3_host_prog()
   -- Set the "python3_host_prog" global variable to the path to the latest executable
   -- vim.g.python3_host_prog = python3_executables[1]
   return python3_executables[1]
+end
+
+--- Update a mason package
+-- @param pkg_name string of the name of the package as defined in Mason (Not mason-lspconfig or mason-null-ls)
+-- @param auto_install boolean of whether or not to install a package that is not currently installed (default: True)
+M.mason = {}
+
+local function notify(msg, level)
+  if vim.in_fast_event() then
+    vim.schedule(function()
+      vim.notify(msg, level)
+    end)
+  else
+    vim.notify(msg, level)
+  end
+end
+
+function M.mason.update(pkg_name, auto_install)
+  if auto_install == nil then
+    auto_install = true
+  end
+  local registry_avail, registry = pcall(require, "mason-registry")
+  if not registry_avail then
+    vim.api.nvim_err_writeln "Unable to access mason registry"
+    return
+  end
+
+  local pkg_avail, pkg = pcall(registry.get_package, pkg_name)
+  if not pkg_avail then
+    notify(("Mason: %s is not available"):format(pkg_name), "error")
+  else
+    if not pkg:is_installed() then
+      if auto_install then
+        notify(("Mason: Installing %s"):format(pkg.name))
+        pkg:install()
+      else
+        notify(("Mason: %s not installed"):format(pkg.name), "warn")
+      end
+    else
+      pkg:check_new_version(function(update_available, version)
+        if update_available then
+          notify(("Mason: Updating %s to %s"):format(pkg.name, version.latest_version))
+          pkg:install():on("closed", function()
+            notify(("Mason: Updated %s"):format(pkg.name))
+          end)
+        else
+          notify(("Mason: No updates available for %s"):format(pkg.name))
+        end
+      end)
+    end
+  end
+end
+
+--- Update all packages in Mason
+function M.mason.update_all()
+  local registry_avail, registry = pcall(require, "mason-registry")
+  if not registry_avail then
+    vim.api.nvim_err_writeln "Unable to access mason registry"
+    return
+  end
+
+  local installed_pkgs = registry.get_installed_packages()
+  local running = #installed_pkgs
+  local no_pkgs = running == 0
+  notify "Mason: Checking for package updates..."
+
+  if no_pkgs then
+    notify "Mason: No updates available"
+  else
+    local updated = false
+    for _, pkg in ipairs(installed_pkgs) do
+      pkg:check_new_version(function(update_available, version)
+        if update_available then
+          updated = true
+          notify(("Mason: Updating %s to %s"):format(pkg.name, version.latest_version))
+          pkg:install():on("closed", function()
+            running = running - 1
+            if running == 0 then
+              notify "Mason: Update Complete"
+            end
+          end)
+        else
+          running = running - 1
+          if running == 0 then
+            if updated then
+              notify "Mason: Update Complete"
+            else
+              notify "Mason: No updates available"
+            end
+          end
+        end
+      end)
+    end
+  end
 end
 
 return M
