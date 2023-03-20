@@ -1,6 +1,7 @@
 local utils = require "custom.utils"
 
 local servers = {
+  "ansible-language-server",
   "bash-language-server",
   "beautysh",
   "black",
@@ -34,6 +35,7 @@ local servers = {
   "vim-language-server",
   "xmlformatter",
   "yamlfmt",
+  "yamlfix",
   "yaml-language-server",
   "yamllint",
   "yapf",

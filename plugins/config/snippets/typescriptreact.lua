@@ -53,7 +53,7 @@ ls.add_snippets("typescriptreact", {
 {}const {} = ({{{}}}: {}Props) => {{
   {}
 }}
-]],
+]]     ,
       {
         -- Import React if it's not yet imported
         f(function()

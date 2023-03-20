@@ -57,6 +57,8 @@ local plugins = {
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
+      require "custom.plugins.lsp.installers.yamlfix"
+      require "custom.plugins.lsp.installers.nginx_beautifier"
       require "custom.plugins.lsp.servers"
       require("base46").load_all_highlights()
       vim.lsp.set_log_level "warn"
@@ -78,7 +80,7 @@ local plugins = {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = false,
     after = { "nvim-cmp" },
-    requires = { "nvim-lua/plenary.nvim" },
+    dependencies = { "mason.nvim", "nvim-lua/plenary.nvim" },
     config = function()
       require("custom.plugins.config.null_ls").setup()
     end,
@@ -143,15 +145,39 @@ local plugins = {
   { "microsoft/python-type-stubs", ft = "python" },
   {
     "jay-babu/mason-null-ls.nvim",
-    lazy = false,
-    dependencies = { "mason.nvim", "null-ls.nvim" },
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "jose-elias-alvarez/null-ls.nvim",
+    },
     config = function()
       local mason_null_ls = require "mason-null-ls"
       mason_null_ls.setup {
-        automatic_installation = { exclude = { "jq", "clang-format", "gofumpt" } },
+        automatic_installation = {
+          exclude = {
+            "zsh",
+            "eslint",
+            "nginx_beautifier",
+            "prettier_d_slim",
+            "jq",
+            "clang_format",
+            "gofumpt",
+          },
+        },
         automatic_setup = true,
       }
-      mason_null_ls.setup_handlers()
+      mason_null_ls.setup_handlers {
+        function(source_name, methods)
+          -- all sources with no handler get passed here
+          -- To keep the original functionality of `automatic_setup = true`,
+          -- please add the below.
+          require "mason-null-ls.automatic_setup" (source_name, methods)
+        end,
+        stylua = function(source_name, methods)
+          local null_ls = require "null-ls"
+          null_ls.register(null_ls.builtins.formatting.stylua)
+        end,
+      }
     end,
   },
   {

@@ -32,7 +32,7 @@ export const Default: Story = (_, {{ argTypes }}) => ({{
 		<{} v-bind="$props" />
 	`,
 }});
-]],
+]]     ,
       {
         d(1, function(_, snip)
           local filename_without_extension, _ = snip.env.TM_FILENAME_BASE:gsub(".stories$", "")

@@ -3,7 +3,6 @@ local base = require "plugins.configs.lspconfig"
 local custom = require "custom.plugins.lsp.settings"
 local ok_coq, ok, coq, res
 ok_coq, coq = pcall(require, "coq")
-local u = require("custom.utils")
 
 ---@public
 --- Sends an async request to all active clients attached to the current
@@ -25,13 +24,10 @@ end
 local servers = vim.tbl_deep_extend(
   "force",
   require("mason-lspconfig").get_installed_servers(),
-  { "pylance", "ccls", "clangd", "sourcekit", "gopls" }
+  { "pylance", "ccls", "clangd", "gopls", "ansiblels" }
 )
 for _, server in ipairs(servers) do
   ok, res = pcall(require, "custom.plugins.lsp.servers." .. server)
-  -- if server == "sourcekit" then
-  --   pprint(res)
-  -- end
   if res.exist == nil then
     if ok and res ~= true then
       local merged = opts(vim.tbl_deep_extend("force", base, res), ok_coq)
@@ -51,9 +47,6 @@ for _, server in ipairs(servers) do
       -- local patched = ltdiff.patch(merged, diff)
       -- print("patched = " .. vim.inspect(patched))
       lspconfig[server].setup(merged)
-      -- if server == "sourcekit" then
-      --   write(merged, "/tmp/clangd.lua")
-      -- end
     else
       lspconfig[server].setup(base)
     end

@@ -46,7 +46,7 @@ local formatter = {
     to_stdin = true,
     cwd = h.cache.by_bufnr(function(params)
       return u.root_pattern(
-        -- https://prettier.io/docs/en/configuration.html
+      -- https://prettier.io/docs/en/configuration.html
         ".prettierrc",
         ".prettierrc.json",
         ".prettierrc.yml",

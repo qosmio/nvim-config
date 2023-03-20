@@ -7,6 +7,7 @@ local function lsp_color_to_hex(color)
   local function to256(c)
     return math.floor(c * color.alpha * 255)
   end
+
   return bit.tohex(bit.bor(bit.lshift(to256(color.red), 16), bit.lshift(to256(color.green), 8), to256(color.blue)), 6)
 end
 
@@ -115,7 +116,7 @@ function M.buf_attach(bufnr, options)
 
   -- VSCode extension also does 200ms debouncing
   local trigger_update_highlight, timer =
-    require("lsp/utils/defer").debounce_trailing(M.update_highlight, options.debounce or 200, false)
+  require("lsp/utils/defer").debounce_trailing(M.update_highlight, options.debounce or 200, false)
 
   -- for the first request, the server needs some time before it's ready
   -- sometimes 200ms is not enough for this

@@ -40,6 +40,24 @@ L.is_null_ls_formatting_enabed = function(bufnr)
   return #generators > 0
 end
 
+L.setup_handlers = function()
+  vim.lsp.handlers["workspace/diagnostic/refresh"] = function(_, _, ctx)
+    local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
+    pcall(vim.diagnostic.reset, ns)
+    return true
+  end
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false, -- if using pop-up window
+    signs = true,
+    underline = true,
+    update_in_insert = false, -- update diagnostics insert mode
+    severity_sort = false,
+  })
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = L.popup_border })
+  vim.lsp.handlers["textDocument/signatureHelp"] =
+  vim.lsp.with(vim.lsp.handlers.signature_help, { border = L.popup_border })
+end
+
 M.on_attach = function(client, bufnr)
   -- L.autocmds.lsp_diagnostics_popup(bufnr)
   vim.diagnostic.config {
@@ -48,11 +66,6 @@ M.on_attach = function(client, bufnr)
     -- signs = { severity = { min = vim.diagnostic.severity.INFO } },
     update_in_insert = false,
   }
-  vim.lsp.handlers["workspace/diagnostic/refresh"] = function(_, _, ctx)
-    local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
-    pcall(vim.diagnostic.reset, ns)
-    return true
-  end
   L.autocmds.DiagPopup(bufnr)
   -- client.server_capabilities.documentFormattingProvider = false
   if client.server_capabilities.documentFormattingProvider then
@@ -81,23 +94,6 @@ M.on_attach = function(client, bufnr)
   end
 end
 
-M.handlers = {
-  ["workspace/diagnostic/refresh"] = function(_, _, ctx)
-    local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
-    pcall(vim.diagnostic.reset, ns)
-    return true
-  end,
-  ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false, -- if using pop-up window
-    signs = true,
-    underline = true,
-    update_in_insert = false, -- update diagnostics insert mode
-    severity_sort = false,
-  }),
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = L.popup_border }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = L.popup_border }),
-}
-
 M.capabilities = (function()
   local lspconfig = require "plugins.configs.lspconfig"
   local caps = vim.lsp.protocol.make_client_capabilities()
@@ -107,4 +103,5 @@ M.capabilities = (function()
   return vim.tbl_deep_extend("force", caps, lspconfig.capabilities)
 end)()
 
+L.setup_handlers()
 return M

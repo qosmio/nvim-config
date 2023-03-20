@@ -95,7 +95,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 vim.api.nvim_create_autocmd("FileType", {
   group = "extension file",
-  pattern = {  "python" },
+  pattern = { "python" },
   callback = function()
     vim.opt.autoindent = true
     vim.opt.softtabstop = 4
@@ -211,7 +211,7 @@ aucmd("FileType", {
 -- Coding {{{
 -- Auto-format *.files prior to saving them{{{
 aucmd("BufWritePre", {
-  pattern = { "*.go", "*.rs" },
+  pattern = { "*.go", "*.rs", "*.lua" },
   command = "lua vim.lsp.buf.format(nil, 1000)",
 })
 -- }}}

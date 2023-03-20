@@ -1,5 +1,15 @@
 local M = {}
 local uv = vim.loop
+local function notify(msg, level)
+  if vim.in_fast_event() then
+    vim.schedule(function()
+      vim.notify(msg, level)
+    end)
+  else
+    vim.notify(msg, level)
+  end
+end
+
 -----------------------------------------------------------
 -- Checks if running under Windows.
 -----------------------------------------------------------
@@ -242,16 +252,6 @@ end
 -- @param pkg_name string of the name of the package as defined in Mason (Not mason-lspconfig or mason-null-ls)
 -- @param auto_install boolean of whether or not to install a package that is not currently installed (default: True)
 M.mason = {}
-
-local function notify(msg, level)
-  if vim.in_fast_event() then
-    vim.schedule(function()
-      vim.notify(msg, level)
-    end)
-  else
-    vim.notify(msg, level)
-  end
-end
 
 function M.mason.update(pkg_name, auto_install)
   if auto_install == nil then

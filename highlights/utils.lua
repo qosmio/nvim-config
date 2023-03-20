@@ -92,8 +92,8 @@ M._hex_to_8bit = function(color)
   -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
   -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
   local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
-    + bit.lshift(math.floor(g * 7 / 255), 2)
-    + math.floor((b * 3 / 255))
+      + bit.lshift(math.floor(g * 7 / 255), 2)
+      + math.floor((b * 3 / 255))
   return encodedData
 end
 
@@ -172,8 +172,8 @@ M._hex_to_8bit = function(color)
   -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
   -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
   local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
-    + bit.lshift(math.floor(g * 7 / 255), 2)
-    + math.floor((b * 3 / 255))
+      + bit.lshift(math.floor(g * 7 / 255), 2)
+      + math.floor((b * 3 / 255))
   return encodedData
 end
 

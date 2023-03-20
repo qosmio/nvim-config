@@ -15,7 +15,7 @@ ls.add_snippets("vue", {
 const {} = ({}) => {{
   {}
 }};
-]],
+]]     ,
       { i(1), i(2), i(3) }
     )
   ),
@@ -28,7 +28,7 @@ const {} = ({}) => {{
 watchEffect(() => {{
   console.log({{ {} }})
 }});
-]],
+]]     ,
       { i(1) }
     )
   ),
@@ -54,7 +54,7 @@ export default defineComponent({{
 
 <style lang="scss" scoped>
 </style>
-]],
+]]     ,
       { i(1) }
     )
   ),

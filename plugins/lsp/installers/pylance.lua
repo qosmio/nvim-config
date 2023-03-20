@@ -107,14 +107,7 @@ if not configs[server_name] then
       },
       -- handlers = require("custom.plugins.lsp.servers.pylance").handlers,
       before_init = function(_, config)
-        local stub_path = require("lspconfig/util").path.join(
-          vim.fn.stdpath "data",
-          "site",
-          "pack",
-          "packer",
-          "opt",
-          "python-type-stubs"
-        )
+        local stub_path = require("lspconfig/util").path.join(vim.fn.stdpath "data", "lazy", "python-type-stubs")
         config.settings.python.analysis.stubPath = stub_path
       end,
     },
