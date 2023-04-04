@@ -109,6 +109,9 @@ local sources = {
   },
   -- Golang
   formatting.gofumpt,
+  -- CMAKE
+  -- diagnostics.cmake_lint,
+  formatting.cmake_format,
 }
 
 local M = {}

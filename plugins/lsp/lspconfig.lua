@@ -12,6 +12,7 @@ local servers = {
   "eslint_d",
   "eslint-lsp",
   "flake8",
+  "gh",
   "gopls",
   "html-lsp",
   "jq",
