@@ -48,7 +48,6 @@ local plugins = {
         { "williamboman/mason.nvim" },
         { "williamboman/mason-lspconfig.nvim" },
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        -- lazy = true,
         config = function()
           require("mason-tool-installer").setup(require "lsp.lspconfig")
         end,
@@ -263,4 +262,3 @@ local plugins = {
   -- },
 }
 return plugins
--- print(vim.inspect(M.user))
