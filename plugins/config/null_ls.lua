@@ -112,6 +112,8 @@ local sources = {
   -- CMAKE
   -- diagnostics.cmake_lint,
   formatting.cmake_format,
+  -- XML
+  formatting.xmllint,
 }
 
 local M = {}
