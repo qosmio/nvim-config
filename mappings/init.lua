@@ -182,6 +182,12 @@ M.mason = {
   },
 }
 
+M.nvchad = {
+  n = {
+    ["<leader>uu"] = { "<cmd>NvChadUpdate<cr>", "Update NvChad" },
+  },
+}
+
 local J = vim.tbl_deep_extend("force", require("core.mappings").lspconfig, M.lsp)
 J.plugin = nil
 M.lsp = J
