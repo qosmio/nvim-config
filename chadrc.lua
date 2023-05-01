@@ -12,9 +12,9 @@ M.ui = {
   -- hl_add = require "custom.highlights.monokai-phoenix",
   -- hl_override = require("custom.highlights.hlo").highlight,
   hl_add = require("custom.highlights.hlo").highlight,
-  theme = "onedark", -- default theme
+  theme = "onedark-deep", -- default theme
   changed_themes = {
-    ["onedark"] = require("custom.highlights.hlo").theme,
+    ["onedark-deep"] = require("custom.highlights.hlo").theme,
   },
   transparency = false,
 

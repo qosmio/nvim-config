@@ -1,9 +1,9 @@
 local plugins = {
-  { "williamboman/mason.nvim", opts = { log_level = vim.log.levels.WARN } },
-  { "nvim-tree/nvim-tree.lua", enabled = false },
-  { "hrsh7th/nvim-cmp", opts = require "custom.plugins.config.cmp" },
+  { "williamboman/mason.nvim",   opts = { log_level = vim.log.levels.WARN } },
+  { "nvim-tree/nvim-tree.lua",   enabled = false },
+  { "hrsh7th/nvim-cmp",          opts = require "custom.plugins.config.cmp" },
   { "NvChad/nvim-colorizer.lua", opts = require "custom.plugins.config.colorizer" },
-  { "lewis6991/gitsigns.nvim", opts = require "custom.plugins.config.gitsigns" },
+  { "lewis6991/gitsigns.nvim",   opts = require "custom.plugins.config.gitsigns" },
   {
     "nvim-treesitter/nvim-treesitter",
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
@@ -39,7 +39,7 @@ local plugins = {
       require("core.utils").load_mappings "comment"
     end,
   },
-  { "folke/which-key.nvim", enabled = true },
+  { "folke/which-key.nvim",              enabled = true },
   {
     "neovim/nvim-lspconfig",
     event = { "VimEnter" },
@@ -57,6 +57,7 @@ local plugins = {
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.installers.yamlfix"
+      require("custom.plugins.lsp.formatters.yamlfix").setup()
       require "custom.plugins.lsp.installers.nginx_beautifier"
       require "custom.plugins.lsp.servers"
       require("base46").load_all_highlights()
@@ -64,10 +65,21 @@ local plugins = {
     end,
   },
   { "williamboman/mason-lspconfig.nvim", dependencies = { "mason.nvim" } },
-  { "hrsh7th/cmp-nvim-lua", dependencies = { "nvim-lspconfig", "nvim-cmp" } },
-  { "folke/neodev.nvim", ft = { "lua" } },
-  { "rmagatti/alternate-toggler", event = { "VimEnter" } },
-  { "chr4/nginx.vim", ft = "nginx" },
+  { "hrsh7th/cmp-nvim-lua",              dependencies = { "nvim-lspconfig", "nvim-cmp" } },
+  { "folke/neodev.nvim",                 ft = { "lua" } },
+  {
+    "rmagatti/alternate-toggler",
+    event = { "VimEnter" },
+    config = function()
+      require("alternate-toggler").setup {
+        alternates = {
+          ["yes"] = "no",
+          ["no"] = "yes",
+        },
+      }
+    end,
+  },
+  { "chr4/nginx.vim",           ft = "nginx" },
   -- Native terminal copying using OCS52
   {
     "ojroques/nvim-osc52",
@@ -84,8 +96,8 @@ local plugins = {
       require("custom.plugins.config.null_ls").setup()
     end,
   },
-  { "lambdalisue/suda.vim", event = { "CmdlineEnter" } },
-  { "machakann/vim-sandwich", event = { "InsertEnter" } },
+  { "lambdalisue/suda.vim",     event = { "CmdlineEnter" } },
+  -- { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
@@ -141,7 +153,7 @@ local plugins = {
     config = { filetypes = { "zsh" } },
   },
   { "lvimuser/lsp-inlayhints.nvim" },
-  { "microsoft/python-type-stubs", ft = "python" },
+  { "microsoft/python-type-stubs",         ft = "python" },
   {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
@@ -220,7 +232,7 @@ local plugins = {
     config = function()
       require("neural").setup {
         mappings = {
-          swift = "<C-n>", -- Context completion
+          swift = "<C-n>",      -- Context completion
           prompt = "<C-space>", -- Open prompt
         },
         open_ai = {
@@ -243,7 +255,7 @@ local plugins = {
   },
   { "cfdrake/vim-pbxproj", event = { "VimEnter" } },
   { "nfnty/vim-nftables" },
-  { "jvirtanen/vim-hcl", ft = { "hcl" } },
+  { "jvirtanen/vim-hcl",   ft = { "hcl" } },
   -- {"jcdickinson/codeium.nvim",
   --   enabled = false,
   --   event = "InsertEnter",

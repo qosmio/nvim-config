@@ -1,7 +1,9 @@
 local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+
 if not null_ls_status_ok then
   return
 end
+
 local h = require "null-ls.helpers"
 local cmd_resolver = require "null-ls.helpers.command_resolver"
 local methods = require "null-ls.methods"
@@ -61,14 +63,12 @@ local formatter = {
       )(params.bufname)
     end),
   },
+  factory = h.formatter_factory,
 }
--- h.make_builtin(formatter)
+
 local M = {}
 M.setup = function()
-  -- local f = null_ls.validate_and_transform(formatter)
-  -- write(f, "/tmp/f.lua")
-  -- null_ls.register(f)
   null_ls.register(formatter)
-  -- write(null_ls.get_all(), "/tmp/null.lua")
+  h.make_builtin(formatter)
 end
 return M

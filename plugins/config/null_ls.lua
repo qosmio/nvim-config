@@ -104,6 +104,10 @@ local sources = {
     timeout = 15000,
     extra_args = { "-conf", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamlfmt.yml" },
   },
+  formatting.yamlfix.with {
+    timeout = 15000,
+    -- extra_args = { "--config-file", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamlfix.toml" },
+  },
   diagnostics.yamllint.with {
     extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamllint.yml" },
   },
@@ -113,7 +117,7 @@ local sources = {
   -- diagnostics.cmake_lint,
   formatting.cmake_format,
   -- XML
-  formatting.xmllint,
+  -- formatting.xmllint,
 }
 
 local M = {}
