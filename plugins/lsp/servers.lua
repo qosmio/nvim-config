@@ -24,7 +24,7 @@ end
 local servers = vim.tbl_deep_extend(
   "force",
   require("mason-lspconfig").get_installed_servers(),
-  { "pylance", "ccls", "clangd", "gopls", "ansiblels" }
+  { "pylance", "clangd", "gopls", "ansiblels" }
 )
 for _, server in ipairs(servers) do
   ok, res = pcall(require, "custom.plugins.lsp.servers." .. server)

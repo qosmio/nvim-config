@@ -1,14 +1,3 @@
-function _G.writee(fun, file)
-  local m = assert(io.open(file, "wb"))
-  if type(fun) == "function" then
-    assert(m:write(string.dump(fun)))
-  else
-    assert(m:write(vim.inspect(fun)))
-  end
-  assert(m:close())
-  vim.notify("wrote " .. type(fun) .. " to " .. file)
-end
-
 local M = {}
 -- don't yank text on cut ( x )
 -- map({ "n", "v" }, "x", '"_x')
@@ -130,23 +119,6 @@ M.neural = {
 --     },
 --   },
 -- }
-
-M.codeium = {
-  i = {
-    ["<C-j>"] = {
-      "codeium#Accept()",
-      "Codeium Accept",
-    },
-    ["<C-k>"] = {
-      "codeium#CycleCompletions(1)",
-      "Codeium Next",
-    },
-    ["<C-h>"] = {
-      "codeium#CycleCompletions(-1)",
-      "Codeium Previous",
-    },
-  },
-}
 
 M.toggle_alternate = {
   n = {
