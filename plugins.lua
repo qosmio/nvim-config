@@ -57,7 +57,6 @@ local plugins = {
       require "plugins.configs.lspconfig"
       require "custom.plugins.lsp.installers.pylance"
       require "custom.plugins.lsp.installers.yamlfix"
-      require("custom.plugins.lsp.formatters.yamlfix").setup()
       require "custom.plugins.lsp.installers.nginx_beautifier"
       require "custom.plugins.lsp.servers"
       require("base46").load_all_highlights()
@@ -93,7 +92,7 @@ local plugins = {
     after = { "nvim-cmp" },
     dependencies = { "mason.nvim", "nvim-lua/plenary.nvim" },
     config = function()
-      require("custom.plugins.config.null_ls").setup()
+      require "custom.plugins.config.null_ls"
     end,
   },
   { "lambdalisue/suda.vim",     event = { "CmdlineEnter" } },
