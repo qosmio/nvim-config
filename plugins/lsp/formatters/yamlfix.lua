@@ -1,23 +1,21 @@
-local null_ls_status_ok, null_ls = pcall(require, "null-ls")
-if not null_ls_status_ok then
+local status_ok, helpers = pcall(require, "null-ls.helpers")
+if not status_ok then
   return
 end
 
-local h = require "null-ls.helpers"
 local methods = require "null-ls.methods"
-local FORMATTING = methods.internal.FORMATTING
 
-local formatter = {
+return helpers.make_builtin {
   name = "yamlfix",
   meta = {
     url = "https://github.com/lyz-code/yamlfix",
     description = "A simple opinionated yaml formatter that keeps your comments!",
   },
-  method = FORMATTING,
+  method = methods.internal.FORMATTING,
   filetypes = {
     "yaml",
   },
-  generator = null_ls.formatter {
+  generator_opts = {
     command = "yamlfix",
     args = {
       "--config-file",
@@ -26,13 +24,5 @@ local formatter = {
     },
     to_stdin = true,
   },
-  factory = h.formatter_factory,
+  factory = helpers.formatter_factory,
 }
-
-local M = {}
-
-M.setup = function()
-  null_ls.register(formatter)
-  h.make_builtin(formatter)
-end
-return M

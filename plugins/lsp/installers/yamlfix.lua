@@ -23,7 +23,9 @@ local pkg = Pkg.new {
 
 pkg:get_installed_version(function(success, _)
   if not success then
-    notify(("[mason-lspconfig.nvim] Installing %s"):format(pkg.name))
+    vim.defer_fn(function()
+      notify(("[mason-lspconfig.nvim] Installing %s"):format(pkg.name))
+    end, 0)
     pkg:install()
   end
 end)

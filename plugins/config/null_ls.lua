@@ -1,11 +1,12 @@
-local null_ls_status_ok, null_ls = pcall(require, "null-ls")
-if not null_ls_status_ok then
+local status_ok, null_ls = pcall(require, "null-ls")
+if not status_ok then
   return
 end
 local command_resolver = require "null-ls.helpers.command_resolver"
 local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
+
 local sources = {
   -- SQL
   -- diagnostics.sqlfluff.with { extra_args = { "--dialect", "postgres" } },
@@ -104,10 +105,7 @@ local sources = {
     timeout = 15000,
     extra_args = { "-conf", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamlfmt.yml" },
   },
-  formatting.yamlfix.with {
-    timeout = 15000,
-    -- extra_args = { "--config-file", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamlfix.toml" },
-  },
+  require "custom.plugins.lsp.formatters.yamlfix",
   diagnostics.yamllint.with {
     extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.yamllint.yml" },
   },
@@ -120,19 +118,11 @@ local sources = {
   -- formatting.xmllint,
 }
 
-local M = {}
-
-M.setup = function()
-  null_ls.setup {
-    debug = false,
-    sources = sources,
-    -- debounce = 250,
-    default_timeout = 15000,
-    -- diagnostics_format = "[#{c}] #{m} (#{s})",
-    log_level = "warn",
-    -- log = { enable = true, level = "info", use_console = "async" },
-  }
-  -- require("custom.plugins.lsp.formatters.yamlfix").setup()
-end
-
-return M
+null_ls.setup {
+  debug = false,
+  sources = sources,
+  default_timeout = 15000,
+  log_level = "warn",
+  -- log = { enable = true, level = "info", use_console = "async" },
+}
+-- require("custom.plugins.lsp.formatters.yamlfix").setup()
