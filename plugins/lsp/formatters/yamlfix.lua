@@ -1,12 +1,11 @@
-local status_ok, null_ls = pcall(require, "null-ls")
+local status_ok, helpers = pcall(require, "null-ls.helpers")
 if not status_ok then
   return
 end
 
-local h = require "null-ls.helpers"
 local methods = require "null-ls.methods"
 
-return h.make_builtin {
+return helpers.make_builtin {
   name = "yamlfix",
   meta = {
     url = "https://github.com/lyz-code/yamlfix",
@@ -25,7 +24,5 @@ return h.make_builtin {
     },
     to_stdin = true,
   },
-  factory = h.formatter_factory,
+  factory = helpers.formatter_factory,
 }
-
--- return null_ls.register(h.make_builtin(formatter))
