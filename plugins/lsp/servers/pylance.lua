@@ -4,38 +4,35 @@ local utils = require "custom.plugins.lsp.utils"
 local server_name = "pylance"
 index[server_name] = "custom.plugins.lsp.installers.pylance"
 
-local function extract_variable()
-  local pos_params = vim.lsp.util.make_given_range_params()
-  local params = {
-    command = "pylance.extractVariable",
-    arguments = {
-      vim.api.nvim_buf_get_name(0),
-      pos_params.range,
-    },
-  }
-  vim.lsp.buf.execute_command(params)
-  -- vim.lsp.buf.rename()
-end
-
 local function extract_method()
-  local pos_params = vim.lsp.util.make_given_range_params()
+  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, {})
+  local arguments = { vim.uri_from_bufnr(0):gsub("file://", ""), range_params.range }
   local params = {
     command = "pylance.extractMethod",
-    arguments = {
-      vim.api.nvim_buf_get_name(0),
-      pos_params.range,
-    },
+    arguments = arguments,
   }
   vim.lsp.buf.execute_command(params)
-  -- vim.lsp.buf.rename()
 end
 
-local organize_imports = function()
-  local params = { command = "pyright.organizeimports", arguments = { vim.uri_from_bufnr(0) } }
+local function extract_variable()
+  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, {})
+  local arguments = { vim.uri_from_bufnr(0):gsub("file://", ""), range_params.range }
+  local params = {
+    command = "pylance.extractVarible",
+    arguments = arguments,
+  }
   vim.lsp.buf.execute_command(params)
 end
 
-local on_workspace_executecommand = function(_, result, ctx)
+local function organize_imports()
+  local params = {
+    command = "pyright.organizeimports",
+    arguments = { vim.uri_from_bufnr(0) },
+  }
+  vim.lsp.buf.execute_command(params)
+end
+
+local function on_workspace_executecommand(err, result, ctx)
   if ctx.params.command:match "WithRename" then
     ctx.params.command = ctx.params.command:gsub("WithRename", "")
     vim.lsp.buf.execute_command(ctx.params)
@@ -60,8 +57,8 @@ local on_workspace_executecommand = function(_, result, ctx)
           return
         end
         params.newName = input
-        local _handler = client.handlers["textDocument/rename"] or vim.lsp.handlers["textDocument/rename"]
-        client.request("textDocument/rename", params, _handler, bufnr)
+        local handler = client.handlers["textDocument/rename"] or vim.lsp.handlers["textDocument/rename"]
+        client.request("textDocument/rename", params, handler, bufnr)
       end)
     end
   end
@@ -228,11 +225,11 @@ M.settings = {
 M.commands = {
   PylanceExtractVariableWithRename = {
     extract_variable,
-    description = "Extract Variable",
+    description = "Extract Variable w/Rename",
   },
   PylanceExtractMethodWithRename = {
     extract_method,
-    description = "Extract Method",
+    description = "Extract Method w/Rename",
   },
   PylanceExtractMethod = {
     extract_method,
@@ -274,7 +271,6 @@ M.on_attach = function(client, bufnr)
     { range = true, desc = "Extract methdod" }
   )
   utils.autocmds.InlayHintsAU()
-  -- require("lsp.settings").on_attach(client, bufnr)
 end
 
 return M

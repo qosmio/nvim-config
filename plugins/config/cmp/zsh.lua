@@ -1,27 +1,26 @@
-local ok_cmp, cmp, comp
+local ok_cmp, cmp
 ok_cmp, cmp = pcall(require, "cmp")
 if ok_cmp then
-  ok_cmp, comp = pcall(require, "cmp-under-comparator")
-  if ok_cmp then
-    local config = {
-      sources = cmp.config.sources {
-        { name = "zsh" },
-        { name = "path" },
-        { name = "buffer" },
+  return {
+    sources = cmp.config.sources({
+      { name = "luasnip",  priority = 1000 },
+      { name = "zsh",      priority = 900 },
+      { name = "nvim_lsp", priority = 850 },
+      { name = "path",     priority = 800 },
+      { name = "buffer",   priority = 700 },
+    }, {
+      { name = "rg", priority = 600 },
+    }),
+    sorting = {
+      comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+        cmp.config.compare.kind,
       },
-      sorting = {
-        comparators = {
-          cmp.config.compare.offset,
-          cmp.config.compare.exact,
-          cmp.config.compare.score,
-          comp.under,
-          cmp.config.compare.sort_text,
-          cmp.config.compare.length,
-          cmp.config.compare.order,
-          cmp.config.compare.kind,
-        },
-      },
-    }
-    cmp.setup.filetype("zsh", vim.tbl_deep_extend("force", require "config.cmp", config))
-  end
+    },
+  }
 end

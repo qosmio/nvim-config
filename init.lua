@@ -33,15 +33,6 @@ function _G.check_vim_option(option, value)
   -- end
 end
 
--- bootstrap lazy.nvim!
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
-
-if not vim.loop.fs_stat(vim.g.base46_cache .. "defaults") then
-  require("core.bootstrap").lazy(lazypath)
-  require "plugins"
-  dofile(vim.g.base46_cache .. "defaults")
-end
-
 vim.g.python3_host_prog = u.get_python3_host_prog() or vim.g.python3_host_prog
 
 -- print(vim.inspect(base46.table_to_str(require "custom.highlights")))
