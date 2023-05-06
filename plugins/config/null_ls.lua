@@ -100,6 +100,9 @@ local sources = {
   formatting.jq,
   -- TOML
   formatting.taplo,
+  -- Ansible
+  diagnostics.ansiblelint,
+
   -- YAML
   formatting.yamlfmt.with {
     timeout = 15000,

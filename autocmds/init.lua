@@ -1,19 +1,96 @@
-local aucmd = vim.api.nvim_create_autocmd
-
 local M = {}
+
+local cmd = vim.api.nvim_create_user_command
+local aucmd = vim.api.nvim_create_autocmd
+local augroup = function(group)
+  vim.api.nvim_create_augroup(group, { clear = true })
+end
+
+local group_name
 
 -- set filetypes function
 function M.ft_aucmd(pattern, ft)
-  aucmd({ "BufRead", "BufNewFile", "BufWinEnter" }, { pattern = pattern, command = [[set ft=]] .. ft, once = false })
+  aucmd({ "BufRead", "BufNewFile", "BufWinEnter" }, {
+    pattern = pattern,
+    command = [[set ft=]] .. ft,
+    once = false,
+  })
 end
 
 -- set syntax function
 function M.syn_aucmd(pattern, syn)
-  aucmd(
-    { "BufRead", "BufNewFile", "BufWinEnter" },
-    { pattern = pattern, command = [[set syntax=]] .. syn, once = false }
-  )
+  aucmd({ "BufRead", "BufNewFile", "BufWinEnter" }, {
+    pattern = pattern,
+    command = [[set syntax=]] .. syn,
+    once = false,
+  })
 end
+
+local function init_term()
+  vim.wo.number = false
+  vim.wo.relativenumber = false
+  vim.wo.signcolumn = "no"
+end
+
+local function process_yank()
+  vim.highlight.on_yank { timeout = 200, on_visual = false }
+  local ok, osc52, yank_data
+  ok, osc52 = pcall(require, "osc52")
+  if not ok then
+    return
+  end
+  if vim.v.event.operator ~= "y" then
+    return
+  else
+    ok, yank_data = pcall(vim.fn.getreg, "")
+    if ok then
+      if vim.fn.has "clipboard" == 1 then
+        pcall(vim.fn.setreg, "+", yank_data)
+      end
+      if vim.env.SSH_CONNECTION then
+        osc52.copy(yank_data)
+      end
+    end
+  end
+  if vim.tbl_contains({ "", "+", "*" }, vim.v.event.regname) then
+    osc52.copy_register ""
+  end
+  if vim.v.event.regname == "c" then
+    osc52.copy_register "c"
+  end
+end
+
+group_name = augroup "init"
+aucmd("FileType", {
+  group = group_name,
+  command = "set formatoptions-=o",
+})
+aucmd("TermOpen", {
+  group = group_name,
+  callback = init_term,
+})
+
+aucmd("TextYankPost", {
+  desc = "[osc52] Copy to clipboard/OSC52",
+  group = group_name,
+  callback = process_yank,
+})
+
+aucmd({ "BufEnter" }, {
+  group = group_name,
+  pattern = { "*" },
+  command = [[lcd `=expand('%:p:h')`]],
+})
+
+aucmd("FileType", {
+  group = group_name,
+  callback = function()
+    if vim.bo.commentstring == nil or vim.bo.commentstring == "" then
+      vim.bo.commentstring = "# %s"
+      return
+    end
+  end,
+})
 
 -- Plist
 M.ft_aucmd({
@@ -79,9 +156,10 @@ M.ft_aucmd({
 }, "yaml.ansible")
 
 --{{ FileType Indentation
-vim.api.nvim_create_augroup("extension file", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  group = "extension file",
+group_name = augroup "filetype_indentation"
+
+aucmd("FileType", {
+  group = group_name,
   pattern = { "cpp", "c" },
   callback = function()
     vim.opt.autoindent = true
@@ -93,8 +171,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.formatoptions = "croql"
   end,
 })
-vim.api.nvim_create_autocmd("FileType", {
-  group = "extension file",
+aucmd("FileType", {
+  group = group_name,
   pattern = { "python" },
   callback = function()
     vim.opt.autoindent = true
@@ -103,8 +181,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.expandtab = true
   end,
 })
-vim.api.nvim_create_autocmd("FileType", {
-  group = "extension file",
+aucmd("FileType", {
+  group = group_name,
   pattern = { "yaml", "json" },
   callback = function()
     vim.opt.tabstop = 2
@@ -113,9 +191,9 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.expandtab = true
   end,
 })
-vim.api.nvim_create_autocmd("FileType", {
+aucmd("FileType", {
   desc = "smart indent for yaml",
-  group = "extension file",
+  group = group_name,
   pattern = { "lua", "sh", "zsh", "bash" },
   callback = function()
     vim.opt.tabstop = 4
@@ -124,19 +202,19 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.expandtab = true
   end,
 })
-vim.api.nvim_create_autocmd("BufWritePre", {
+aucmd("BufWritePre", {
   desc = "kill trailing whitespace",
-  group = "extension file",
+  group = group_name,
   pattern = "*",
   callback = function()
     vim.cmd [[%s/\s\+$//e]]
   end,
 })
 
-vim.api.nvim_create_augroup("highlight", { clear = true })
-vim.api.nvim_create_autocmd("Syntax", {
+group_name = augroup "highlight"
+aucmd("Syntax", {
   desc = "whitespace trailing display",
-  group = "highlight",
+  group = group_name,
   pattern = "*",
   callback = function()
     vim.cmd [[highlight ExtraWhitespace ctermbg=red guibg=red]]
@@ -145,68 +223,7 @@ vim.api.nvim_create_autocmd("Syntax", {
   end,
 })
 --}}
-local function init_term()
-  vim.wo.number = false
-  vim.wo.relativenumber = false
-  vim.wo.signcolumn = "no"
-end
 
-local function process_yank()
-  vim.highlight.on_yank { timeout = 200, on_visual = false }
-  local ok, osc52, yank_data
-  ok, osc52 = pcall(require, "osc52")
-  if not ok then
-    return
-  end
-  if vim.v.event.operator ~= "y" then
-    return
-  else
-    ok, yank_data = pcall(vim.fn.getreg, "")
-    if ok then
-      if vim.fn.has "clipboard" == 1 then
-        pcall(vim.fn.setreg, "+", yank_data)
-      end
-      if vim.env.SSH_CONNECTION then
-        osc52.copy(yank_data)
-      end
-    end
-  end
-  if vim.tbl_contains({ "", "+", "*" }, vim.v.event.regname) then
-    osc52.copy_register ""
-  end
-  if vim.v.event.regname == "c" then
-    osc52.copy_register "c"
-  end
-end
-
-local group_name = "init"
-vim.api.nvim_create_augroup(group_name, { clear = true })
-aucmd("FileType", { group = group_name, command = "set formatoptions-=o" })
-aucmd("TermOpen", { group = group_name, callback = init_term })
-
-aucmd("TextYankPost", {
-  desc = "[osc52] Copy to clipboard/OSC52",
-  group = group_name,
-  callback = process_yank,
-})
-
-aucmd({ "BufEnter" }, {
-  group = group_name,
-  pattern = { "*" },
-  callback = function()
-    pcall(vim.cmd, [[lcd `=expand('%:p:h')`]])
-  end,
-})
-
-aucmd("FileType", {
-  group = group_name,
-  callback = function()
-    if vim.bo.commentstring == nil or vim.bo.commentstring == "" then
-      vim.bo.commentstring = "# %s"
-      return
-    end
-  end,
-})
 -- Coding {{{
 -- Auto-format *.files prior to saving them{{{
 aucmd("BufWritePre", {
@@ -216,14 +233,14 @@ aucmd("BufWritePre", {
 -- }}}
 
 -- Highlight whitespaces {{{
-local extra_whitespace = vim.api.nvim_create_augroup("ExtraWhitespace", { clear = true })
+group_name = augroup "extra_whitespace"
 aucmd(
   { "BufNewFile", "BufRead", "InsertLeave" },
-  { command = "silent! match ExtraWhitespace /\\s\\+$/", group = extra_whitespace }
+  { command = "silent! match ExtraWhitespace /\\s\\+$/", group = group_name }
 )
 aucmd({ "InsertEnter" }, {
   command = "silent! match ExtraWhitespace /\\s\\+\\%#\\@<!$/",
-  group = extra_whitespace,
+  group = group_name,
 })
 -- }}}
 
@@ -231,13 +248,10 @@ aucmd({ "InsertEnter" }, {
 
 -- Misc {{{
 
--- Unset paste on InsertLeave.{{{
--- aucmd("InsertLeave", { command = "silent! set nopaste" })
--- -- }}}
-
 -- remember and go to last position when opening a buffer {{{
+group_name = augroup "remember_position"
 aucmd({ "BufReadPost" }, {
-  group = vim.api.nvim_create_augroup("LastPosition", { clear = true }),
+  group = group_name,
   callback = function()
     local test_line_data = vim.api.nvim_buf_get_mark(0, '"')
     local test_line = test_line_data[1]
@@ -276,43 +290,65 @@ aucmd("BufEnter", {
 })
 
 -- edit hex for bins - edit binary using xxd-format {{{
-local binary = vim.api.nvim_create_augroup("Binary", { clear = true })
-aucmd("BufReadPre", { pattern = { "*.bin", "*.dat" }, command = "let &bin=1", group = binary })
-aucmd("BufReadPost", { pattern = { "*.bin", "*.dat" }, command = "if &bin | %!xxd", group = binary })
-aucmd("BufReadPost", { pattern = { "*.bin", "*.dat" }, command = "set ft=xxd | endif", group = binary })
-aucmd("BufWritePre", { pattern = { "*.bin", "*.dat" }, command = "if &bin | %!xxd -r", group = binary })
-aucmd("BufWritePre", { pattern = { "*.bin", "*.dat" }, command = "endif", group = binary })
-aucmd("BufWritePost", { pattern = { "*.bin", "*.dat" }, command = "if &bin | %!xxd", group = binary })
-aucmd("BufWritePost", { pattern = { "*.bin", "*.dat" }, command = "set nomod | endif", group = binary })
+group_name = augroup "binary_files"
+
+aucmd("BufReadPre", {
+  pattern = { "*.bin", "*.dat" },
+  command = "let &bin=1",
+  group = group_name,
+})
+aucmd("BufReadPost", {
+  pattern = { "*.bin", "*.dat" },
+  command = "if &bin | %!xxd",
+  group = group_name,
+})
+aucmd("BufReadPost", {
+  pattern = { "*.bin", "*.dat" },
+  command = "set ft=xxd | endif",
+  group = group_name,
+})
+aucmd("BufWritePre", {
+  pattern = { "*.bin", "*.dat" },
+  command = "if &bin | %!xxd -r",
+  group = group_name,
+})
+aucmd("BufWritePre", {
+  pattern = { "*.bin", "*.dat" },
+  command = "endif",
+  group = group_name,
+})
+aucmd("BufWritePost", {
+  pattern = { "*.bin", "*.dat" },
+  command = "if &bin | %!xxd",
+  group = group_name,
+})
+aucmd("BufWritePost", {
+  pattern = { "*.bin", "*.dat" },
+  command = "set nomod | endif",
+  group = group_name,
+})
 -- }}}
 
 -- Code Folding {{{
 -- function to create a list of commands and convert them to autocommands
--------- This function is taken from https://github.com/norcalli/nvim_utils
-function M.nvim_create_augroups(definitions)
-  for _group_name, definition in pairs(definitions) do
-    vim.api.nvim_command("augroup " .. _group_name)
-    vim.api.nvim_command "autocmd!"
-    for _, def in ipairs(definition) do
-      local command = table.concat(vim.tbl_flatten { "autocmd", def }, " ")
-      vim.api.nvim_command(command)
-    end
-    vim.api.nvim_command "augroup END"
-  end
-end
+group_name = augroup "remember_folds"
 
-local autoCommands = {
-  -- other autocommands
-  remember_folds = {
-    { "BufWinLeave", "?*", "mkview 1" },
-    { "BufWinEnter", "?*", "silent! loadview 1" },
-  },
-}
-M.nvim_create_augroups(autoCommands)
+aucmd("BufWinLeave", {
+  pattern = { "*" },
+  command = ":silent! mkview",
+  group = group_name,
+})
+
+aucmd("BufWinEnter", {
+  pattern = { "*" },
+  command = ":silent! loadview",
+  group = group_name,
+})
+
 -- InLayHints
-vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = "LspAttach_inlayhints",
+group_name = augroup "LspAttach_inlayhints"
+aucmd("LspAttach", {
+  group = group_name,
   callback = function(args)
     if not (args.data and args.data.client_id) then
       return
@@ -326,7 +362,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-local cmd = vim.api.nvim_create_user_command
+-- Custom Commands
 cmd("MasonUpdateAll", function()
   require("custom.utils").mason.update_all()
 end, { desc = "Update Mason Packages" })

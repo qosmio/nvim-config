@@ -36,11 +36,10 @@ local pylance_installer = function(ctx)
   local source = github.tag { repo = repo }
   source.with_receipt()
   local version = source.tag
-  local url = (
-      "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"
-      ):format(
-        version
-      )
+  local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage")
+  :format(
+    version
+  )
   download_file(url, "archive.gz")
   std.gunzip("archive.gz", ".")
   std.unzip("archive", ".")
@@ -96,7 +95,8 @@ if not configs[server_name] then
       end,
       docs = {
         package_json = path.concat { "extension", "package.json" },
-        description = [[https://github.com/microsoft/pylance-release `pylance`, a Fast, feature-rich static type checker language support for Python ]],
+        description =
+        [[https://github.com/microsoft/pylance-release `pylance`, a Fast, feature-rich static type checker language support for Python ]],
       },
       cmd = { "pylance", "--stdio" },
       single_file_support = true,

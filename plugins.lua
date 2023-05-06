@@ -39,14 +39,14 @@ local plugins = {
       require("core.utils").load_mappings "comment"
     end,
   },
-  { "folke/which-key.nvim",              enabled = true },
+  { "folke/which-key.nvim", enabled = true },
   {
-    "neovim/nvim-lspconfig",
+    "williamboman/mason-lspconfig.nvim",
     event = { "VimEnter" },
     dependencies = {
       {
         { "williamboman/mason.nvim" },
-        { "williamboman/mason-lspconfig.nvim" },
+        { "neovim/nvim-lspconfig" },
         "WhoIsSethDaniel/mason-tool-installer.nvim",
         config = function()
           require("mason-tool-installer").setup(require "lsp.lspconfig")
@@ -63,9 +63,7 @@ local plugins = {
       vim.lsp.set_log_level "warn"
     end,
   },
-  { "williamboman/mason-lspconfig.nvim", dependencies = { "mason.nvim" } },
-  { "hrsh7th/cmp-nvim-lua",              dependencies = { "nvim-lspconfig", "nvim-cmp" } },
-  { "folke/neodev.nvim",                 ft = { "lua" } },
+  { "folke/neodev.nvim",    ft = { "lua" } },
   {
     "rmagatti/alternate-toggler",
     event = { "VimEnter" },
@@ -142,17 +140,27 @@ local plugins = {
       require "custom.plugins.config.pretty_fold"
     end,
   },
-  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = "null-ls.nvim" }, --  function signature help
+  { "lukas-reineke/cmp-rg" },
+  { "hrsh7th/cmp-cmdline" },
+  { "hrsh7th/cmp-calc" },
+  { "hrsh7th/cmp-nvim-lua",                dependencies = { "nvim-lspconfig", "nvim-cmp" } },
+  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "null-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
-    ft = { "zsh" },
-    init = function()
-      require("core.utils").lazy_load "cmp-zsh"
+    dependencies = {
+      "Shougo/deol.nvim",
+    },
+    ft = { "zsh", "lua" },
+    config = function()
+      require("cmp").setup.filetype("zsh", require "config.cmp.zsh")
+      require("cmp_zsh").setup {
+        zshrc = false,                     -- Source the zshrc (adding all custom completions). default: false
+        filetypes = { "deoledit", "zsh" }, -- Filetypes to enable cmp_zsh source. default: {"*"}
+      }
     end,
-    config = { filetypes = { "zsh" } },
   },
   { "lvimuser/lsp-inlayhints.nvim" },
-  { "microsoft/python-type-stubs",         ft = "python" },
+  { "microsoft/python-type-stubs", ft = "python" },
   {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },

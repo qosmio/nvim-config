@@ -11,6 +11,9 @@ local function border(hl_name)
   }
 end
 
+local cmp = require "cmp"
+local compare = require "cmp.config.compare"
+
 return {
   -- enabled = vim.bo.filetype ~= "python" and true or false,
   window = {
@@ -27,37 +30,47 @@ return {
   experimental = {
     ghost_text = true,
   },
-  sources = {
-    { name = "codeium" },
-    { name = "luasnip" },
-    { name = "nvim_lua" },
-    { name = "buffer" },
-    { name = "path" },
-    { name = "zsh" },
-    { name = "nvim_lsp" },
+  matching = {
+    disallow_fuzzy_matching = false,
+    disallow_partial_fuzzy_matching = false,
+    disallow_partial_matching = false,
+    disallow_prefix_unmatching = true,
   },
-  -- sources = {
-  --   {
-  --     name = "nvim_lsp",
-  --     priority = 100,
-  --     group_index = 1,
-  --     -- entry_filter = entry_filter_function,
-  --     -- keyword_length = 2,
-  --     -- max_item_count = 5,
-  --   },
-  --   { name = "nvim_lua", priority = 5, group_index = 1, max_item_count = 5 },
-  --   {
-  --     name = "buffer",
-  --     priority = 550,
-  --     group_index = 1,
-  --     -- entry_filter = entry_filter_function,
-  --     -- keyword_length = 2,
-  --     max_item_count = 5,
-  --   },
-  --   -- { name = "spell", priority = 5, group_index = 1, keyword_length = 3, keyword_pattern = [[\w\+]] },
-  --   -- { name = "calc", priority = 3, group_index = 1, keyword_pattern = [[\d\+\W\{-\}\d]] },
-  --   { name = "path", priority = 10, group_index = 1 },
-  --   { name = "zsh" },
-  --   { name = "luasnip", priority = 30, group_index = 1, max_item_count = 5 },
-  -- },
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+    end,
+  },
+  sources = cmp.config.sources({ name = "codeium" }, {
+    {
+      name = "luasnip",
+      keyword_length = 2,
+      -- trigger_characters = { "s", "n" },
+      -- Keyword_pattern = "sn",
+      priority = 1000,
+    },
+    { name = "nvim_lua", priority = 900 },
+    { name = "nvim_lsp", keyword_length = 0, priority = 800 },
+    { name = "path",     priority = 700 },
+  }, {
+    { name = "buffer", priority = 800 },
+    { name = "rg",     priority = 700 },
+  }, {
+    { name = "spell", priority = 600 },
+    { name = "rime",  priority = 600 },
+  }),
+  sorting = {
+    priority_weight = 1,
+    -- rime-ls
+    comparators = {
+      compare.sort_test,
+      compare.offset,
+      compare.exact,
+      compare.score,
+      compare.recently_used,
+      compare.kind,
+      compare.length,
+      compare.order,
+    },
+  },
 }
