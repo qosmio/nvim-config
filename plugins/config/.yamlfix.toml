@@ -1,7 +1,7 @@
 allow_duplicate_keys = false
 comments_min_spaces_from_content = 2
 comments_require_starting_space = true
-comments_whitelines = 1
+comments_whitelines = 2
 section_whitelines = 1
 # config_path = None
 explicit_start = true
@@ -12,7 +12,7 @@ line_length = 80
 quote_basic_values = false
 quote_keys_and_basic_values = false
 preserve_quotes = false
-none_representation = "null"
+none_representation = ""
 quote_representation = '"'
 # flow_style
 # 	list: [item, item, item]

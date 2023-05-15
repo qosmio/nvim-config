@@ -235,7 +235,7 @@ local syntax = { -- LSP References
 
   gitconfigSection = { fg = c.green, bold = true, ctermfg = 181 },
 
-  Keyword = { bold = true },
+  Keyword = { fg = "#dd1df4", bold = true },
   Define = { bold = true },
   -- Search = { bg = c.yellow, reverse = true },
   -- CurSearch = { bg = c.nord_blue, fg = c.white },
@@ -347,7 +347,6 @@ local statusline = {
     ctermfg = 252,
   },
 }
---echo $HOME/.config/nvim/lua/?.lua;/usr/share/nvim/runtime/lua/?.lua; .. package.path
 local highlight = require("custom.highlights.utils").gui_syntax_to_cterm(syntax)
 -- print(vim.inspect(highlight))
 -- require("custom.highlights.utils").nvim_set_hl(highlight)

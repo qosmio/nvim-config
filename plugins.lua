@@ -1,29 +1,28 @@
+local cfg = function(mod)
+  return "custom.plugins.config." .. mod
+end
+
+local lang = function(mod)
+  return "custom.plugins.lsp.installers." .. mod
+end
+
 local plugins = {
-  { "williamboman/mason.nvim",   opts = { log_level = vim.log.levels.WARN } },
-  { "nvim-tree/nvim-tree.lua",   enabled = false },
-  { "hrsh7th/nvim-cmp",          opts = require "custom.plugins.config.cmp" },
-  { "NvChad/nvim-colorizer.lua", opts = require "custom.plugins.config.colorizer" },
-  { "lewis6991/gitsigns.nvim",   opts = require "custom.plugins.config.gitsigns" },
+  { "williamboman/mason.nvim", opts = require(cfg "mason") },
+  { "hrsh7th/nvim-cmp", opts = require(cfg "cmp") },
+  { "NvChad/nvim-colorizer.lua", opts = require(cfg "colorizer") },
+  { "lewis6991/gitsigns.nvim", opts = require(cfg "gitsigns") },
   {
     "nvim-treesitter/nvim-treesitter",
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    module = "nvim-treesitter",
     init = function()
       require("core.utils").lazy_load "nvim-treesitter"
     end,
-    cmd = {
-      "TSInstall",
-      "TSBufEnable",
-      "TSBufDisable",
-      "TSEnable",
-      "TSDisable",
-      "TSModuleInfo",
-    },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     build = ":TSUpdate",
-    opts = require "custom.plugins.config.treesitter",
-    config = function()
-      require "custom.plugins.config.treesitter_parsers"
-      require "plugins.configs.treesitter"
+    opts = require(cfg "treesitter"),
+    config = function(_, opts)
+      dofile(vim.g.base46_cache .. "syntax")
+      require(cfg "treesitter_parsers")
+      require("nvim-treesitter.configs").setup(opts)
     end,
   },
   {
@@ -41,29 +40,34 @@ local plugins = {
   },
   { "folke/which-key.nvim", enabled = true },
   {
-    "williamboman/mason-lspconfig.nvim",
-    event = { "VimEnter" },
+    "neovim/nvim-lspconfig",
     dependencies = {
-      {
-        { "williamboman/mason.nvim" },
-        { "neovim/nvim-lspconfig" },
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        config = function()
-          require("mason-tool-installer").setup(require "lsp.lspconfig")
-        end,
-      },
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
       require "plugins.configs.lspconfig"
-      require "custom.plugins.lsp.installers.pylance"
-      require "custom.plugins.lsp.installers.yamlfix"
-      require "custom.plugins.lsp.installers.nginx_beautifier"
+      -- require "custom.plugins.lsp.servers"
+    end,
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      -- require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
+      local sources = require "mason-registry.sources"
+      require(lang "pylance")
+      require(lang "yamlfix")
+      require(lang "nginx_beautifier")
+      sources.set_registries { "lua:mason-registry.index" }
+      require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       require "custom.plugins.lsp.servers"
-      require("base46").load_all_highlights()
       vim.lsp.set_log_level "warn"
     end,
   },
-  { "folke/neodev.nvim",    ft = { "lua" } },
+  { "folke/neodev.nvim", ft = { "lua" } },
   {
     "rmagatti/alternate-toggler",
     event = { "VimEnter" },
@@ -76,7 +80,7 @@ local plugins = {
       }
     end,
   },
-  { "chr4/nginx.vim",           ft = "nginx" },
+  { "chr4/nginx.vim", ft = "nginx" },
   -- Native terminal copying using OCS52
   {
     "ojroques/nvim-osc52",
@@ -88,12 +92,12 @@ local plugins = {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = false,
     after = { "nvim-cmp" },
-    dependencies = { "mason.nvim", "nvim-lua/plenary.nvim" },
+    dependencies = { "mason.nvim", "WhoIsSethDaniel/mason-tool-installer.nvim", "nvim-lua/plenary.nvim" },
     config = function()
-      require "custom.plugins.config.null_ls"
+      require(cfg "null_ls")
     end,
   },
-  { "lambdalisue/suda.vim",     event = { "CmdlineEnter" } },
+  { "lambdalisue/suda.vim", event = { "CmdlineEnter" } },
   -- { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
@@ -137,13 +141,13 @@ local plugins = {
   {
     "anuvyklack/pretty-fold.nvim",
     config = function()
-      require "custom.plugins.config.pretty_fold"
+      require(cfg "pretty_fold")
     end,
   },
   { "lukas-reineke/cmp-rg" },
   { "hrsh7th/cmp-cmdline" },
   { "hrsh7th/cmp-calc" },
-  { "hrsh7th/cmp-nvim-lua",                dependencies = { "nvim-lspconfig", "nvim-cmp" } },
+  { "hrsh7th/cmp-nvim-lua", dependencies = { "nvim-lspconfig", "nvim-cmp" } },
   { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "null-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
@@ -152,9 +156,9 @@ local plugins = {
     },
     ft = { "zsh", "lua" },
     config = function()
-      require("cmp").setup.filetype("zsh", require "config.cmp.zsh")
+      require("cmp").setup.filetype("zsh", require(cfg "cmp.zsh"))
       require("cmp_zsh").setup {
-        zshrc = false,                     -- Source the zshrc (adding all custom completions). default: false
+        zshrc = false, -- Source the zshrc (adding all custom completions). default: false
         filetypes = { "deoledit", "zsh" }, -- Filetypes to enable cmp_zsh source. default: {"*"}
       }
     end,
@@ -177,6 +181,7 @@ local plugins = {
             "eslint",
             "nginx_beautifier",
             "prettier_d_slim",
+            "ansiblelint",
             "jq",
             "clang_format",
             "gofumpt",
@@ -222,11 +227,11 @@ local plugins = {
           scroll_down = "<S-Down>",
         },
         chat_window = {
-          border = { style = require "lsp.settings.popup_border" "FloatBorder" },
+          border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
         },
         chat_input = {
           prompt = " > ",
-          border = { style = require "lsp.settings.popup_border" "FloatBorder" },
+          border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
         },
       }
     end,
@@ -239,7 +244,7 @@ local plugins = {
     config = function()
       require("neural").setup {
         mappings = {
-          swift = "<C-n>",      -- Context completion
+          swift = "<C-n>", -- Context completion
           prompt = "<C-space>", -- Open prompt
         },
         open_ai = {
@@ -257,12 +262,12 @@ local plugins = {
     "tzachar/cmp-tabnine",
     dependencies = "cmp-path",
     config = function()
-      require("custom.plugins.config.cmp.tabnine").setup()
+      require(cfg "cmp.tabnine").setup()
     end,
   },
   { "cfdrake/vim-pbxproj", event = { "VimEnter" } },
   { "nfnty/vim-nftables" },
-  { "jvirtanen/vim-hcl",   ft = { "hcl" } },
+  { "jvirtanen/vim-hcl", ft = { "hcl" } },
   -- {"jcdickinson/codeium.nvim",
   --   enabled = false,
   --   event = "InsertEnter",

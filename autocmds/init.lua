@@ -152,7 +152,6 @@ M.ft_aucmd({
   "playbook*",
   "role*/*.yml",
   "roles.yml",
-  "*.yml",
 }, "yaml.ansible")
 
 --{{ FileType Indentation

@@ -1,11 +1,11 @@
-local index = require "mason-registry.index"
+-- local index = require "mason-registry.index"
 local utils = require "custom.plugins.lsp.utils"
 
 local server_name = "pylance"
-index[server_name] = "custom.plugins.lsp.installers.pylance"
+-- index[server_name] = "custom.plugins.lsp.installers.pylance"
 
 local function extract_method()
-  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, {})
+  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, "utf-16")
   local arguments = { vim.uri_from_bufnr(0):gsub("file://", ""), range_params.range }
   local params = {
     command = "pylance.extractMethod",
@@ -15,7 +15,7 @@ local function extract_method()
 end
 
 local function extract_variable()
-  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, {})
+  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, "utf-16")
   local arguments = { vim.uri_from_bufnr(0):gsub("file://", ""), range_params.range }
   local params = {
     command = "pylance.extractVarible",
@@ -32,7 +32,7 @@ local function organize_imports()
   vim.lsp.buf.execute_command(params)
 end
 
-local function on_workspace_executecommand(err, result, ctx)
+local function on_workspace_executecommand(_, result, ctx)
   if ctx.params.command:match "WithRename" then
     ctx.params.command = ctx.params.command:gsub("WithRename", "")
     vim.lsp.buf.execute_command(ctx.params)
@@ -102,51 +102,6 @@ M.handlers = {
 
     vim.lsp.handlers["textDocument/publishDiagnostics"](err, result, ctx, config)
   end,
-  -- ["textDocument/semanticTokensProvider"] = false,
-  -- ["textDocument/semanticTokensProvider"] = {
-  --   legend = {
-  --     tokenTypes = {
-  --       "comment",
-  --       "keyword",
-  --       "string",
-  --       "number",
-  --       "regexp",
-  --       "type",
-  --       "class",
-  --       "interface",
-  --       "enum",
-  --       "enumMember",
-  --       "typeParameter",
-  --       "function",
-  --       "method",
-  --       "property",
-  --       "variable",
-  --       "parameter",
-  --       "module",
-  --       "intrinsic",
-  --       "selfParameter",
-  --       "clsParameter",
-  --       "magicFunction",
-  --       "builtinConstant",
-  --     },
-  --     tokenModifiers = {
-  --       "declaration",
-  --       "static",
-  --       "abstract",
-  --       "async",
-  --       "documentation",
-  --       "typeHint",
-  --       "typeHintComment",
-  --       "readonly",
-  --       "decorator",
-  --       "builtin",
-  --     },
-  --   },
-  --   range = true,
-  --   full = {
-  --     delta = true,
-  --   },
-  -- },
   ["workspace/diagnostic/refresh"] = function(_, _, ctx)
     local ns = vim.lsp.diagnostic.get_namespace(ctx.client_id)
     pcall(vim.diagnostic.reset, ns)
@@ -182,12 +137,14 @@ M.settings = {
       functionReturnInlayTypeHints = true,
       importFormat = "relative",
       completeFunctionParens = true,
-      indexing = true,
+      indexing = false,
       typeCheckingMode = "basic",
       diagnosticMode = "openFilesOnly",
       inlayHints = {
         variableTypes = true,
         functionReturnTypes = true,
+        callArgumentNames = true,
+        pytestParameters = true,
       },
       autoSearchPaths = true,
       -- Honestly just shut this thing up , its actually very annoying
@@ -218,7 +175,6 @@ M.settings = {
         reportOptionalCall = "none",
       },
     },
-    -- experiments = { optInto = { "Experiment1", "Experiment13", "Experiment56", "Experiment106" } },
   },
 }
 
@@ -253,7 +209,7 @@ M.on_attach = function(client, bufnr)
     client.server_capabilities.semanticTokensProvider = false
   end
 
-  require("lsp.settings").on_attach(client, bufnr)
+  require("custom.plugins.lsp.settings").on_attach(client, bufnr)
 
   vim.api.nvim_buf_create_user_command(bufnr, "PylanceOrganizeImports", organize_imports, { desc = "Organize Imports" })
 
@@ -268,7 +224,7 @@ M.on_attach = function(client, bufnr)
     bufnr,
     "PylanceExtractMethod",
     extract_method,
-    { range = true, desc = "Extract methdod" }
+    { range = true, desc = "Extract method" }
   )
   utils.autocmds.InlayHintsAU()
 end

@@ -53,6 +53,7 @@ local sources = {
 
   -- Python
   -- pip install reorder-python-imports black yapf
+  -- require "custom.plugins.lsp.diagnostics.pylance",
   formatting.reorder_python_imports.with { extra_args = { "--py310-plus" } },
   formatting.black.with { timeout = 20000 },
   -- diagnostics.pylama,
@@ -101,7 +102,7 @@ local sources = {
   -- TOML
   formatting.taplo,
   -- Ansible
-  diagnostics.ansiblelint,
+  -- diagnostics.ansiblelint.with { filetypes = { "ansible" } },
 
   -- YAML
   formatting.yamlfmt.with {

@@ -37,6 +37,7 @@ return {
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = true,
+    use_languagetree = true,
   },
   textobjects = { select = { enable = true } },
   rainbow = { enable = true, extended_mode = true, max_file_lines = 1000 },
@@ -50,7 +51,6 @@ return {
   indent = { enable = true },
   context = { enable = true, throttle = true },
   matchup = {
-    --   -- disable     = {},
     enable = true,
     disable_virtual_text = true,
     include_match_words = true,

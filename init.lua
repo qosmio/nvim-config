@@ -1,14 +1,4 @@
 local u = require "custom.utils"
-local plugins = u.join_paths(vim.fn.stdpath "config", "lua", "custom", "plugins")
-package.path = u.join_paths(plugins, "?.lua") .. ";" .. package.path
-package.path = u.join_paths(plugins, "?", "init.lua") .. ";" .. package.path
-package.path = u.join_paths(plugins, "lsp", "?.lua") .. ";" .. package.path
--- local base46 = require "base46"
--- print(vim.inspect(base46))
-
-function _G.pprint(data)
-  vim.pretty_print(data)
-end
 
 function _G.write(fun, file)
   local m = assert(io.open(file, "wb"))

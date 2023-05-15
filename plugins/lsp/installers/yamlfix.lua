@@ -8,7 +8,7 @@ local server_name = "yamlfix"
 index[server_name] = "custom.plugins.lsp.installers.yamlfix"
 
 local pkg = Pkg.new {
-  name = "yamlfix",
+  name = server_name,
   desc = _.dedent [[
      A simple opinionated yaml formatter that keeps your comments!
     ]],
@@ -16,8 +16,8 @@ local pkg = Pkg.new {
   languages = { Pkg.Lang.YAML },
   categories = { Pkg.Cat.Linter },
   install = pip3.packages {
-    "yamlfix",
-    bin = { "yamlfix" },
+    server_name,
+    bin = { server_name },
   },
 }
 

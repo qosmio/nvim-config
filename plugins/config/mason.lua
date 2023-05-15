@@ -21,7 +21,6 @@ local servers = {
   "perlnavigator",
   "prettier",
   "pylance",
-  "reorder-python-imports",
   "rust-analyzer",
   "rustfmt",
   "shellcheck",
@@ -47,6 +46,7 @@ if vim.loop.os_uname().machine == "aarch64" then
     "json-lsp",
     "shellcheck",
     "shfmt",
+    "yamlfix",
     "bash-language-server",
     "yaml-language-server",
     "typescript-language-server",
@@ -65,7 +65,10 @@ if vim.v.shell_error ~= 0 then
 end
 
 return {
+  log_level = vim.log.levels.WARN,
   ensure_installed = servers,
   automatic_installation = true,
   auto_update = true,
+  run_on_start = true,
+  -- start_delay = 2,
 }

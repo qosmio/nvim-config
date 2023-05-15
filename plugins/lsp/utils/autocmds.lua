@@ -88,7 +88,7 @@ M.DiagPopup = function(bufnr)
     if not (current_cursor[1] == last_popup_cursor[1] and current_cursor[2] == last_popup_cursor[2]) then
       vim.w.lsp_diagnostics_last_cursor = current_cursor
       vim.diagnostic.open_float(client.buf, {
-        border = require "lsp.settings.popup_border" "LspInfoBorder",
+        border = require "custom.plugins.lsp.settings.popup_border" "LspInfoBorder",
         scope = "cursor",
         focusable = false,
         source = "always",

@@ -2,8 +2,8 @@ local M = {}
 local L = {}
 -- UI
 -- L.codes = require "lsp.settings.codes"
-L.icons = require "lsp.settings.icons"
-L.popup_border = require "lsp.settings.popup_border" "FloatBorder"
+L.icons = require "custom.plugins.lsp.settings.icons"
+L.popup_border = require "custom.plugins.lsp.settings.popup_border" "FloatBorder"
 require("lspconfig.ui.windows").default_options = {
   border = L.popup_border,
   -- col = 9,
@@ -31,12 +31,12 @@ L.define_signs {
   Info = L.icons.info,
 }
 
-L.autocmds = require "lsp.utils.autocmds"
+L.autocmds = require "custom.plugins.lsp.utils.autocmds"
 
 L.is_null_ls_formatting_enabed = function(bufnr)
   local file_type = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local generators =
-  require("null-ls.generators").get_available(file_type, require("null-ls.methods").internal.FORMATTING)
+    require("null-ls.generators").get_available(file_type, require("null-ls.methods").internal.FORMATTING)
   return #generators > 0
 end
 
@@ -55,7 +55,7 @@ L.setup_handlers = function()
   })
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = L.popup_border })
   vim.lsp.handlers["textDocument/signatureHelp"] =
-  vim.lsp.with(vim.lsp.handlers.signature_help, { border = L.popup_border })
+    vim.lsp.with(vim.lsp.handlers.signature_help, { border = L.popup_border })
 end
 
 M.on_attach = function(client, bufnr)
