@@ -5,7 +5,7 @@ local server_name = "pylance"
 -- index[server_name] = "custom.plugins.lsp.installers.pylance"
 
 local function extract_method()
-  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, "utf-16")
+  local range_params = vim.lsp.util.make_given_range_params()
   local arguments = { vim.uri_from_bufnr(0):gsub("file://", ""), range_params.range }
   local params = {
     command = "pylance.extractMethod",
@@ -15,7 +15,7 @@ local function extract_method()
 end
 
 local function extract_variable()
-  local range_params = vim.lsp.util.make_given_range_params(nil, nil, 0, "utf-16")
+  local range_params = vim.lsp.util.make_given_range_params()
   local arguments = { vim.uri_from_bufnr(0):gsub("file://", ""), range_params.range }
   local params = {
     command = "pylance.extractVarible",
@@ -154,7 +154,7 @@ M.settings = {
         reportMissingTypeStubs = false,
         -- stuff from top
         reportUnusedImport = "information",
-        reportUnusedFunction = "information",
+        reportUnusedFunction = "none",
         reportUnusedVariable = "information",
         reportGeneralTypeIssues = "none",
         reportUnboundVariable = false,
@@ -205,13 +205,26 @@ M.commands = {
 
 M.on_attach = function(client, bufnr)
   -- vim.lsp.set_log_level "info"
-  if client.server_capabilities.semanticTokensProvider and client.server_capabilities.semanticTokensProvider.full then
-    client.server_capabilities.semanticTokensProvider = false
+  -- if client.server_capabilities.semanticTokensProvider and client.server_capabilities.semanticTokensProvider.full then
+  --   client.server_capabilities.semanticTokensProvider = false
+  -- end
+  require("custom.plugins.lsp.settings").on_attach(client, bufnr)
+  client.commands["PylanceExtractVariableWithRename"] = function(command, _)
+    command.command = "pylance.extractVariable"
+    vim.lsp.buf.execute_command(command)
   end
 
-  require("custom.plugins.lsp.settings").on_attach(client, bufnr)
+  client.commands["PylanceExtractMethodWithRename"] = function(command, _)
+    command.command = "pylance.extractMethod"
+    vim.lsp.buf.execute_command(command)
+  end
 
-  vim.api.nvim_buf_create_user_command(bufnr, "PylanceOrganizeImports", organize_imports, { desc = "Organize Imports" })
+  vim.api.nvim_buf_create_user_command(
+    bufnr,
+    "PylanceOrganizeImports",
+    organize_imports,
+    { range = false, desc = "Organize Imports" }
+  )
 
   vim.api.nvim_buf_create_user_command(
     bufnr,

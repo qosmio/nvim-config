@@ -54,11 +54,14 @@ local plugins = {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "nvim-cmp",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
       -- require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       local sources = require "mason-registry.sources"
       require(lang "pylance")
+      require("cmp").setup.filetype("python", require(cfg "cmp.python"))
       require(lang "yamlfix")
       require(lang "nginx_beautifier")
       sources.set_registries { "lua:mason-registry.index" }
