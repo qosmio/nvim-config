@@ -80,7 +80,7 @@ local plugins = {
       require(cfg "null_ls")
     end,
   },
-  { "lambdalisue/suda.vim", event = { "CmdlineEnter" } },
+  { "lambdalisue/suda.vim", event = { "VeryLazy" } },
   -- { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
