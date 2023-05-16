@@ -17,6 +17,7 @@ local servers = {
   "html-lsp",
   "jq",
   "json-lsp",
+  "lua-language-server",
   "nginx-language-server",
   "perlnavigator",
   "prettier",
@@ -43,6 +44,7 @@ local servers = {
 
 if vim.loop.os_uname().machine == "aarch64" then
   servers = {
+    "lua-language-server",
     "json-lsp",
     "shellcheck",
     "shfmt",

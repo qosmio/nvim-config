@@ -13,45 +13,24 @@ local plugins = {
   { "lewis6991/gitsigns.nvim", opts = require(cfg "gitsigns") },
   {
     "nvim-treesitter/nvim-treesitter",
-    init = function()
-      require("core.utils").lazy_load "nvim-treesitter"
-    end,
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-    build = ":TSUpdate",
     opts = require(cfg "treesitter"),
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "syntax")
-      require(cfg "treesitter_parsers")
-      require("nvim-treesitter.configs").setup(opts)
-    end,
   },
   {
+    "JoosepAlviste/nvim-ts-context-commentstring",
     "numToStr/Comment.nvim",
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+    dependencies = { "numToStr/Comment.nvim" },
     keys = { "gbc", "gcc" },
     config = function()
       require("Comment").setup {
         pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
       }
     end,
-    init = function()
-      require("core.utils").load_mappings "comment"
-    end,
   },
   { "folke/which-key.nvim", enabled = true },
   {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
-    },
-    config = function()
-      require "plugins.configs.lspconfig"
-      -- require "custom.plugins.lsp.servers"
-    end,
-  },
-  {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     dependencies = {
+      "neovim/nvim-lspconfig",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "nvim-cmp",
@@ -59,6 +38,7 @@ local plugins = {
     },
     config = function()
       -- require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
+      require "plugins.configs.lspconfig"
       local sources = require "mason-registry.sources"
       require(lang "pylance")
       require("cmp").setup.filetype("python", require(cfg "cmp.python"))
@@ -271,21 +251,5 @@ local plugins = {
   { "cfdrake/vim-pbxproj", event = { "VimEnter" } },
   { "nfnty/vim-nftables" },
   { "jvirtanen/vim-hcl", ft = { "hcl" } },
-  -- {"jcdickinson/codeium.nvim",
-  --   enabled = false,
-  --   event = "InsertEnter",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "MunifTanjim/nui.nvim",
-  --     "hrsh7th/nvim-cmp",
-  --   },
-  --   config = function()
-  --     require("codeium").setup {}
-  --   end,
-  -- },
-  -- {"Exafunction/codeium.vim",
-  --   dependencies = { "nyngwang/cmp-codeium" },
-  --   event = "InsertEnter",
-  -- },
 }
 return plugins
