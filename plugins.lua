@@ -17,7 +17,6 @@ local plugins = {
   },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
-    "numToStr/Comment.nvim",
     dependencies = { "numToStr/Comment.nvim" },
     keys = { "gbc", "gcc" },
     config = function()
@@ -33,7 +32,7 @@ local plugins = {
       "neovim/nvim-lspconfig",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "nvim-cmp",
+      "hrsh7th/nvim-cmp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
@@ -74,8 +73,11 @@ local plugins = {
   {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = false,
-    after = { "nvim-cmp" },
-    dependencies = { "mason.nvim", "WhoIsSethDaniel/mason-tool-installer.nvim", "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
+      "nvim-lua/plenary.nvim",
+    },
     config = function()
       require(cfg "null_ls")
     end,
@@ -93,7 +95,6 @@ local plugins = {
       "nielsmadan/harlequin",
       "patstockwell/vim-monokai-tasty",
     },
-    -- dependencies = { "ui", "indent-blankline.nvim" },
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
     end,
@@ -129,9 +130,8 @@ local plugins = {
   },
   { "lukas-reineke/cmp-rg" },
   { "hrsh7th/cmp-cmdline" },
-  { "hrsh7th/cmp-calc" },
-  { "hrsh7th/cmp-nvim-lua", dependencies = { "nvim-lspconfig", "nvim-cmp" } },
-  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "null-ls.nvim" } },
+  { "hrsh7th/cmp-nvim-lua", dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
+  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "jose-elias-alvarez/null-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
     dependencies = {
@@ -141,8 +141,8 @@ local plugins = {
     config = function()
       require("cmp").setup.filetype("zsh", require(cfg "cmp.zsh"))
       require("cmp_zsh").setup {
-        zshrc = false, -- Source the zshrc (adding all custom completions). default: false
-        filetypes = { "deoledit", "zsh" }, -- Filetypes to enable cmp_zsh source. default: {"*"}
+        zshrc = false,
+        filetypes = { "deoledit", "zsh" },
       }
     end,
   },
@@ -243,12 +243,13 @@ local plugins = {
   },
   {
     "tzachar/cmp-tabnine",
-    dependencies = "cmp-path",
+    build = "./install.sh",
+    dependencies = { "hrsh7th/nvim-cmp" },
     config = function()
       require(cfg "cmp.tabnine").setup()
     end,
   },
-  { "cfdrake/vim-pbxproj", event = { "VimEnter" } },
+  { "cfdrake/vim-pbxproj" },
   { "nfnty/vim-nftables" },
   { "jvirtanen/vim-hcl", ft = { "hcl" } },
 }
