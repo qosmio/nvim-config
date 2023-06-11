@@ -8,7 +8,7 @@ caps = cmp_nvim_lsp.default_capabilities(caps)
 
 caps.textDocument.completion.completionItem.snippetSupport = true
 caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
-caps.offsetEncoding = "utf-16"
+caps.offsetEncoding = { "utf-16" }
 
 local servers = vim.tbl_deep_extend(
   "force",
