@@ -18,7 +18,7 @@ local servers = {
   "jq",
   "json-lsp",
   "nginx-language-server",
-  "perlnavigator",
+  "perlimports",
   "prettier",
   "pylance",
   "rust-analyzer",

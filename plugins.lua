@@ -60,10 +60,11 @@ local plugins = {
     config = function()
       -- require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       local sources = require "mason-registry.sources"
+      require(lang "crossplane")
       require(lang "pylance")
       require("cmp").setup.filetype("python", require(cfg "cmp.python"))
       require(lang "yamlfix")
-      require(lang "nginx_beautifier")
+      -- require(lang "nginx_beautifier")
       sources.set_registries { "lua:mason-registry.index" }
       require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       require "custom.plugins.lsp.servers"
@@ -157,7 +158,7 @@ local plugins = {
     dependencies = {
       "Shougo/deol.nvim",
     },
-    ft = { "zsh", "lua" },
+    ft = { "zsh" },
     config = function()
       require("cmp").setup.filetype("zsh", require(cfg "cmp.zsh"))
       require("cmp_zsh").setup {
@@ -183,6 +184,7 @@ local plugins = {
             "zsh",
             "eslint",
             "nginx_beautifier",
+            "crossplane",
             "prettier_d_slim",
             "ansiblelint",
             "jq",
@@ -268,9 +270,9 @@ local plugins = {
       require(cfg "cmp.tabnine").setup()
     end,
   },
-  { "cfdrake/vim-pbxproj", event = { "VimEnter" } },
-  { "nfnty/vim-nftables" },
+  { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
   { "jvirtanen/vim-hcl", ft = { "hcl" } },
+  { "egberts/vim-nftables" },
   -- {"jcdickinson/codeium.nvim",
   --   enabled = false,
   --   event = "InsertEnter",

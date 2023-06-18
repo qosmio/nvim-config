@@ -33,7 +33,7 @@ local sources = {
       "handlebars",
     },
     dynamic_command = command_resolver.from_node_modules(),
-    command = "prettier_d",
+    command = "prettier_d_slim",
     args = {
       "--config-path",
       vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.prettierrc.json",
@@ -62,6 +62,7 @@ local sources = {
   -- Nginx
   -- npm -g i nginxbeautifier
   formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
+  require "custom.plugins.lsp.formatters.crossplane",
 
   -- PHP
   -- composer global require "squizlabs/php_codesniffer=*"
