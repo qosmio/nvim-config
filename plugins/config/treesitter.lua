@@ -1,3 +1,4 @@
+require "custom.plugins.config.treesitter_parsers"
 local ensure_installed = {
   "dockerfile",
   "lua",
@@ -52,7 +53,7 @@ return {
   context = { enable = true, throttle = true },
   matchup = {
     enable = true,
-    disable_virtual_text = true,
+    disable_virtual_text = false,
     include_match_words = true,
   },
 }

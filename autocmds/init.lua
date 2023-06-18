@@ -370,4 +370,11 @@ cmd("MasonUpdate", function(opts)
   require("custom.utils").mason.update(opts.args)
 end, { nargs = 1, desc = "Update Mason Package" })
 
+-- vim.api.nvim_command 'command! -bang -nargs=* TmuxJumpFile call v:lua.require("custom.autocmds.jump_to_ln").capture_and_list_file(<q-args>, <bang>0)'
+-- vim.api.nvim_command 'command! -bang -nargs=* TmuxJumpFirst call v:lua.require("custom.autocmds.jump_to_ln").capture_and_jump(<q-args>, <bang>0)'
+
+-- vim.api.nvim_command 'autocmd FileType * lua require("custom.autocmds.jump_to_ln").capture_and_list_file("*", 0)'
+
+-- vim.g.tmuxjump_loaded = true
+
 -- }}}

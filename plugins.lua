@@ -13,52 +13,31 @@ local plugins = {
   { "lewis6991/gitsigns.nvim", opts = require(cfg "gitsigns") },
   {
     "nvim-treesitter/nvim-treesitter",
-    init = function()
-      require("core.utils").lazy_load "nvim-treesitter"
-    end,
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-    build = ":TSUpdate",
     opts = require(cfg "treesitter"),
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "syntax")
-      require(cfg "treesitter_parsers")
-      require("nvim-treesitter.configs").setup(opts)
-    end,
   },
   {
-    "numToStr/Comment.nvim",
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    dependencies = { "numToStr/Comment.nvim" },
     keys = { "gbc", "gcc" },
     config = function()
       require("Comment").setup {
         pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
       }
     end,
-    init = function()
-      require("core.utils").load_mappings "comment"
-    end,
   },
   { "folke/which-key.nvim", enabled = true },
   {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
-    },
-    config = function()
-      require "plugins.configs.lspconfig"
-      -- require "custom.plugins.lsp.servers"
-    end,
-  },
-  {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     dependencies = {
+      "neovim/nvim-lspconfig",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "nvim-cmp",
+      "hrsh7th/nvim-cmp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
       -- require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
+      require "plugins.configs.lspconfig"
       local sources = require "mason-registry.sources"
       require(lang "crossplane")
       require(lang "pylance")
@@ -95,13 +74,16 @@ local plugins = {
   {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = false,
-    after = { "nvim-cmp" },
-    dependencies = { "mason.nvim", "WhoIsSethDaniel/mason-tool-installer.nvim", "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
+      "nvim-lua/plenary.nvim",
+    },
     config = function()
       require(cfg "null_ls")
     end,
   },
-  { "lambdalisue/suda.vim", event = { "CmdlineEnter" } },
+  { "lambdalisue/suda.vim", event = { "VeryLazy" } },
   -- { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
@@ -114,7 +96,6 @@ local plugins = {
       "nielsmadan/harlequin",
       "patstockwell/vim-monokai-tasty",
     },
-    -- dependencies = { "ui", "indent-blankline.nvim" },
     cond = function()
       return vim.env.LC_TERMINAL == "shelly"
     end,
@@ -150,9 +131,8 @@ local plugins = {
   },
   { "lukas-reineke/cmp-rg" },
   { "hrsh7th/cmp-cmdline" },
-  { "hrsh7th/cmp-calc" },
-  { "hrsh7th/cmp-nvim-lua", dependencies = { "nvim-lspconfig", "nvim-cmp" } },
-  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "null-ls.nvim" } },
+  { "hrsh7th/cmp-nvim-lua", dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
+  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "jose-elias-alvarez/null-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
     dependencies = {
@@ -162,8 +142,8 @@ local plugins = {
     config = function()
       require("cmp").setup.filetype("zsh", require(cfg "cmp.zsh"))
       require("cmp_zsh").setup {
-        zshrc = false, -- Source the zshrc (adding all custom completions). default: false
-        filetypes = { "deoledit", "zsh" }, -- Filetypes to enable cmp_zsh source. default: {"*"}
+        zshrc = false,
+        filetypes = { "deoledit", "zsh" },
       }
     end,
   },
@@ -265,7 +245,8 @@ local plugins = {
   },
   {
     "tzachar/cmp-tabnine",
-    dependencies = "cmp-path",
+    build = "./install.sh",
+    dependencies = { "hrsh7th/nvim-cmp" },
     config = function()
       require(cfg "cmp.tabnine").setup()
     end,

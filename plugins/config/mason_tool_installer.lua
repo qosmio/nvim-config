@@ -1,6 +1,7 @@
 local utils = require "custom.utils"
 
 local servers = {
+  "lua-language-server",
   "pylance",
   "ansiblelint",
   "shellcheck",
