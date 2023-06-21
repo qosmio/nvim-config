@@ -163,8 +163,7 @@ local plugins = {
           exclude = {
             "zsh",
             "eslint",
-            "nginx_beautifier",
-            "crossplane",
+            -- "crossplane-ng",
             "prettier_d_slim",
             "ansiblelint",
             "jq",

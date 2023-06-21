@@ -61,7 +61,7 @@ local sources = {
 
   -- Nginx
   -- npm -g i nginxbeautifier
-  formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
+  -- formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
   require "custom.plugins.lsp.formatters.crossplane",
 
   -- PHP

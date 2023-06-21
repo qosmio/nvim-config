@@ -160,6 +160,32 @@ M.nvchad = {
   },
 }
 
+M.gitsigns = {
+  -- Default keymap options
+  v = {
+    ["<leader>hr"] = { '<cmd>Gitsigns reset_hunk({vim.fn.line("."), vim.fn.line("v")}) <CR>' },
+    ["<leader>hs"] = { '<cmd>Gitsigns stage_hunk({vim.fn.line("."), vim.fn.line("v")}) <CR>' },
+  },
+  n = {
+    ["]h"] = {
+      -- expr = true,
+      "&diff ? ']h' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'",
+    },
+    ["[h"] = {
+      -- expr = true,
+      "&diff ? '[h' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'",
+    },
+    ["<leader>hs"] = { "<cmd>Gitsigns stage_hunk <CR>" },
+    ["<leader>hu"] = { "<cmd>Gitsigns undo_stage_hunk <CR>" },
+    ["<leader>hr"] = { "<cmd>Gitsigns reset_hunk <CR>" },
+    ["<leader>hR"] = { "<cmd>Gitsigns reset_buffer <CR>" },
+    ["<leader>hp"] = { "<cmd>Gitsigns preview_hunk <CR>" },
+    ["<leader>hb"] = { "<cmd>Gitsigns blame_line(true) <CR>" },
+    ["<leader>hS"] = { "<cmd>Gitsigns stage_buffer <CR>" },
+    ["<leader>hU"] = { "<cmd>Gitsigns reset_buffer_index <CR>" },
+  },
+}
+
 local J = vim.tbl_deep_extend("force", require("core.mappings").lspconfig, M.lsp)
 J.plugin = nil
 M.lsp = J
