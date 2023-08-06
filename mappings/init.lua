@@ -52,7 +52,7 @@ M.lsp = {
     },
     ["<leader>lW"] = {
       function()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        vim.print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
       end,
       "List Workspaces",
     },
@@ -76,7 +76,7 @@ M.lsp = {
     },
     ["<leader>ll"] = {
       function()
-        vim.lsp.buf.format { timeout = 15000 }
+        vim.lsp.buf.format { timeout_ms = 5000 }
       end,
       "Format Code",
     },
@@ -84,7 +84,7 @@ M.lsp = {
   v = {
     ["<leader>ll"] = {
       function()
-        vim.lsp.buf.format { timeout = 2000 }
+        vim.lsp.buf.format { timeout_ms = 5000 }
       end,
       "Format Code Range",
     },

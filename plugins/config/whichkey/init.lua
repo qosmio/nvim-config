@@ -81,7 +81,7 @@ return {
           "Loc List",
         },
         f = {
-          "<cmd>lua vim.lsp.buf.format()<CR>",
+          "<cmd>lua vim.lsp.buf.format({ timeout_ms = 5000 })<CR>",
           "Format",
         },
       },

@@ -105,6 +105,12 @@ function M.not_matches(str, list)
   end, list) > 0
 end
 
+function M.tbl_remove_key(table, key)
+  local element = table[key]
+  table[key] = nil
+  return element
+end
+
 function M.tbl_filter_inplace(tbl, filter)
   local i = 1
   while i <= #tbl do

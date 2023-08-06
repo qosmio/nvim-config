@@ -56,7 +56,9 @@ M.DocumentFormattingAU = function(bufnr)
         return bufnr
       end
     end)(),
-    callback = vim.lsp.buf.format,
+    callback = function()
+      vim.lsp.buf.format { timeout_ms = 5000 }
+    end,
   })
 end
 

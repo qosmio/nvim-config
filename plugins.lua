@@ -8,6 +8,7 @@ end
 
 local plugins = {
   { "williamboman/mason.nvim", opts = require(cfg "mason") },
+  { "williamboman/mason-lspconfig.nvim", opts = require(cfg "mason_lspconfig") },
   { "hrsh7th/nvim-cmp", opts = require(cfg "cmp") },
   { "NvChad/nvim-colorizer.lua", opts = require(cfg "colorizer") },
   { "lewis6991/gitsigns.nvim", opts = require(cfg "gitsigns") },
@@ -36,14 +37,12 @@ local plugins = {
       "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
-      -- require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       require "plugins.configs.lspconfig"
       local sources = require "mason-registry.sources"
       require(lang "crossplane")
       require(lang "pylance")
       require("cmp").setup.filetype("python", require(cfg "cmp.python"))
       require(lang "yamlfix")
-      -- require(lang "nginx_beautifier")
       sources.set_registries { "lua:mason-registry.index" }
       require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       require "custom.plugins.lsp.servers"
@@ -151,6 +150,7 @@ local plugins = {
   { "microsoft/python-type-stubs", ft = "python" },
   {
     "jay-babu/mason-null-ls.nvim",
+    -- event = "VeryLazy",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
@@ -163,7 +163,7 @@ local plugins = {
           exclude = {
             "zsh",
             "eslint",
-            -- "crossplane-ng",
+            "crossplane-ng",
             "prettier_d_slim",
             "ansiblelint",
             "jq",
@@ -194,54 +194,54 @@ local plugins = {
       )
     end,
   },
-  {
-    "jackMort/ChatGPT.nvim",
-    cmd = "ChatGPT",
-    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-    config = function()
-      require("chatgpt").setup {
-        welcome_message = "",
-        question_sign = "",
-        answer_sign = "ﮧ",
-        max_line_length = 80,
-        keymaps = {
-          close = "<Esc>", -- removes ability to use normal mode
-          yank_last = "<D-c>",
-          scroll_up = "<S-Up>",
-          scroll_down = "<S-Down>",
-        },
-        chat_window = {
-          border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
-        },
-        chat_input = {
-          prompt = " > ",
-          border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
-        },
-      }
-    end,
-  },
-  {
-    "dense-analysis/neural",
-    keys = { "<leader>..", "<leader>." },
-    cmd = "NeuralCode",
-    dependencies = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
-    config = function()
-      require("neural").setup {
-        mappings = {
-          swift = "<C-n>", -- Context completion
-          prompt = "<C-space>", -- Open prompt
-        },
-        open_ai = {
-          api_key = vim.env.OPENAI_API_KEY, -- not committed, defined in config/private-settings.lua outside of repo
-          max_tokens = 10000,
-          temperature = 0.1,
-          presence_penalty = 0.5,
-          frequency_penalty = 0.5,
-        },
-        ui = { icon = "ﮧ" },
-      }
-    end,
-  },
+  -- {
+  --   "jackMort/ChatGPT.nvim",
+  --   cmd = "ChatGPT",
+  --   dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+  --   config = function()
+  --     require("chatgpt").setup {
+  --       welcome_message = "",
+  --       question_sign = "",
+  --       answer_sign = "ﮧ",
+  --       max_line_length = 80,
+  --       keymaps = {
+  --         close = "<Esc>", -- removes ability to use normal mode
+  --         yank_last = "<D-c>",
+  --         scroll_up = "<S-Up>",
+  --         scroll_down = "<S-Down>",
+  --       },
+  --       chat_window = {
+  --         border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
+  --       },
+  --       chat_input = {
+  --         prompt = " > ",
+  --         border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
+  --       },
+  --     }
+  --   end,
+  -- },
+  -- {
+  --   "dense-analysis/neural",
+  --   keys = { "<leader>..", "<leader>." },
+  --   cmd = "NeuralCode",
+  --   dependencies = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
+  --   config = function()
+  --     require("neural").setup {
+  --       mappings = {
+  --         swift = "<C-n>", -- Context completion
+  --         prompt = "<C-space>", -- Open prompt
+  --       },
+  --       open_ai = {
+  --         api_key = vim.env.OPENAI_API_KEY, -- not committed, defined in config/private-settings.lua outside of repo
+  --         max_tokens = 10000,
+  --         temperature = 0.1,
+  --         presence_penalty = 0.5,
+  --         frequency_penalty = 0.5,
+  --       },
+  --       ui = { icon = "ﮧ" },
+  --     }
+  --   end,
+  -- },
   {
     "tzachar/cmp-tabnine",
     build = "./install.sh",
@@ -253,6 +253,25 @@ local plugins = {
   { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
   { "jvirtanen/vim-hcl", ft = { "hcl" } },
   { "egberts/vim-nftables" },
+  {
+    "someone-stole-my-name/yaml-companion.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      require("telescope").load_extension "yaml_schema"
+    end,
+    ft = { "yaml" },
+    event = "VimEnter",
+  },
+  {
+    "towolf/vim-helm",
+    dependencies = { -- optional packages
+      "mrjosh/helm-ls",
+    },
+  },
   -- {"jcdickinson/codeium.nvim",
   --   enabled = false,
   --   event = "InsertEnter",

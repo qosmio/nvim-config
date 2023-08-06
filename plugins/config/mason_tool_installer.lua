@@ -1,17 +1,18 @@
 local utils = require "custom.utils"
 
 local servers = {
-  "lua-language-server",
   "pylance",
   "ansiblelint",
   "shellcheck",
   "yamllint",
   "eslint_d",
+  "perlimports",
   "sqlfluff",
   "cmakelang",
   "yamlfmt",
-  "reorder",
+  "usort",
   "taplo",
+  "ruff",
   "beautysh",
   "shfmt",
   "black",

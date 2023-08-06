@@ -15,7 +15,7 @@ local sources = {
   -- Javascript
   diagnostics.eslint_d,
   formatting.prettier_d_slim.with {
-    {
+    filetypes = {
       "javascript",
       "javascriptreact",
       "typescript",
@@ -54,10 +54,11 @@ local sources = {
   -- Python
   -- pip install reorder-python-imports black yapf
   -- require "custom.plugins.lsp.diagnostics.pylance",
-  formatting.reorder_python_imports.with { extra_args = { "--py310-plus" } },
-  formatting.black.with { timeout = 20000 },
-  -- diagnostics.pylama,
-  -- formatting.yapf,
+  -- formatting.reorder_python_imports.with { extra_args = { "--py310-plus" } },
+  formatting.black,
+  formatting.ruff,
+  -- diagnostics.ruff,
+  formatting.usort,
 
   -- Nginx
   -- npm -g i nginxbeautifier
@@ -126,8 +127,6 @@ local sources = {
 null_ls.setup {
   debug = false,
   sources = sources,
-  default_timeout = 15000,
   log_level = "warn",
-  -- log = { enable = true, level = "info", use_console = "async" },
 }
 -- require("custom.plugins.lsp.formatters.yamlfix").setup()

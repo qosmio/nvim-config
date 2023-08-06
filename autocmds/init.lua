@@ -26,6 +26,25 @@ function M.syn_aucmd(pattern, syn)
   })
 end
 
+aucmd("VimEnter", {
+  group = augroup "set_syntax",
+  callback = function()
+    local custom_after_path = vim.api.nvim_get_runtime_file("lua/custom/after", false)[1]
+    vim.opt.runtimepath:append(custom_after_path)
+  end,
+  once = false,
+})
+
+-- set helm filetype
+aucmd("BufRead,BufNewFile", {
+  group = augroup "helm_syntax",
+  pattern = "*/templates/*.yaml,*/templates/*.tpl,helmfile*.yaml,*/templates/*/*.yaml,Chart.{yml,yaml}",
+  callback = function()
+    vim.bo.filetype = "helm"
+    vim.bo.commentstring = "{{/* %s */}}"
+  end,
+})
+
 local function init_term()
   vim.wo.number = false
   vim.wo.relativenumber = false
@@ -33,7 +52,7 @@ local function init_term()
 end
 
 local function process_yank()
-  vim.highlight.on_yank { timeout = 200, on_visual = false }
+  vim.highlight.on_yank { timeout_ms = 2000, on_visual = false }
   local ok, osc52, yank_data
   ok, osc52 = pcall(require, "osc52")
   if not ok then
@@ -128,6 +147,8 @@ M.ft_aucmd({
   "Dockerfile*",
 }, "dockerfile")
 
+M.ft_aucmd({ "*docker-compose*.{yml,yaml}" }, "yaml.docker-compose")
+
 -- Nessus/Tenable filetypes
 M.ft_aucmd({
   "*.audit",
@@ -137,7 +158,7 @@ M.ft_aucmd({
   "*.cnf",
 }, "dosini")
 
--- Dockerfile filetype
+-- nftables filetype
 M.ft_aucmd({
   "*nft*.conf",
 }, "nftables")
@@ -227,7 +248,7 @@ aucmd("Syntax", {
 -- Auto-format *.files prior to saving them{{{
 aucmd("BufWritePre", {
   pattern = { "*.go", "*.rs", "*.lua" },
-  command = "lua vim.lsp.buf.format(nil, 1000)",
+  command = "lua vim.lsp.buf.format({ timeout_ms = 5000 })",
 })
 -- }}}
 
