@@ -102,24 +102,26 @@ local plugins = {
     config = function()
       vim.opt.termguicolors = false
       local timer = vim.loop.new_timer()
-      timer:start(
-        10,
-        0,
-        vim.schedule_wrap(function()
-          vim.cmd [[colo monokai-phoenix]]
-          -- vim.cmd [[colo tender]]
-          -- vim.cmd [[colorscheme vim-monokai-tasty]]
-          vim.cmd [[hi Normal ctermbg=0]]
-          local highlight = require("custom.highlights.hlo").highlight
-          local statusline = require("custom.highlights.hlo").statusline
-          -- local statusline = require "base46.integrations.statusline"
-          -- pprint(statusline)
-          local cterm = require("custom.highlights.utils").gui_syntax_to_cterm(highlight)
-          require("custom.highlights.utils").nvim_set_hl(cterm)
-          require("custom.highlights.utils").nvim_set_hl(statusline)
-          vim.cmd [[hi IndentBlankLineChar ctermfg=237]]
-        end)
-      )
+      if timer ~= nil then
+        timer:start(
+          10,
+          0,
+          vim.schedule_wrap(function()
+            vim.cmd [[colo monokai-phoenix]]
+            -- vim.cmd [[colo tender]]
+            -- vim.cmd [[colorscheme vim-monokai-tasty]]
+            vim.cmd [[hi Normal ctermbg=0]]
+            local highlight = require("custom.highlights.hlo").highlight
+            local statusline = require("custom.highlights.hlo").statusline
+            -- local statusline = require "base46.integrations.statusline"
+            -- pprint(statusline)
+            local cterm = require("custom.highlights.utils").gui_syntax_to_cterm(highlight)
+            require("custom.highlights.utils").nvim_set_hl(cterm)
+            require("custom.highlights.utils").nvim_set_hl(statusline)
+            vim.cmd [[hi IndentBlankLineChar ctermfg=237]]
+          end)
+        )
+      end
     end,
   },
   {
@@ -242,14 +244,14 @@ local plugins = {
   --     }
   --   end,
   -- },
-  {
-    "tzachar/cmp-tabnine",
-    build = "./install.sh",
-    dependencies = { "hrsh7th/nvim-cmp" },
-    config = function()
-      require(cfg "cmp.tabnine").setup()
-    end,
-  },
+  -- {
+  --   "tzachar/cmp-tabnine",
+  --   build = "./install.sh",
+  --   dependencies = { "hrsh7th/nvim-cmp" },
+  --   config = function()
+  --     require(cfg "cmp.tabnine").setup()
+  --   end,
+  -- },
   { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
   { "jvirtanen/vim-hcl", ft = { "hcl" } },
   { "egberts/vim-nftables" },

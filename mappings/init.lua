@@ -74,6 +74,12 @@ M.lsp = {
       end,
       "Loc List",
     },
+    ["<leader>lk"] = {
+      function()
+        vim.lsp.buf.code_action { apply = true }
+      end,
+      "Fix Code",
+    },
     ["<leader>ll"] = {
       function()
         vim.lsp.buf.format { timeout_ms = 5000 }

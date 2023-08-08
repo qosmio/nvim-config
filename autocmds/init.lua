@@ -175,6 +175,11 @@ M.ft_aucmd({
   "roles.yml",
 }, "yaml.ansible")
 
+M.ft_aucmd({
+  "*/git/config",
+  "*.git/config",
+}, "gitconfig")
+
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"
 
