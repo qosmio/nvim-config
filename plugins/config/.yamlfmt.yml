@@ -5,6 +5,8 @@ formatter:
   include_document_start: true
   line_ending: lf
   max_line_length: 80
+  drop_merge_tag: true
+  scan_folded_as_literal: true
 include:
   - .yamlfmt
   - "**/*.yaml"
