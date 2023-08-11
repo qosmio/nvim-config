@@ -56,8 +56,7 @@ local plugins = {
     config = function()
       require("alternate-toggler").setup {
         alternates = {
-          ["yes"] = "no",
-          ["no"] = "yes",
+          -- ["no"] = "yes",
         },
       }
     end,
