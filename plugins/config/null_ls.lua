@@ -9,8 +9,22 @@ local code_actions = null_ls.builtins.code_actions
 
 local sources = {
   -- SQL
-  -- diagnostics.sqlfluff.with { extra_args = { "--dialect", "postgres" } },
-  formatting.sqlfluff.with { extra_args = { "--dialect", "sqlite" } },
+  -- diagnostics.sqlfluff.with {
+  --   extra_args = {
+  --     "--dialect",
+  --     "postgres",
+  --     "--config",
+  --     vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.sqlfluff",
+  --   },
+  -- },
+  formatting.sqlfluff.with {
+    extra_args = {
+      "--dialect",
+      "postgres",
+      "--config",
+      vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.sqlfluff",
+    },
+  },
 
   -- Javascript
   diagnostics.eslint_d,
