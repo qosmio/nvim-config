@@ -11,7 +11,7 @@ local std = require "mason-core.managers.std"
 local github = require "mason-core.managers.github"
 
 local server_name = "pylance"
-index[server_name] = "custom.plugins.lsp.installers.pylance"
+index[server_name] = "custom.registry.pylance"
 
 local download_file = function(url, out_file)
   local headers = {

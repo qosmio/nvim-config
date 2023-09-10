@@ -5,7 +5,7 @@ local index = require "mason-registry.index"
 local notify = require "mason-core.notify"
 
 local server_name = "crossplane-ng"
-index[server_name] = "custom.plugins.lsp.installers.crossplane"
+index[server_name] = "custom.registry.crossplane"
 
 local pkg = Pkg.new {
   name = server_name,

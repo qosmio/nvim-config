@@ -1,23 +1,23 @@
 local Pkg = require "mason-core.package"
-local npm = require "mason-core.managers.npm"
+local pip3 = require "mason-core.managers.pip3"
 local _ = require "mason-core.functional"
 local index = require "mason-registry.index"
 local notify = require "mason-core.notify"
 
-local server_name = "nginx_beautifier"
-index[server_name] = "custom.plugins.lsp.installers.nginx_beautifier"
+local server_name = "yamlfix"
+index[server_name] = "custom.registry.yamlfix"
 
 local pkg = Pkg.new {
   name = server_name,
   desc = _.dedent [[
-    Format and beautify nginx config files
+     A simple opinionated yaml formatter that keeps your comments!
     ]],
-  homepage = "https://github.com/vasilevich/nginxbeautifier",
-  languages = { Pkg.Lang.Nginx },
-  categories = { Pkg.Cat.Formatter },
-  install = npm.packages {
-    "nginxbeautifier",
-    bin = { "nginxbeautifier" },
+  homepage = "https://github.com/lyz-code/yamlfix",
+  languages = { Pkg.Lang.YAML },
+  categories = { Pkg.Cat.Linter },
+  install = pip3.packages {
+    server_name,
+    bin = { server_name },
   },
 }
 

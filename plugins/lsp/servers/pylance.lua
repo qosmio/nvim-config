@@ -2,7 +2,6 @@
 local utils = require "custom.plugins.lsp.utils"
 
 local server_name = "pylance"
--- index[server_name] = "custom.plugins.lsp.installers.pylance"
 
 local function extract_method()
   local range_params = vim.lsp.util.make_given_range_params()

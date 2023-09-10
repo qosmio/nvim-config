@@ -3,7 +3,7 @@ local cfg = function(mod)
 end
 
 local lang = function(mod)
-  return "custom.plugins.lsp.installers." .. mod
+  return "custom.registry." .. mod
 end
 
 local plugins = {
@@ -38,12 +38,12 @@ local plugins = {
     },
     config = function()
       require "plugins.configs.lspconfig"
-      -- local sources = require "mason-registry.sources"
+      local sources = require "mason-registry.sources"
       require(lang "crossplane")
       require(lang "pylance")
       require("cmp").setup.filetype("python", require(cfg "cmp.python"))
       require(lang "yamlfix")
-      -- sources.set_registries { "lua:mason-registry.index" }
+      sources.set_registries { "lua:custom.registry", "lua:mason-registry.index", "github:mason-org/mason-registry" }
       require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
       require "custom.plugins.lsp.servers"
       vim.lsp.set_log_level "warn"
