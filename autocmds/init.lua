@@ -36,7 +36,7 @@ aucmd("VimEnter", {
 })
 
 -- set helm filetype
-aucmd("BufRead,BufNewFile", {
+aucmd({ "BufRead", "BufNewFile" }, {
   group = augroup "helm_syntax",
   pattern = "*/templates/*.yaml,*/templates/*.tpl,helmfile*.yaml,*/templates/*/*.yaml,Chart.{yml,yaml}",
   callback = function()
