@@ -78,7 +78,7 @@ M.on_attach = function(client, bufnr)
   -- client.server_capabilities.documentRangeFormattingProvider = false
 
   if client.server_capabilities.signatureHelpProvider then
-    require("nvchad_ui.signature").setup(client)
+    require("nvchad.signature").setup(client)
   end
 
   if client.server_capabilities.documentHighlightProvider then

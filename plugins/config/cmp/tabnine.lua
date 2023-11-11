@@ -39,7 +39,7 @@ local S = {
   formatting = {
     format = function(entry, item)
       local cmp_ui = require("core.utils").load_config().ui.cmp
-      local icons = vim.tbl_extend("force", require("nvchad_ui.icons").lspkind, { Tabnine = "" })
+      local icons = vim.tbl_extend("force", require("nvchad.icons").lspkind, { Tabnine = "" })
       local cmp_style = cmp_ui.style
       if entry.source.name == "cmp_tabnine" then
         item.kind = "Tabnine"

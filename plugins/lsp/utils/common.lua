@@ -68,8 +68,8 @@ end
 --
 --   if client.server_capabilities.signatureHelpProvider then
 --     require("base46").load_highlight "lsp"
---     require "nvchad_ui.lsp"
---     require("nvchad_ui.signature").setup(client)
+--     require "nvchad.lsp"
+--     require("nvchad.signature").setup(client)
 --   end
 -- end
 
