@@ -35,7 +35,7 @@ local pylance_installer = function(ctx)
   local repo = "microsoft/pylance-release"
   local source = github.tag { repo = repo }
   source.with_receipt()
-  local version = source.tag
+  local version = "2023.10.40"
   local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"):format(
     version
   )
@@ -67,7 +67,7 @@ local pylance_installer = function(ctx)
   ctx.receipt:with_primary_source {
     type = "github_tag",
     repo = repo,
-    tag = version,
+    tag = source.tag,
   }
   ctx:link_bin(
     server_name,
