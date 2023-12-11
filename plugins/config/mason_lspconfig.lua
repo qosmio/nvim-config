@@ -29,6 +29,7 @@ local servers = {
   -- "shellharden",
   -- "shfmt",
   -- "sqlfluff",
+  "rubocop",
   "sqlls",
   -- "sql-formatter",
   -- "stylua",

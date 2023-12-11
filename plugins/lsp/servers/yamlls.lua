@@ -11,8 +11,8 @@ M.schemas = {
     url = "https://raw.githubusercontent.com/hiberbee/yamlschema/master/src/schemas/helm/helmfile.yaml.json",
   },
   {
-    name = "Kubernetes 1.27.4",
-    uri = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.4-standalone-strict/all.json",
+    name = "Kubernetes 1.28.4",
+    uri = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.4-standalone-strict/all.json",
   },
 }
 M.filetypes = { "yaml", "yaml.dockerfile", "yaml.docker-compose" }

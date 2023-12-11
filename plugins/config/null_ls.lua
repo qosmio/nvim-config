@@ -8,15 +8,8 @@ local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 
 local sources = {
+  code_actions.refactoring,
   -- SQL
-  -- diagnostics.sqlfluff.with {
-  --   extra_args = {
-  --     "--dialect",
-  --     "postgres",
-  --     "--config",
-  --     vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.sqlfluff",
-  --   },
-  -- },
   formatting.sqlfluff.with {
     extra_args = {
       "--dialect",
@@ -28,7 +21,7 @@ local sources = {
 
   -- Javascript
   diagnostics.eslint_d,
-  formatting.prettier_d_slim.with {
+  formatting.prettier.with {
     filetypes = {
       "javascript",
       "javascriptreact",
@@ -47,7 +40,7 @@ local sources = {
       "handlebars",
     },
     dynamic_command = command_resolver.from_node_modules(),
-    command = "prettier_d_slim",
+    command = "prettier",
     args = {
       "--config-path",
       vim.fn.stdpath "config" .. "/lua/custom/plugins/config/.prettierrc.json",
@@ -93,8 +86,11 @@ local sources = {
 
   -- Bash
   -- diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
-  code_actions.shellcheck,
+  code_actions.shellcheck.with {
+    filetypes = { "bash", "csh", "ksh", "sh" },
+  },
   diagnostics.shellcheck.with {
+    filetypes = { "bash", "csh", "ksh", "sh" },
     extra_args = {
       "-a",
       "-s",
@@ -136,6 +132,11 @@ local sources = {
   formatting.cmake_format,
   -- XML
   -- formatting.xmllint,
+  -- Ruby
+  -- diagnostics.rubocop,
+  formatting.rubocop,
+  -- HTML5
+  diagnostics.tidy,
 }
 
 null_ls.setup {
@@ -143,4 +144,3 @@ null_ls.setup {
   sources = sources,
   log_level = "warn",
 }
--- require("custom.plugins.lsp.formatters.yamlfix").setup()

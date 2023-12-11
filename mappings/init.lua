@@ -96,19 +96,19 @@ M.lsp = {
     },
   },
 }
-M.neural = {
-  n = {
-    -- 20:37:46 plus 41 minutes
-    ["<leader>."] = {
-      "<cmd>NeuralCode<cr>",
-      "Run OpenAI Codex Code Completion",
-    },
-    ["<leader>.."] = {
-      "<cmd>NeuralText<cr>",
-      "Run OpenAI Text Completion",
-    },
-  },
-}
+-- M.neural = {
+--   n = {
+--     -- 20:37:46 plus 41 minutes
+--     ["<leader>."] = {
+--       "<cmd>NeuralCode<cr>",
+--       "Run OpenAI Codex Code Completion",
+--     },
+--     ["<leader>.."] = {
+--       "<cmd>NeuralText<cr>",
+--       "Run OpenAI Text Completion",
+--     },
+--   },
+-- }
 -- M.copilot = {
 --   i = {
 --     ["<C-j>"] = {
@@ -144,6 +144,14 @@ M.lazy = {
 }
 
 M.comment = {
+  n = {
+    ["<leader>."] = {
+      function()
+        require("Comment.api").toggle.blockwise.current()
+      end,
+      "toggle blockcomment",
+    },
+  },
   v = {
     ["<leader>'"] = {
       function()

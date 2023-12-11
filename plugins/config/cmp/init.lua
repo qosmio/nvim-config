@@ -11,7 +11,11 @@ local function border(hl_name)
   }
 end
 
-local cmp = require "cmp"
+local status_ok, cmp = pcall(require, "cmp")
+if not status_ok then
+  return
+end
+
 local compare = require "cmp.config.compare"
 
 return {
@@ -51,13 +55,13 @@ return {
     },
     { name = "nvim_lua", priority = 900 },
     { name = "nvim_lsp", keyword_length = 0, priority = 800 },
-    { name = "path",     priority = 700 },
+    { name = "path", priority = 700 },
   }, {
     { name = "buffer", priority = 800 },
-    { name = "rg",     priority = 700 },
+    { name = "rg", priority = 700 },
   }, {
     { name = "spell", priority = 600 },
-    { name = "rime",  priority = 600 },
+    { name = "rime", priority = 600 },
   }),
   sorting = {
     priority_weight = 1,

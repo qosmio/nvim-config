@@ -147,13 +147,16 @@ M.ft_aucmd({
   "Dockerfile*",
 }, "dockerfile")
 
-M.ft_aucmd({ "*docker-compose*.{yml,yaml}" }, "yaml.docker-compose")
+M.ft_aucmd({
+  "*docker-compose*.{yml,yaml}",
+}, "yaml.docker-compose")
 
--- Nessus/Tenable filetypes
+-- Nessus/Tenable
 M.ft_aucmd({
   "*.audit",
 }, "audit")
 
+-- Most .ini files are dosini like
 M.ft_aucmd({
   "*.cnf",
 }, "dosini")
@@ -169,16 +172,24 @@ M.ft_aucmd({
   "php*conf",
 }, "dosini")
 
+-- ansible
 M.ft_aucmd({
   "playbook*",
   "role*/*.yml",
   "roles.yml",
 }, "yaml.ansible")
 
+-- Git
 M.ft_aucmd({
   "*/git/config",
   "*.git/config",
 }, "gitconfig")
+
+-- Groovy (Jenkins)
+M.ft_aucmd({
+  "*/jenkinsLibraries/*",
+  "*/jenkinsPipeline/*",
+}, "groovy")
 
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"
@@ -291,7 +302,7 @@ aucmd({ "BufReadPost" }, {
 
 -- wrapping for txt {{{
 M.setupWrapping = function()
-  vim.w.wrap = true
+  vim.wo.wrap = true
   vim.bo.wm = 2
   vim.bo.textwidth = 79
 end
@@ -395,12 +406,5 @@ end, { desc = "Update Mason Packages" })
 cmd("MasonUpdate", function(opts)
   require("custom.utils").mason.update(opts.args)
 end, { nargs = 1, desc = "Update Mason Package" })
-
--- vim.api.nvim_command 'command! -bang -nargs=* TmuxJumpFile call v:lua.require("custom.autocmds.jump_to_ln").capture_and_list_file(<q-args>, <bang>0)'
--- vim.api.nvim_command 'command! -bang -nargs=* TmuxJumpFirst call v:lua.require("custom.autocmds.jump_to_ln").capture_and_jump(<q-args>, <bang>0)'
-
--- vim.api.nvim_command 'autocmd FileType * lua require("custom.autocmds.jump_to_ln").capture_and_list_file("*", 0)'
-
--- vim.g.tmuxjump_loaded = true
 
 -- }}}

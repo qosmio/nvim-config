@@ -70,7 +70,7 @@ local plugins = {
     end,
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     lazy = false,
     dependencies = {
       "williamboman/mason.nvim",
@@ -132,7 +132,7 @@ local plugins = {
   { "lukas-reineke/cmp-rg" },
   { "hrsh7th/cmp-cmdline" },
   { "hrsh7th/cmp-nvim-lua", dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
-  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "jose-elias-alvarez/null-ls.nvim" } },
+  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "nvimtools/none-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
     dependencies = {
@@ -155,7 +155,7 @@ local plugins = {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
-      "jose-elias-alvarez/null-ls.nvim",
+      "nvimtools/none-ls.nvim",
     },
     config = function()
       local mason_null_ls = require "mason-null-ls"
@@ -246,7 +246,8 @@ local plugins = {
   -- {
   --   "tzachar/cmp-tabnine",
   --   build = "./install.sh",
-  --   dependencies = { "hrsh7th/nvim-cmp" },
+  --   dependencies = { "NvChad/ui", "hrsh7th/nvim-cmp" },
+  --   event = "VimEnter",
   --   config = function()
   --     require(cfg "cmp.tabnine").setup()
   --   end,
@@ -273,21 +274,15 @@ local plugins = {
       "mrjosh/helm-ls",
     },
   },
-  -- {"jcdickinson/codeium.nvim",
-  --   enabled = false,
-  --   event = "InsertEnter",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "MunifTanjim/nui.nvim",
-  --     "hrsh7th/nvim-cmp",
-  --   },
-  --   config = function()
-  --     require("codeium").setup {}
-  --   end,
-  -- },
-  -- {"Exafunction/codeium.vim",
-  --   dependencies = { "nyngwang/cmp-codeium" },
-  --   event = "InsertEnter",
-  -- },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+    end,
+  },
 }
 return plugins

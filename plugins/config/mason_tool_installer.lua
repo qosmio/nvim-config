@@ -3,6 +3,7 @@ local utils = require "custom.utils"
 local servers = {
   "pylance",
   "ansiblelint",
+  "rubocop",
   "shellcheck",
   "yamllint",
   "eslint_d",

@@ -95,7 +95,7 @@ M.base_16 = {
   base0B = "#8bcd5b",
   base0C = "#6499ff",
   base0D = "#28b1ff",
-  base0E = "#dc14f4",
+  base0E = "#ff00de",
   base0F = "#ff6464",
 }
 
@@ -122,6 +122,7 @@ local syntax = { -- LSP References
   Number = { fg = c16.base06 },
   MasonNormal = { bg = c.darker_black },
 
+  -- Highlights word under cursor
   LspReferenceText = { fg = c.darker_black, bg = c.blue },
   LspReferenceRead = { fg = c.darker_black, bg = c.blue },
   LspReferenceWrite = { fg = c.darker_black, bg = c.blue },
@@ -231,11 +232,12 @@ local syntax = { -- LSP References
   CmpItemKindInterface = { fg = "#f90c71", bg = "NONE" },
   CmpItemKindVariable = { fg = "#9CDCFE", bg = "NONE" },
   CmpItemMenu = { fg = "#ffffff" },
+  IndentBlankLineContextStart = { fg = c.blue, ctermfg = 237 },
   IndentBlankLineChar = { ctermfg = 237 },
 
   gitconfigSection = { fg = c.green, bold = true, ctermfg = 181 },
 
-  Keyword = { fg = "#dd1df4", bold = true },
+  Keyword = { fg = "#2986cc", bold = true },
   Define = { bold = true },
   -- Search = { bg = c.yellow, reverse = true },
   -- CurSearch = { bg = c.nord_blue, fg = c.white },
