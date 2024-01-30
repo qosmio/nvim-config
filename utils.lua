@@ -226,7 +226,7 @@ function M.dirlist(dir)
   return items
 end
 
-function M.get_python3_host_prog()
+function M.get_python3_host_prog(opts)
   -- Get the environment path
   local path = vim.env.PATH
 
@@ -237,7 +237,7 @@ function M.get_python3_host_prog()
   local python3_executables = {}
   for _, dir in ipairs(path_dirs) do
     for _, file in ipairs(M.dirlist(dir)) do
-      if file:match "^python3%.%d+$" then
+      if file:match "^python3%.%d+$" and (not opts.exclude or not file:match(opts.exclude)) then
         table.insert(python3_executables, vim.fn.fnamemodify(M.join_paths(dir, file), ":p"))
       end
     end

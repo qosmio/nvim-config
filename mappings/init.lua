@@ -82,7 +82,7 @@ M.lsp = {
     },
     ["<leader>ll"] = {
       function()
-        vim.lsp.buf.format { timeout_ms = 5000 }
+        require("conform").format { async = true, lsp_fallback = true }
       end,
       "Format Code",
     },
@@ -90,7 +90,7 @@ M.lsp = {
   v = {
     ["<leader>ll"] = {
       function()
-        vim.lsp.buf.format { timeout_ms = 5000 }
+        require("conform").format { async = true, lsp_fallback = true }
       end,
       "Format Code Range",
     },

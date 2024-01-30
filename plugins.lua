@@ -163,13 +163,16 @@ local plugins = {
         automatic_installation = {
           exclude = {
             "zsh",
+            "refactoring",
+            "clangd",
+            "rubocop",
             "eslint",
             "crossplane-ng",
             "prettier_d_slim",
             "ansiblelint",
             "jq",
             "clang_format",
-            "gofumpt",
+            -- "gofumpt",
           },
         },
         automatic_setup = true,
@@ -283,6 +286,71 @@ local plugins = {
     config = function()
       require("refactoring").setup()
     end,
+  },
+  { "cmcaine/vim-uci", ft = { "uci" } },
+  {
+    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    lazy = false,
+    config = function()
+      local lsp_lines = require "lsp_lines"
+
+      lsp_lines.setup()
+
+      vim.keymap.set("n", "g?", function()
+        local lines_enabled = not vim.diagnostic.config().virtual_lines
+        vim.diagnostic.config {
+          virtual_lines = lines_enabled,
+          virtual_text = not lines_enabled,
+        }
+      end, { noremap = true, silent = true })
+
+      vim.diagnostic.config {
+        virtual_text = true,
+        virtual_lines = false,
+      }
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    lazy = false,
+    config = function()
+      require("treesitter-context").setup {
+        enable = true,
+        max_lines = 1,
+        trim_scope = "outer",
+        -- patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+        --   -- For all filetypes
+        --   -- Note that setting an entry here replaces all other patterns for this entry.
+        --   -- By setting the 'default' entry below, you can control which nodes you want to
+        --   -- appear in the context window.
+        --   default = {
+        --     "class",
+        --     "function",
+        --     "method",
+        --     "for", -- These won't appear in the context
+        --     "while",
+        --     "if",
+        --     "switch",
+        --     "case",
+        --     "element",
+        --     "call",
+        --   },
+        -- },
+        -- exact_patterns = {},
+        --
+        zindex = 20, -- The Z-index of the context window
+        mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+        separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
+      }
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    --  for users those who want auto-save conform + lazyloading!
+    -- lazy = false,
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    opts = require "custom.plugins.config.conform",
   },
 }
 return plugins

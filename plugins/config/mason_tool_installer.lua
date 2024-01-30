@@ -18,6 +18,7 @@ local servers = {
   "shfmt",
   "black",
   "stylua",
+  "goimports",
 }
 
 _ = vim.fn.system "which go"

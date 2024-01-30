@@ -29,7 +29,7 @@ local servers = {
   -- "shellharden",
   -- "shfmt",
   -- "sqlfluff",
-  "rubocop",
+  -- "rubocop",
   "sqlls",
   -- "sql-formatter",
   -- "stylua",
@@ -73,7 +73,9 @@ end
 return {
   log_level = vim.log.levels.WARN,
   ensure_installed = servers,
-  automatic_installation = true,
+  automatic_installation = {
+    exclude = { "clangd" },
+  },
   auto_update = true,
   run_on_start = true,
   -- start_delay = 2,

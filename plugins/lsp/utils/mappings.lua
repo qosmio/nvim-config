@@ -22,8 +22,8 @@ M.setup = function(client)
   keymap.set("n", "<leader>wl", ":lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opt)
 
   -- keymap.set("n", "<leader>k", "<cmd>lua vim.diagnostic.open_float()<CR>", opt)
-  keymap.set("n", "[d", vim.diagnostic.goto_prev, opt)
-  keymap.set("n", "]d", vim.diagnostic.goto_next, opt)
+  keymap.set("n", "]d", ":lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })", opt)
+  keymap.set("n", "[d", ":lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })", opt)
   keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opt)
 
   if mappings[client.name] then

@@ -1,7 +1,7 @@
 local M = {}
 
 M.options = {
-  nvchad_branch = "v2.0",
+  nvchad_branch = "v3.0",
 }
 
 M.ui = {
@@ -9,7 +9,7 @@ M.ui = {
   -- hl = highlights
   -- hl_override = require "custom.highlights.monokai-phoenix",
   -- hl_add = require "custom.highlights.monokai-phoenix",
-  hl_override = require("custom.highlights.hlo").highlight,
+  -- hl_override = require("custom.highlights.hlo").highlight,
   hl_add = require("custom.highlights.hlo").highlight,
   theme_toggle = { "onedark-deep", "onedark" },
   theme = "onedark-deep", -- default theme

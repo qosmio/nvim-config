@@ -191,6 +191,16 @@ M.ft_aucmd({
   "*/jenkinsPipeline/*",
 }, "groovy")
 
+-- UCI (OpenWRT Unified Configuration Interface)
+M.ft_aucmd({
+  "*etc/config*",
+}, "uci")
+
+-- Diff/Patch
+M.ft_aucmd({
+  "*.patch",
+}, "diff")
+
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"
 
@@ -238,14 +248,14 @@ aucmd("FileType", {
     vim.opt.expandtab = true
   end,
 })
-aucmd("BufWritePre", {
-  desc = "kill trailing whitespace",
-  group = group_name,
-  pattern = "*",
-  callback = function()
-    vim.cmd [[%s/\s\+$//e]]
-  end,
-})
+-- aucmd("BufWritePre", {
+--   desc = "kill trailing whitespace",
+--   group = group_name,
+--   pattern = "*",
+--   callback = function()
+--     vim.cmd [[%s/\s\+$//e]]
+--   end,
+-- })
 
 group_name = augroup "highlight"
 aucmd("Syntax", {
@@ -398,6 +408,22 @@ aucmd("LspAttach", {
   end,
 })
 
+-- Disable LSP on diff buffer (typically when using `git mergetool`)
+-- aucmd("LspAttach", {
+--   pattern = { "*" },
+--   callback = function(t)
+--     if vim.api.nvim_win_get_option(0, "diff") then
+--       vim.api.nvim_exec(
+--         [[
+--         LspStop
+--       ]],
+--         false
+--       )
+--       vim.diagnostic.disable(t.buf)
+--     end
+--   end,
+-- })
+--
 -- Custom Commands
 cmd("MasonUpdateAll", function()
   require("custom.utils").mason.update_all()
