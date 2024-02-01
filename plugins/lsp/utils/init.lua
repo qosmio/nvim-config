@@ -1,7 +1,7 @@
-local U = {}
+local M = {}
 
-U.mappings = require "custom.plugins.lsp.utils.mappings"
-U.common = require "custom.plugins.lsp.utils.common"
-U.autocmds = require "custom.plugins.lsp.utils.autocmds"
+M = require "custom.plugins.lsp.utils.common"
+M.mappings = require "custom.plugins.lsp.utils.mappings"
+M.autocmds = require "custom.plugins.lsp.utils.autocmds"
 
-return U
+return M

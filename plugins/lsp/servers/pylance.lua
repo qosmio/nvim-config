@@ -115,14 +115,17 @@ M.settings = {
     insertSpaces = true,
     tabSize = 2,
   } },
-  ["[python]"] = { editor = {
-    formatOnType = true,
-    insertSpaces = true,
-    tabSize = 2,
-  } },
+  ["[python]"] = {
+    editor = {
+      formatOnType = true,
+      insertSpaces = true,
+      tabSize = 2,
+    }
+  },
   python = {
     formatting = { provider = "black" },
     analysis = {
+      autoImportUserSymbols = true,
       disableLanguageServices = false,
       openFilesOnly = true,
       useLibraryCodeForTypes = true,

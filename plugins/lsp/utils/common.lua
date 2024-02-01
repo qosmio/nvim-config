@@ -40,37 +40,207 @@ M.has_exec = function(filename)
   end
 end
 
--- M.on_attach = function(client, bufnr)
---   local function buf_set_option(...)
---     vim.api.nvim_buf_set_option(bufnr, ...)
---   end
---
---   local utils = require "core.utils"
---   utils.load_mappings("lspconfig", { buffer = bufnr })
---
---   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
---
---   if client.server_capabilities.definitionProvider then
---     vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
---   end
---
---   if client.server_capabilities.documentHighlightProvider then
---     autocmds.DocumentHighlightAU(bufnr)
---   end
---
---   if client.server_capabilities.codeLensProvider then
---     autocmds.CodeLensAU(bufnr)
---   end
---
---   if client.server_capabilities.documentFormattingProvider then
---     autocmds.DocumentFormattingAU(bufnr)
---   end
---
---   if client.server_capabilities.signatureHelpProvider then
---     require("base46").load_highlight "lsp"
---     require "nvchad.lsp"
---     require("nvchad.signature").setup(client)
---   end
--- end
+local M = {}
+
+---@param on_attach fun(client, buffer)
+M.on_attach = function(on_attach)
+  vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+      local buffer = args.buf
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      on_attach(client, buffer)
+    end,
+  })
+end
+
+M.file_fn = function(mode, filepath, content)
+  local data
+  local fd = assert(vim.loop.fs_open(filepath, mode, 438))
+  local stat = assert(vim.loop.fs_fstat(fd))
+  if stat.type ~= "file" then
+    data = false
+  else
+    if mode == "r" then
+      data = assert(vim.loop.fs_read(fd, stat.size, 0))
+    else
+      assert(vim.loop.fs_write(fd, content, 0))
+      data = true
+    end
+  end
+  assert(vim.loop.fs_close(fd))
+  return data
+end
+
+-- Get functions in current file
+local python_function_query_string = [[
+  (function_definition
+    name: (identifier) @func_name (#offset! @func_name)
+  )
+]]
+
+local lua_function_query_string = [[
+  (function_declaration
+  name:
+    [
+      (dot_index_expression)
+      (identifier)
+    ] @func_name (#offset! @func_name)
+  )
+]]
+
+local func_lookup = {
+  python = python_function_query_string,
+  lua = lua_function_query_string,
+}
+
+local function get_functions(bufnr, lang, query_string)
+  local parser = vim.treesitter.get_parser(bufnr, lang)
+  local syntax_tree = parser:parse()[1]
+  local root = syntax_tree:root()
+  local query = vim.treesitter.query.parse(lang, query_string)
+  local func_list = {}
+
+  for _, captures, metadata in query:iter_matches(root, bufnr) do
+    local row, col, _ = captures[1]:start()
+    local name = vim.treesitter.get_node_text(captures[1], bufnr)
+    table.insert(func_list, { name, row, col, metadata[1].range })
+  end
+  return func_list
+end
+
+function M.goto_function(bufnr, lang)
+  local pickers, finders, actions, action_state, conf
+  if pcall(require, "telescope") then
+    pickers = require("telescope.pickers")
+    finders = require("telescope.finders")
+    actions = require("telescope.actions")
+    action_state = require("telescope.actions.state")
+    conf = require("telescope.config").values
+  else
+    error("Cannot find telescope!")
+  end
+
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  lang = lang or vim.api.nvim_buf_get_option(bufnr, "filetype")
+
+  local query_string = func_lookup[lang]
+  if not query_string then
+    vim.notify(lang .. " is not supported", vim.log.levels.INFO)
+    return
+  end
+  local func_list = get_functions(bufnr, lang, query_string)
+  if vim.tbl_isempty(func_list) then
+    vim.notify("No functions found in current file", vim.log.levels.INFO)
+    return
+  end
+  local funcs = {}
+  for _, func in ipairs(func_list) do
+    table.insert(funcs, func[1])
+  end
+
+  pickers
+      .new(opts, {
+        prompt_title = "Function List",
+        finder = finders.new_table({
+          results = func_list,
+          entry_maker = function(entry)
+            return { value = entry, display = entry[1], ordinal = entry[1] }
+          end,
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function()
+          actions.select_default:replace(function(prompt_bufnr)
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            local row, col = selection.value[2] + 1, selection.value[3] + 2
+            vim.fn.setcharpos(".", { bufnr, row, col, 0 })
+          end)
+          return true
+        end,
+      })
+      :find()
+end
+
+local opts = { noremap = true, silent = true }
+M.imap = function(tbl)
+  if tbl[3] then
+    for k, v in ipairs(tbl[3]) do
+      opts[k] = v
+    end
+  end
+  vim.keymap.set("i", tbl[1], tbl[2], opts)
+end
+M.nmap = function(tbl)
+  if tbl[3] then
+    for k, v in ipairs(tbl[3]) do
+      opts[k] = v
+    end
+  end
+  vim.keymap.set("n", tbl[1], tbl[2], opts)
+end
+
+M.tmap = function(tbl)
+  if tbl[3] then
+    for k, v in ipairs(tbl[3]) do
+      opts[k] = v
+    end
+  end
+  vim.keymap.set("t", tbl[1], tbl[2], opts)
+end
+
+M.vmap = function(tbl)
+  if tbl[3] then
+    for k, v in ipairs(tbl[3]) do
+      opts[k] = v
+    end
+  end
+  vim.keymap.set("v", tbl[1], tbl[2], opts)
+end
+M.execute = function()
+  local config = {
+    cmds = {
+      markdown = "glow %",
+      python = "python3 %",
+      cpp = "./$fileBase",
+      lua = "luafile %",
+      vim = "source %",
+    },
+    ui = {
+      -- bot|top|vert
+      pos = "vert",
+      size = 50,
+    },
+  }
+
+  local cmd = config.cmds[vim.bo.filetype]
+  cmd = cmd:gsub("%%", vim.fn.expand("%"))
+  cmd = cmd:gsub("$fileBase", vim.fn.expand("%:r"))
+  cmd = cmd:gsub("$filePath", vim.fn.expand("%:p"))
+  cmd = cmd:gsub("$file", vim.fn.expand("%"))
+  cmd = cmd:gsub("$dir", vim.fn.expand("%:p:h"))
+  cmd = cmd:gsub(
+    "$moduleName",
+    vim.fn.substitute(
+      vim.fn.substitute(vim.fn.fnamemodify(vim.fn.expand("%:r"), ":~:."), "/", ".", "g"),
+      "\\",
+      ".",
+      "g"
+    )
+  )
+
+  vim.cmd("silent! make")
+  if cmd ~= nil then
+    if cmd ~= "" then
+      vim.cmd(config.ui.pos .. " " .. config.ui.size .. "new | term " .. cmd)
+    end
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_keymap(buf, "n", "q", "<C-\\><C-n>:bdelete!<CR>", { silent = true })
+    vim.api.nvim_buf_set_option(buf, "filetype", "Execute")
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  else
+    vim.cmd("echohl ErrorMsg | echo 'Error: Invalid command' | echohl None")
+  end
+end
 
 return M

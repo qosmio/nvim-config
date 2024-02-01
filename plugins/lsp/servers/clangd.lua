@@ -1,4 +1,13 @@
 local M = {}
+M.cmd = {
+  "/usr/bin/clangd",
+  "--malloc-trim",
+  "--log=error",
+  "--header-insertion=iwyu",
+  "--background-index",
+  "-j=40",
+  -- "--pch-storage=memory",
+}
 M.capabilities = {
   offsetEncoding = { "utf-16" },
 }
