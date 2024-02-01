@@ -38,12 +38,12 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
           -- vim.print(res)
         end
         lspconfig[server].setup(res)
-        if server == "yamlls" then
-          -- vim.print(lspconfig[server])
-          -- local m = assert(io.open("/tmp/luac.out", "wb"))
-          -- assert(m:write(string.dump(res.on_attach)))
-          -- assert(m:close())
-        end
+        -- if server == "clangd" then
+        --   vim.print(lspconfig[server])
+        --   local m = assert(io.open("/tmp/luac.out", "wb"))
+        --   assert(m:write(string.dump(res.on_attach)))
+        --   assert(m:close())
+        -- end
       else
         lspconfig[server].setup {}
       end

@@ -20,13 +20,13 @@ local download_file = function(url, out_file)
   local ctx = installer.context()
   ctx.stdio_sink.stdout(("Downloading file %q...\n"):format(url))
   fetch(url, {
-      headers = headers,
-      out_file = path.concat { ctx.cwd:get(), out_file },
-    })
-    :map_err(function(err)
-      return ("Failed to download file %q.\n%s"):format(url, err)
-    end)
-    :get_or_throw()
+    headers = headers,
+    out_file = path.concat { ctx.cwd:get(), out_file },
+  })
+      :map_err(function(err)
+        return ("Failed to download file %q.\n%s"):format(url, err)
+      end)
+      :get_or_throw()
 end
 
 local bin_path = path.concat { "extension", "dist", "server.bundle.js" }
@@ -36,9 +36,10 @@ local pylance_installer = function(ctx)
   local source = github.tag { repo = repo }
   source.with_receipt()
   local version = "2023.10.40"
-  local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage"):format(
-    version
-  )
+  local url = ("https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/vscode-pylance/%s/vspackage")
+      :format(
+        version
+      )
   download_file(url, "archive.gz")
   std.gunzip("archive.gz", ".")
   std.unzip("archive", ".")
@@ -89,12 +90,13 @@ if not configs[server_name] then
           "pyrightconfig.json",
         }
         return lsputil.root_pattern(unpack(markers))(fname)
-          or lsputil.find_git_ancestor(fname)
-          or lsputil.path.dirname(fname)
+            or lsputil.find_git_ancestor(fname)
+            or lsputil.path.dirname(fname)
       end,
       docs = {
         package_json = path.concat { "extension", "package.json" },
-        description = [[https://github.com/microsoft/pylance-release `pylance`, a Fast, feature-rich static type checker language support for Python ]],
+        description =
+        [[https://github.com/microsoft/pylance-release `pylance`, a Fast, feature-rich static type checker language support for Python ]],
       },
       cmd = { "pylance", "--stdio" },
       single_file_support = true,

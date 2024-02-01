@@ -7,11 +7,11 @@ local lang = function(mod)
 end
 
 local plugins = {
-  { "williamboman/mason.nvim", opts = require(cfg "mason") },
+  { "williamboman/mason.nvim",           opts = require(cfg "mason") },
   { "williamboman/mason-lspconfig.nvim", opts = require(cfg "mason_lspconfig") },
-  { "hrsh7th/nvim-cmp", opts = require(cfg "cmp") },
-  { "NvChad/nvim-colorizer.lua", opts = require(cfg "colorizer") },
-  { "lewis6991/gitsigns.nvim", opts = require(cfg "gitsigns") },
+  { "hrsh7th/nvim-cmp",                  opts = require(cfg "cmp") },
+  { "NvChad/nvim-colorizer.lua",         opts = require(cfg "colorizer") },
+  { "lewis6991/gitsigns.nvim",           opts = require(cfg "gitsigns") },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = require(cfg "treesitter"),
@@ -49,7 +49,7 @@ local plugins = {
       vim.lsp.set_log_level "warn"
     end,
   },
-  { "folke/neodev.nvim", ft = { "lua" } },
+  { "folke/neodev.nvim",    ft = { "lua" } },
   {
     "rmagatti/alternate-toggler",
     event = { "VimEnter" },
@@ -61,7 +61,7 @@ local plugins = {
       }
     end,
   },
-  { "chr4/nginx.vim", ft = "nginx" },
+  { "chr4/nginx.vim",           ft = "nginx" },
   -- Native terminal copying using OCS52
   {
     "ojroques/nvim-osc52",
@@ -81,7 +81,7 @@ local plugins = {
       require(cfg "null_ls")
     end,
   },
-  { "lambdalisue/suda.vim", event = { "VeryLazy" } },
+  { "lambdalisue/suda.vim",     event = { "VeryLazy" } },
   -- { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
@@ -131,7 +131,7 @@ local plugins = {
   },
   { "lukas-reineke/cmp-rg" },
   { "hrsh7th/cmp-cmdline" },
-  { "hrsh7th/cmp-nvim-lua", dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
+  { "hrsh7th/cmp-nvim-lua",                dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
   { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "nvimtools/none-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
@@ -198,65 +198,28 @@ local plugins = {
       )
     end,
   },
-  -- {
-  --   "jackMort/ChatGPT.nvim",
-  --   cmd = "ChatGPT",
-  --   dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-  --   config = function()
-  --     require("chatgpt").setup {
-  --       welcome_message = "",
-  --       question_sign = "",
-  --       answer_sign = "ﮧ",
-  --       max_line_length = 80,
-  --       keymaps = {
-  --         close = "<Esc>", -- removes ability to use normal mode
-  --         yank_last = "<D-c>",
-  --         scroll_up = "<S-Up>",
-  --         scroll_down = "<S-Down>",
-  --       },
-  --       chat_window = {
-  --         border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
-  --       },
-  --       chat_input = {
-  --         prompt = " > ",
-  --         border = { style = require "custom.plugins.lsp.settings.popup_border" "FloatBorder" },
-  --       },
-  --     }
-  --   end,
-  -- },
-  -- {
-  --   "dense-analysis/neural",
-  --   keys = { "<leader>..", "<leader>." },
-  --   cmd = "NeuralCode",
-  --   dependencies = { "MunifTanjim/nui.nvim", "ElPiloto/significant.nvim" },
-  --   config = function()
-  --     require("neural").setup {
-  --       mappings = {
-  --         swift = "<C-n>", -- Context completion
-  --         prompt = "<C-space>", -- Open prompt
-  --       },
-  --       open_ai = {
-  --         api_key = vim.env.OPENAI_API_KEY, -- not committed, defined in config/private-settings.lua outside of repo
-  --         max_tokens = 10000,
-  --         temperature = 0.1,
-  --         presence_penalty = 0.5,
-  --         frequency_penalty = 0.5,
-  --       },
-  --       ui = { icon = "ﮧ" },
-  --     }
-  --   end,
-  -- },
-  -- {
-  --   "tzachar/cmp-tabnine",
-  --   build = "./install.sh",
-  --   dependencies = { "NvChad/ui", "hrsh7th/nvim-cmp" },
-  --   event = "VimEnter",
-  --   config = function()
-  --     require(cfg "cmp.tabnine").setup()
-  --   end,
-  -- },
+  -- copilot
+  {
+    "zbirenbaum/copilot-cmp",
+    event = { "BufReadPost", "BufNewFile" },
+    config = function(_, opts)
+      local copilot_cmp = require("copilot_cmp")
+      copilot_cmp.setup(opts)
+      require("custom.plugins.lsp.utils").on_attach(function(client)
+        if client.name == "copilot" then
+          copilot_cmp._on_insert_enter()
+        end
+      end)
+    end,
+    dependencies = {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      build = ":Copilot auth",
+      opts = require "custom.plugins.config.copilot",
+    },
+  },
   { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
-  { "jvirtanen/vim-hcl", ft = { "hcl" } },
+  { "jvirtanen/vim-hcl",   ft = { "hcl" } },
   { "egberts/vim-nftables" },
   {
     "someone-stole-my-name/yaml-companion.nvim",
@@ -338,7 +301,7 @@ local plugins = {
         -- },
         -- exact_patterns = {},
         --
-        zindex = 20, -- The Z-index of the context window
+        zindex = 20,     -- The Z-index of the context window
         mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
         separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
       }
