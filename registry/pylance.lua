@@ -91,7 +91,7 @@ if not configs[server_name] then
         }
         return lsputil.root_pattern(unpack(markers))(fname)
             or lsputil.find_git_ancestor(fname)
-            or lsputil.path.dirname(fname)
+        -- or lsputil.path.dirname(fname)
       end,
       docs = {
         package_json = path.concat { "extension", "package.json" },
@@ -107,7 +107,7 @@ if not configs[server_name] then
           analysis = {
             autoSearchPaths = true,
             useLibraryCodeForTypes = true,
-            diagnosticMode = "workspace",
+            diagnosticMode = "openFilesOnly",
             typeCheckingMode = "basic",
             completeFunctionParens = true,
             indexing = false,

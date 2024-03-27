@@ -40,8 +40,6 @@ M.has_exec = function(filename)
   end
 end
 
-local M = {}
-
 ---@param on_attach fun(client, buffer)
 M.on_attach = function(on_attach)
   vim.api.nvim_create_autocmd("LspAttach", {

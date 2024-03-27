@@ -23,7 +23,7 @@ function _G.check_vim_option(option, value)
   -- end
 end
 
-vim.g.python3_host_prog = u.get_python3_host_prog { exclude = "python3.12" } or vim.g.python3_host_prog
+vim.g.python3_host_prog = u.get_python3_host_prog { exclude = "python3.9" } or vim.g.python3_host_prog
 -- print(vim.inspect(base46.table_to_str(require "custom.highlights")))
 require "custom.options"
 -- AUTOCMDS

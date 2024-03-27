@@ -8,13 +8,12 @@ M.disabled = {
   n = { ["sr"] = "", ["sd"] = "" },
   i = {
     -- go to  beginning and end
-    ["<C-b>"] = "",
-    ["<C-e>"] = "",
-    -- navigate within insert mode
-    ["<C-h>"] = "",
-    ["<C-l>"] = "",
-    ["<C-j>"] = "",
-    ["<C-k>"] = "",
+    ["<C-b>"] = "Move Beginning of line",
+    ["<C-e>"] = "Move End of line",
+    ["<C-h>"] = "Move Left",
+    ["<C-l>"] = "Move Right",
+    ["<C-j>"] = "Move Down",
+    ["<C-k>"] = "Nove Up",
   },
 }
 
@@ -96,35 +95,6 @@ M.lsp = {
     },
   },
 }
--- M.neural = {
---   n = {
---     -- 20:37:46 plus 41 minutes
---     ["<leader>."] = {
---       "<cmd>NeuralCode<cr>",
---       "Run OpenAI Codex Code Completion",
---     },
---     ["<leader>.."] = {
---       "<cmd>NeuralText<cr>",
---       "Run OpenAI Text Completion",
---     },
---   },
--- }
--- M.copilot = {
---   i = {
---     ["<C-j>"] = {
---       "copilot#Accept()",
---       "Accept",
---     },
---     ["<C-k>"] = {
---       "copilot#Next()",
---       "Next",
---     },
---     ["<C-z>"] = {
---       "Copilot#Previous()",
---       "Previous",
---     },
---   },
--- }
 
 M.toggle_alternate = {
   n = {

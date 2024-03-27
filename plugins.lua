@@ -311,9 +311,10 @@ local plugins = {
     "stevearc/conform.nvim",
     --  for users those who want auto-save conform + lazyloading!
     -- lazy = false,
-    event = { "BufWritePre" },
+    event = { "VimEnter" },
     cmd = { "ConformInfo" },
     opts = require "custom.plugins.config.conform",
   },
 }
+
 return plugins

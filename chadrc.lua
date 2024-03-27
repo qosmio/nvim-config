@@ -1,7 +1,7 @@
 local M = {}
 
 M.options = {
-  nvchad_branch = "v3.0",
+  nvchad_branch = "v2.0",
 }
 
 M.ui = {
@@ -11,10 +11,10 @@ M.ui = {
   -- hl_add = require "custom.highlights.monokai-phoenix",
   -- hl_override = require("custom.highlights.hlo").highlight,
   hl_add = require("custom.highlights.hlo").highlight,
-  theme_toggle = { "onedark-deep", "onedark" },
-  theme = "onedark-deep", -- default theme
+  theme_toggle = { "dark_horizon", "onedark" },
+  theme = "dark_horizon", -- default theme
   changed_themes = {
-    ["onedark-deep"] = require("custom.highlights.hlo").theme,
+    ["dark_horizon"] = require("custom.highlights.hlo").theme,
   },
   transparency = false,
   lsp_semantic_tokens = true, -- needs nvim v0.9, just adds highlight groups for lsp semantic tokens
@@ -27,8 +27,8 @@ M.ui = {
     icons = true,
     lspkind_text = true,
     style = "default", -- default/flat_light/flat_dark/atom/atom_colored
-    border_color = "darker_black", -- only applicable for "default" style, use color names from base30 variables
-    selected_item_bg = "colored", -- colored / simple
+    -- border_color = "darker_black", -- only applicable for "default" style, use color names from base30 variables
+    -- selected_item_bg = "colored", -- colored / simple
   },
 
   telescope = { style = "borderless" }, -- borderless / bordered
@@ -58,17 +58,12 @@ M.ui = {
   cheatsheet = { theme = "grid" }, -- simple/grid
 
   lsp = {
-    -- show function signatures i.e args as you type
-    signature = {
-      disabled = false,
-      silent = true, -- silences 'no signature help available' message from appearing
-    },
+    signature = true,
+    semantic_tokens = false,
   },
 }
 
 M.plugins = "custom.plugins"
-
--- M.lazy_nvim = require "plugins.configs.lazy_nvim" -- config for lazy.nvim startup options
 
 M.mappings = require "custom.mappings"
 

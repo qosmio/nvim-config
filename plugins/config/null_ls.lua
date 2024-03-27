@@ -20,7 +20,7 @@ local sources = {
   -- },
 
   -- Javascript
-  diagnostics.eslint_d,
+  -- diagnostics.eslint_d,
   -- formatting.prettier.with {
   --   filetypes = {
   --     "javascript",
@@ -86,19 +86,19 @@ local sources = {
 
   -- Bash
   -- diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
-  code_actions.shellcheck.with {
-    filetypes = { "bash", "csh", "ksh", "sh" },
-  },
-  diagnostics.shellcheck.with {
-    filetypes = { "bash", "csh", "ksh", "sh" },
-    extra_args = {
-      "-a",
-      "-s",
-      "bash",
-      "-e",
-      "SC2154,SC2169,SC2034,SC2086,SC2039,SC2166,SC2154,SC1091,SC2174,SC3043,SC3013,SC3045",
-    },
-  },
+  -- code_actions.shellcheck.with {
+  --   filetypes = { "bash", "csh", "ksh", "sh" },
+  -- },
+  -- diagnostics.shellcheck.with {
+  --   filetypes = { "bash", "csh", "ksh", "sh" },
+  --   extra_args = {
+  --     "-a",
+  --     "-s",
+  --     "bash",
+  --     "-e",
+  --     "SC2154,SC2169,SC2034,SC2086,SC2039,SC2166,SC2154,SC1091,SC2174,SC3043,SC3013,SC3045",
+  --   },
+  -- },
   -- go install mvdan.cc/sh/v3/cmd/shfmt@latest
   -- formatting.beautysh.with {
   --   extra_args = { "--indent-size", 2, "--force-function-style", "paronly" },
