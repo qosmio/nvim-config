@@ -1,30 +1,44 @@
-local u = require "custom.utils"
+vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
+vim.g.mapleader = " "
 
-function _G.write(fun, file)
-  local m = assert(io.open(file, "wb"))
-  if type(fun) == "function" then
-    assert(m:write(string.dump(fun)))
-  else
-    assert(m:write(vim.inspect(fun)))
-  end
-  assert(m:close())
-  vim.notify("wrote " .. type(fun) .. " to " .. file)
+-- bootstrap lazy and all plugins
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+  local repo = "https://github.com/folke/lazy.nvim.git"
+  vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
 end
 
-function _G.check_vim_option(option, value)
-  if vim.opt[option] ~= nil then
-    -- if M.clean(_value) == M.clean(value) then
-    if value ~= vim.opt[option]._value then
-      print("opt." .. option .. " = " .. tostring(vim.opt[option]._value) .. " -- " .. tostring(value))
-    end
-    -- print(string.format("%s=%s -- %s", option, opt[option]._value, value))
-  end
-  -- vim.cmd("set " .. option)
-  -- end
-end
+vim.opt.rtp:prepend(lazypath)
 
+local lazy_config = require "plugins.config._lazy"
+
+-- load plugins
+require("lazy").setup({
+  {
+    "NvChad/NvChad",
+    lazy = false,
+    branch = "v2.5",
+    import = "nvchad.plugins",
+    config = function()
+      require "options"
+    end,
+  },
+
+  { import = "plugins" },
+}, lazy_config)
+
+-- load theme
+dofile(vim.g.base46_cache .. "defaults")
+dofile(vim.g.base46_cache .. "statusline")
+
+require "nvchad.autocmds"
+require "autocmds"
+
+local u = require "utils"
 vim.g.python3_host_prog = u.get_python3_host_prog { exclude = "python3.9" } or vim.g.python3_host_prog
--- print(vim.inspect(base46.table_to_str(require "custom.highlights")))
-require "custom.options"
--- AUTOCMDS
-require "custom.autocmds"
+-- print(vim.inspect(base46.table_to_str(require "highlights")))
+
+vim.schedule(function()
+  require "mappings"
+end)
