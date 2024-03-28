@@ -33,7 +33,7 @@ L.define_signs {
 
 L.autocmds = require "plugins.lsp.utils.autocmds"
 
-L.is_null_ls_formatting_enabed = function(bufnr)
+L.is_null_ls_formatting_enabled = function(bufnr)
   local file_type = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local generators =
       require("null-ls.generators").get_available(file_type, require("null-ls.methods").internal.FORMATTING)
@@ -59,6 +59,8 @@ L.setup_handlers = function()
 end
 
 M.on_attach = function(client, bufnr)
+  require("nvchad.configs.lspconfig").on_attach(client, bufnr)
+  -- require("plugins.lsp.settings").on_attach
   -- L.autocmds.lsp_diagnostics_popup(bufnr)
   vim.diagnostic.config {
     underline = true,
@@ -69,16 +71,16 @@ M.on_attach = function(client, bufnr)
   L.autocmds.DiagPopup(bufnr)
   -- client.server_capabilities.documentFormattingProvider = false
   if client.server_capabilities.documentFormattingProvider then
-    if client.name == "null-ls" and M.is_null_ls_formatting_enabed(bufnr) or client.name ~= "null-ls" then
-      vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+    if client.name == "null-ls" and M.is_null_ls_formatting_enabled(bufnr) or client.name ~= "null-ls" then
+      vim.api.nvim_set_option_value("formatexpr", "v:lua.vim.lsp.formatexpr()", { buf = bufnr })
     else
-      vim.api.nvim_buf_set_option(bufnr, "formatexpr", "")
+      vim.api.nvim_set_option_value("formatexpr", "", { buf = bufnr })
     end
   end
-  -- client.server_capabilities.documentRangeFormattingProvider = false
 
+  -- setup signature popup
   if client.server_capabilities.signatureHelpProvider then
-    require("nvchad.signature").setup(client)
+    require("nvchad.lsp.signature").setup(client, bufnr)
   end
 
   if client.server_capabilities.documentHighlightProvider then
@@ -99,7 +101,7 @@ M.capabilities = (function()
   local caps = vim.lsp.protocol.make_client_capabilities()
   caps.textDocument.completion.completionItem.snippetSupport = true
   caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
-  caps.offsetEncoding = { "utf-16" }
+  -- caps.offsetEncoding = { "utf-16" }
   return vim.tbl_deep_extend("force", caps, lspconfig.capabilities)
 end)()
 

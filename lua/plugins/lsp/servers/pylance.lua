@@ -120,7 +120,7 @@ M.settings = {
       formatOnType = true,
       insertSpaces = true,
       tabSize = 2,
-    }
+    },
   },
   python = {
     formatting = { provider = "black" },
@@ -207,20 +207,7 @@ M.commands = {
 
 M.on_attach = function(client, bufnr)
   -- vim.lsp.set_log_level "info"
-  -- if client.server_capabilities.semanticTokensProvider and client.server_capabilities.semanticTokensProvider.full then
-  --   client.server_capabilities.semanticTokensProvider = false
-  -- end
   require("plugins.lsp.settings").on_attach(client, bufnr)
-  client.commands["PylanceExtractVariableWithRename"] = function(command, _)
-    command.command = "pylance.extractVariable"
-    vim.lsp.buf.execute_command(command)
-  end
-
-  client.commands["PylanceExtractMethodWithRename"] = function(command, _)
-    command.command = "pylance.extractMethod"
-    vim.lsp.buf.execute_command(command)
-  end
-
   vim.api.nvim_buf_create_user_command(
     bufnr,
     "PylanceOrganizeImports",

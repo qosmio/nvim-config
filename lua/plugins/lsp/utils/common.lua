@@ -1,4 +1,4 @@
--- local autocmds = require "plugins.lsp.utils.autocmds"
+local opts = { noremap = true, silent = true }
 
 local M = {}
 
@@ -18,20 +18,20 @@ M.set_default_formatter_for_filetypes = function(language_server_name, filetypes
 
   local active_servers = {}
 
-  vim.lsp.for_each_buffer_client(0, function(client)
+  for _, client in ipairs(vim.lsp.get_clients { bufnr = 0 }) do
     table.insert(active_servers, client.config.name)
-  end)
+  end
 
   if not M.set_contains(active_servers, language_server_name) then
     return
   end
 
-  vim.lsp.for_each_buffer_client(0, function(client)
+  for _, client in ipairs(vim.lsp.get_clients { bufnr = 0 }) do
     if client.name ~= language_server_name then
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
     end
-  end)
+  end
 end
 
 M.has_exec = function(filename)
@@ -109,17 +109,17 @@ end
 function M.goto_function(bufnr, lang)
   local pickers, finders, actions, action_state, conf
   if pcall(require, "telescope") then
-    pickers = require("telescope.pickers")
-    finders = require("telescope.finders")
-    actions = require("telescope.actions")
-    action_state = require("telescope.actions.state")
+    pickers = require "telescope.pickers"
+    finders = require "telescope.finders"
+    actions = require "telescope.actions"
+    action_state = require "telescope.actions.state"
     conf = require("telescope.config").values
   else
-    error("Cannot find telescope!")
+    error "Cannot find telescope!"
   end
 
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-  lang = lang or vim.api.nvim_buf_get_option(bufnr, "filetype")
+  lang = lang or vim.api.nvim_get_option_value("filetype", { buf = bufnr })
 
   local query_string = func_lookup[lang]
   if not query_string then
@@ -139,12 +139,12 @@ function M.goto_function(bufnr, lang)
   pickers
       .new(opts, {
         prompt_title = "Function List",
-        finder = finders.new_table({
+        finder = finders.new_table {
           results = func_list,
           entry_maker = function(entry)
             return { value = entry, display = entry[1], ordinal = entry[1] }
           end,
-        }),
+        },
         sorter = conf.generic_sorter(opts),
         attach_mappings = function()
           actions.select_default:replace(function(prompt_bufnr)
@@ -159,7 +159,6 @@ function M.goto_function(bufnr, lang)
       :find()
 end
 
-local opts = { noremap = true, silent = true }
 M.imap = function(tbl)
   if tbl[3] then
     for k, v in ipairs(tbl[3]) do
@@ -168,6 +167,7 @@ M.imap = function(tbl)
   end
   vim.keymap.set("i", tbl[1], tbl[2], opts)
 end
+
 M.nmap = function(tbl)
   if tbl[3] then
     for k, v in ipairs(tbl[3]) do
@@ -194,6 +194,7 @@ M.vmap = function(tbl)
   end
   vim.keymap.set("v", tbl[1], tbl[2], opts)
 end
+
 M.execute = function()
   local config = {
     cmds = {
@@ -211,33 +212,33 @@ M.execute = function()
   }
 
   local cmd = config.cmds[vim.bo.filetype]
-  cmd = cmd:gsub("%%", vim.fn.expand("%"))
-  cmd = cmd:gsub("$fileBase", vim.fn.expand("%:r"))
-  cmd = cmd:gsub("$filePath", vim.fn.expand("%:p"))
-  cmd = cmd:gsub("$file", vim.fn.expand("%"))
-  cmd = cmd:gsub("$dir", vim.fn.expand("%:p:h"))
+  cmd = cmd:gsub("%%", vim.fn.expand "%")
+  cmd = cmd:gsub("$fileBase", vim.fn.expand "%:r")
+  cmd = cmd:gsub("$filePath", vim.fn.expand "%:p")
+  cmd = cmd:gsub("$file", vim.fn.expand "%")
+  cmd = cmd:gsub("$dir", vim.fn.expand "%:p:h")
   cmd = cmd:gsub(
     "$moduleName",
-    vim.fn.substitute(
-      vim.fn.substitute(vim.fn.fnamemodify(vim.fn.expand("%:r"), ":~:."), "/", ".", "g"),
-      "\\",
-      ".",
-      "g"
-    )
+    vim.fn.substitute(vim.fn.substitute(vim.fn.fnamemodify(vim.fn.expand "%:r", ":~:."), "/", ".", "g"), "\\", ".", "g")
   )
 
-  vim.cmd("silent! make")
+  vim.cmd "silent! make"
+
   if cmd ~= nil then
     if cmd ~= "" then
       vim.cmd(config.ui.pos .. " " .. config.ui.size .. "new | term " .. cmd)
     end
     local buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_set_keymap(buf, "n", "q", "<C-\\><C-n>:bdelete!<CR>", { silent = true })
-    vim.api.nvim_buf_set_option(buf, "filetype", "Execute")
     vim.wo.number = false
     vim.wo.relativenumber = false
+    if vim.fn.argc() > 0 then
+      vim.schedule(function()
+        vim.api.nvim_set_option_value("filetype", "Execute", { buf = buf })
+      end)
+    end
   else
-    vim.cmd("echohl ErrorMsg | echo 'Error: Invalid command' | echohl None")
+    vim.cmd "echohl ErrorMsg | echo 'Error: Invalid command' | echohl None"
   end
 end
 

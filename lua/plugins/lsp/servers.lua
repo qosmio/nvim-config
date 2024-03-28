@@ -1,6 +1,4 @@
 local lspconfig = require "lspconfig"
--- local base = require "plugins.config.mason"
-local custom = require "plugins.lsp.settings"
 local ok, res
 local cmp_nvim_lsp = require "cmp_nvim_lsp"
 local caps = vim.lsp.protocol.make_client_capabilities()
@@ -34,9 +32,11 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
       if ok and res ~= true then
         res.capabilities = caps
         if res.on_attach == nil then
-          res.on_attach = on_attach
-          -- vim.print(res)
+          res.on_attach = require("plugins.lsp.settings").on_attach
         end
+        -- if server == "pylance" then
+        --   vim.print(res)
+        -- end
         lspconfig[server].setup(res)
         -- if server == "clangd" then
         --   vim.print(lspconfig[server])

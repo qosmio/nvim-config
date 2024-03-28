@@ -5,7 +5,7 @@ end
 -- local command_resolver = require "null-ls.helpers.command_resolver"
 -- local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
-local code_actions = null_ls.builtins.code_actions
+-- local code_actions = null_ls.builtins.code_actions
 
 local sources = {
   -- code_actions.refactoring,
