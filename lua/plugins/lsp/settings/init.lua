@@ -83,10 +83,6 @@ M.on_attach = function(client, bufnr)
     require("nvchad.lsp.signature").setup(client, bufnr)
   end
 
-  if client.server_capabilities.documentHighlightProvider then
-    L.autocmds.DocumentHighlightAU(bufnr)
-  end
-
   if client.server_capabilities.codeLensProvider then
     L.autocmds.CodeLensAU(bufnr)
   end
@@ -101,7 +97,6 @@ M.capabilities = (function()
   local caps = vim.lsp.protocol.make_client_capabilities()
   caps.textDocument.completion.completionItem.snippetSupport = true
   caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
-  -- caps.offsetEncoding = { "utf-16" }
   return vim.tbl_deep_extend("force", caps, lspconfig.capabilities)
 end)()
 

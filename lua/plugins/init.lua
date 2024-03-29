@@ -218,64 +218,48 @@ local plugins = {
       opts = require "plugins.config.copilot",
     },
   },
-  { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
-  { "jvirtanen/vim-hcl",   ft = { "hcl" } },
-  { "egberts/vim-nftables" },
-  {
-    "someone-stole-my-name/yaml-companion.nvim",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    config = function()
-      require("telescope").load_extension "yaml_schema"
-    end,
-    ft = { "yaml" },
-    event = "VimEnter",
-  },
-  {
-    "towolf/vim-helm",
-    dependencies = { -- optional packages
-      "mrjosh/helm-ls",
-    },
-  },
-  {
-    "ThePrimeagen/refactoring.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    config = function()
-      require("refactoring").setup()
-    end,
-  },
+  -- { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
+  -- { "jvirtanen/vim-hcl",   ft = { "hcl" } },
+  -- { "egberts/vim-nftables" },
+  -- {
+  --   "towolf/vim-helm",
+  --   dependencies = { -- optional packages
+  --     "mrjosh/helm-ls",
+  --   },
+  -- },
+  -- {
+  --   "ThePrimeagen/refactoring.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --   },
+  --   config = function()
+  --     require("refactoring").setup()
+  --   end,
+  -- },
   { "cmcaine/vim-uci", ft = { "uci" } },
-  {
-    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-    lazy = false,
-    config = function()
-      local lsp_lines = require "lsp_lines"
-
-      lsp_lines.setup()
-
-      vim.keymap.set("n", "g?", function()
-        local lines_enabled = not vim.diagnostic.config().virtual_lines
-        vim.diagnostic.config {
-          virtual_lines = lines_enabled,
-          virtual_text = not lines_enabled,
-        }
-      end, { noremap = true, silent = true })
-
-      vim.diagnostic.config {
-        virtual_text = true,
-        virtual_lines = false,
-      }
-    end,
-  },
+  -- {
+  --   url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+  --   config = function()
+  --     local lsp_lines = require "lsp_lines"
+  --     lsp_lines.setup()
+  --     vim.keymap.set("n", "g?", function()
+  --       local lines_enabled = not vim.diagnostic.config().virtual_lines
+  --       vim.diagnostic.config {
+  --         virtual_lines = lines_enabled,
+  --         virtual_text = not lines_enabled,
+  --       }
+  --     end, { noremap = true, silent = true })
+  --
+  --     vim.diagnostic.config {
+  --       virtual_text = true,
+  --       virtual_lines = false,
+  --     }
+  --   end,
+  -- },
   {
     "nvim-treesitter/nvim-treesitter-context",
-    lazy = false,
+    -- lazy = false,
     config = function()
       require("treesitter-context").setup {
         enable = true,

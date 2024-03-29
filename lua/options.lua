@@ -1,12 +1,10 @@
-require "nvchad.options"
-
 -- OPTIONS
 local opt = vim.opt
 
 opt.backupdir = "," .. os.getenv "HOME" .. "/.nvim/backup//" -- backup directory
-opt.directory = os.getenv "HOME" .. "/.nvim/swap//" -- swap directory
-opt.undodir = os.getenv "HOME" .. "/.nvim/undo//" -- for undo
-opt.undolevels = 5000 -- default is 1000
+opt.directory = os.getenv "HOME" .. "/.nvim/swap//"          -- swap directory
+opt.undodir = os.getenv "HOME" .. "/.nvim/undo//"            -- for undo
+opt.undolevels = 5000                                        -- default is 1000
 opt.diffopt:append "context:3"
 opt.diffopt:append "vertical"
 opt.diffopt:append "foldcolumn:1"
@@ -23,16 +21,16 @@ opt.completeopt = { "menu", "menuone", "noinsert", "noselect" } -- default is "m
 -- opt.breakindent = true -- indent lines after a break
 -- opt.linebreak = true -- break lines after a character
 -- opt.updatetime = 550 -- update the file info every `N` ms
-opt.timeoutlen = 800 -- timeout length for commands (ms) defaut 1000
-opt.textwidth = 120 -- text width for the editor
+opt.timeoutlen = 800       -- timeout length for commands (ms) defaut 1000
+opt.textwidth = 120        -- text width for the editor
 opt.relativenumber = false -- true to show relative line numbers
 opt.cursorlineopt = "both" -- number the lines from the cursor
 
 --" Spaces & Tabs {{{
 opt.expandtab = false
 opt.softtabstop = 2 -- number of soft spaces in a tab
-opt.tabstop = 4 -- number of spaces in a tab
-opt.shiftwidth = 2 -- number of spaces to shift
+opt.tabstop = 4     -- number of spaces in a tab
+opt.shiftwidth = 2  -- number of spaces to shift
 opt.copyindent = true
 
 opt.tabstop = 2
@@ -46,13 +44,13 @@ opt.copyindent = true
 -- opt.autoindent = true
 --" }}} Spaces & Tabs
 
--- opt.conceallevel = 3 -- number of concealed characters
-opt.switchbuf = "useopen" -- useopen, useall, useallfile, usealltabs
+opt.conceallevel = 3                        -- number of concealed characters
+opt.switchbuf = "useopen"                   -- useopen, useall, useallfile, usealltabs
 opt.viewoptions = "cursor,folds,slash,unix" -- options for the view
 -- vim.cmd "set listchars=tab:╍╍,nbsp:_,trail:·"
-opt.scrolloff = 10 -- number of lines to scroll
+opt.scrolloff = 10                          -- number of lines to scroll
 -- opt.wrap = true -- wrap lines, if possible (not on a terminal)
-opt.fixendofline = true -- fix end of line characters
+opt.fixendofline = true                     -- fix end of line characters
 -- vim.opt.characters for after foldtext, eof, foldcolumn
 opt.fillchars = "fold: ,foldclose:,foldopen:,foldsep: ,diff:/,eob: "
 
