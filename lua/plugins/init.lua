@@ -201,6 +201,7 @@ local plugins = {
   -- copilot
   {
     "zbirenbaum/copilot-cmp",
+    enabled = vim.loop.os_uname().machine ~= "aarch64",
     event = { "BufReadPost", "BufNewFile" },
     config = function(_, opts)
       local copilot_cmp = require("copilot_cmp")
