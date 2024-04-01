@@ -7,6 +7,7 @@ local lang = function(mod)
 end
 
 local plugins = {
+  -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
   { "williamboman/mason.nvim",           opts = require(cfg "mason") },
   { "williamboman/mason-lspconfig.nvim", opts = require(cfg "mason_lspconfig") },
   { "hrsh7th/nvim-cmp",                  opts = require(cfg "cmp") },
@@ -82,7 +83,6 @@ local plugins = {
     end,
   },
   { "lambdalisue/suda.vim",     event = { "VeryLazy" } },
-  -- { "machakann/vim-sandwich", event = { "InsertEnter" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
@@ -107,13 +107,9 @@ local plugins = {
           0,
           vim.schedule_wrap(function()
             vim.cmd [[colo monokai-phoenix]]
-            -- vim.cmd [[colo tender]]
-            -- vim.cmd [[colorscheme vim-monokai-tasty]]
             vim.cmd [[hi Normal ctermbg=0]]
             local highlight = require("highlights.hlo").highlight
             local statusline = require("highlights.hlo").statusline
-            -- local statusline = require "base46.integrations.statusline"
-            -- pprint(statusline)
             local cterm = require("highlights.utils").gui_syntax_to_cterm(highlight)
             require("highlights.utils").nvim_set_hl(cterm)
             require("highlights.utils").nvim_set_hl(statusline)
@@ -151,7 +147,6 @@ local plugins = {
   { "microsoft/python-type-stubs", ft = "python" },
   {
     "jay-babu/mason-null-ls.nvim",
-    -- event = "VeryLazy",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
@@ -172,7 +167,6 @@ local plugins = {
             "ansiblelint",
             "jq",
             "clang_format",
-            -- "gofumpt",
           },
         },
         automatic_setup = true,
@@ -201,7 +195,7 @@ local plugins = {
   -- copilot
   {
     "zbirenbaum/copilot-cmp",
-    enabled = vim.loop.os_uname().machine ~= "aarch64",
+    enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
     config = function(_, opts)
       local copilot_cmp = require("copilot_cmp")
@@ -222,22 +216,6 @@ local plugins = {
   -- { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
   -- { "jvirtanen/vim-hcl",   ft = { "hcl" } },
   -- { "egberts/vim-nftables" },
-  -- {
-  --   "towolf/vim-helm",
-  --   dependencies = { -- optional packages
-  --     "mrjosh/helm-ls",
-  --   },
-  -- },
-  -- {
-  --   "ThePrimeagen/refactoring.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --   },
-  --   config = function()
-  --     require("refactoring").setup()
-  --   end,
-  -- },
   { "cmcaine/vim-uci", ft = { "uci" } },
   -- {
   --   url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
