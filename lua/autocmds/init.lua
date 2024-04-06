@@ -423,7 +423,25 @@ aucmd("LspAttach", {
 --     end
 --   end,
 -- })
---
+-- check first and last 5 lines in current buffer for 'vim:.*ft=.*' and set filetype accordingly
+-- set filetypes function
+aucmd("BufWinEnter", {
+  group = augroup "ft_modeline",
+  callback = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local lines = vim.api.nvim_buf_get_lines(bufnr, 0, 5, false)
+    for _, line in ipairs(lines) do
+      -- look for ft or syn
+      local vim_cmd = line:match "vim:(.*)"
+      if vim_cmd then
+        vim.cmd(vim_cmd)
+        return
+      end
+    end
+  end,
+  once = false,
+})
+
 -- Custom Commands
 cmd("MasonUpdateAll", function()
   require("utils").mason.update_all()
