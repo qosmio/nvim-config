@@ -28,7 +28,7 @@ local formatters = {
   },
   shfmt = {
     filetypes = { "bash", "csh", "ksh", "sh" },
-    prepend_args = { "-i", "2", "-bn", "-ci", "-sr" },
+    prepend_args = { "--language-dialect", "bash", "-i", "2", "-bn", "-ci", "-sr" },
   },
 
   -- YAML

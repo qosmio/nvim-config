@@ -77,6 +77,7 @@ local plugins = {
       "williamboman/mason.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
       "nvim-lua/plenary.nvim",
+      "gbprod/none-ls-shellcheck.nvim"
     },
     config = function()
       require(cfg "null_ls")

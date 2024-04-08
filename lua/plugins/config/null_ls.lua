@@ -86,6 +86,7 @@ local sources = {
 
   -- Bash
   -- diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
+  require "none-ls-shellcheck.code_actions",
   -- code_actions.shellcheck.with {
   --   filetypes = { "bash", "csh", "ksh", "sh" },
   -- },

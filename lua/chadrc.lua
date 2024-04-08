@@ -5,8 +5,8 @@ M.ui = {
   ------------------------------- base46 -------------------------------------
   -- hl_override = require("highlights.hlo").highlight,
   hl_add = require("highlights.hlo").highlight,
-  theme_toggle = { "yoru", "onedark-deep" },
-  theme = "yoru", -- default theme
+  theme_toggle = { "onedark-deep", "onedark-deep" },
+  theme = "onedark-deep", -- default theme
   -- cmp themeing
   cmp = {
     icons = true,
