@@ -272,10 +272,10 @@ aucmd("Syntax", {
 
 -- Coding {{{
 -- Auto-format *.files prior to saving them{{{
-aucmd("BufWritePre", {
-  pattern = { "*.go", "*.rs", "*.lua" },
-  command = "lua vim.lsp.buf.format({ timeout_ms = 5000 })",
-})
+-- aucmd("BufWritePre", {
+--   pattern = { "*.go", "*.rs", "*.lua" },
+--   command = "lua vim.lsp.buf.format({ timeout_ms = 5000 })",
+-- })
 -- }}}
 
 -- Highlight whitespaces {{{
@@ -336,43 +336,43 @@ aucmd("BufEnter", {
 })
 
 -- edit hex for bins - edit binary using xxd-format {{{
-group_name = augroup "binary_files"
+-- group_name = augroup "binary_files"
 
-aucmd("BufReadPre", {
-  pattern = { "*.bin", "*.dat" },
-  command = "let &bin=1",
-  group = group_name,
-})
-aucmd("BufReadPost", {
-  pattern = { "*.bin", "*.dat" },
-  command = "if &bin | %!xxd",
-  group = group_name,
-})
-aucmd("BufReadPost", {
-  pattern = { "*.bin", "*.dat" },
-  command = "set ft=xxd | endif",
-  group = group_name,
-})
-aucmd("BufWritePre", {
-  pattern = { "*.bin", "*.dat" },
-  command = "if &bin | %!xxd -r",
-  group = group_name,
-})
-aucmd("BufWritePre", {
-  pattern = { "*.bin", "*.dat" },
-  command = "endif",
-  group = group_name,
-})
-aucmd("BufWritePost", {
-  pattern = { "*.bin", "*.dat" },
-  command = "if &bin | %!xxd",
-  group = group_name,
-})
-aucmd("BufWritePost", {
-  pattern = { "*.bin", "*.dat" },
-  command = "set nomod | endif",
-  group = group_name,
-})
+-- aucmd("BufReadPre", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "let &bin=1",
+--   group = group_name,
+-- })
+-- aucmd("BufReadPost", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "if &bin | %!xxd",
+--   group = group_name,
+-- })
+-- aucmd("BufReadPost", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "set ft=xxd | endif",
+--   group = group_name,
+-- })
+-- aucmd("BufWritePre", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "if &bin | %!xxd -r",
+--   group = group_name,
+-- })
+-- aucmd("BufWritePre", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "endif",
+--   group = group_name,
+-- })
+-- aucmd("BufWritePost", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "if &bin | %!xxd",
+--   group = group_name,
+-- })
+-- aucmd("BufWritePost", {
+--   pattern = { "*.bin", "*.dat" },
+--   command = "set nomod | endif",
+--   group = group_name,
+-- })
 -- }}}
 
 -- Code Folding {{{

@@ -52,7 +52,8 @@ local plugins = {
   },
   { "folke/neodev.nvim",    ft = { "lua" } },
   {
-    "rmagatti/alternate-toggler",
+    "qosmio/alternate-toggler",
+    branch = "fix-tbl_add_reverse_lookup",
     event = { "VimEnter" },
     config = function()
       require("alternate-toggler").setup {

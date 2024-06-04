@@ -16,11 +16,17 @@ require("lspconfig.ui.windows").default_options = {
 L.define_signs = function(signs)
   for type, icon in pairs(signs) do
     local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, {
-      text = icon,
-      texthl = hl,
-      numhl = "",
-    })
+    vim.diagnostic.config {
+      signs = {
+        text = {
+          [hl] = icon,
+        },
+        texthl = {
+          [hl] = hl,
+        },
+        numhl = {},
+      },
+    }
   end
 end
 
