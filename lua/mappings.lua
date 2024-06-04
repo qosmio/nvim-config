@@ -141,7 +141,7 @@ M.toggle_alternate = {
 M.lazy = {
   n = {
     ["<leader>ps"] = { "<cmd>Lazy show<cr>", "Status" },
-    ["<leader>pp"] = { "<cmd>Lazy sync<cr>", "Sync" },
+    ["<leader>pp"] = { "<cmd>Lazy update<cr>", "Update" },
     ["<leader>pc"] = { "<cmd>Lazy health<cr>", "Health" },
   },
 }
