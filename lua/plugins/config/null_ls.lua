@@ -87,7 +87,7 @@ local sources = {
   -- Bash
   -- diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
   require("none-ls-shellcheck.diagnostics").with {
-    extra_args = { "--rcfile", "/home/xbmc/.config/nvim/lua/plugins/config/.shellcheckrc" },
+    extra_args = { "--rcfile", vim.fn.stdpath "config" .. "/lua/plugins/config/.shellcheckrc" },
   },
   require "none-ls-shellcheck.code_actions",
   -- code_actions.shellcheck.with {
