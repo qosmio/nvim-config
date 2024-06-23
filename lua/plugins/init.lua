@@ -7,7 +7,7 @@ local lang = function(mod)
 end
 
 local plugins = {
-  -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
+  { "lukas-reineke/indent-blankline.nvim", enabled = false },
   { "williamboman/mason.nvim",           opts = require(cfg "mason") },
   { "williamboman/mason-lspconfig.nvim", opts = require(cfg "mason_lspconfig") },
   { "hrsh7th/nvim-cmp",                  opts = require(cfg "cmp") },
