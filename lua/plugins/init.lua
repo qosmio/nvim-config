@@ -20,6 +20,7 @@ local plugins = {
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
     dependencies = { "numToStr/Comment.nvim" },
+    -- event = { "VimEnter" },
     keys = { "gbc", "gcc" },
     config = function()
       require("Comment").setup {
@@ -196,12 +197,13 @@ local plugins = {
   },
   -- copilot
   {
-    "zbirenbaum/copilot-cmp",
+    "tris203/copilot-cmp",
+    branch = "0.11_compat",
     enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
-    config = function(_, opts)
+    config = function()
       local copilot_cmp = require("copilot_cmp")
-      copilot_cmp.setup(opts)
+      copilot_cmp.setup()
       require("plugins.lsp.utils").on_attach(function(client)
         if client.name == "copilot" then
           copilot_cmp._on_insert_enter()
