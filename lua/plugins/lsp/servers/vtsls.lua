@@ -112,7 +112,7 @@ local settings = {
     },
   },
 }
-M.name = "tsserver"
+M.name = "vtsls"
 M.capabilities = capabilities
 M.on_attach = on_attach
 M.handlers = handlers
