@@ -34,7 +34,7 @@ local servers = {
   -- "sql-formatter",
   -- "stylua",
   "taplo",
-  "tsserver",
+  "vtsls",
   -- "terraformls",
   "vimls",
   -- "xmlformatter",
@@ -55,7 +55,7 @@ if vim.loop.os_uname().machine == "aarch64" then
     -- "yamlfix",
     "bashls",
     "yamlls",
-    "tsserver",
+    "vtsls",
     -- "pylance",
     "html",
   }

@@ -1,3 +1,4 @@
+-- Your original configuration
 return {
   signs = {
     add = {
