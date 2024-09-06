@@ -72,7 +72,6 @@ end
 
 return {
   log_level = vim.log.levels.WARN,
-  ensure_installed = servers,
   automatic_installation = {
     exclude = { "clangd" },
   },
