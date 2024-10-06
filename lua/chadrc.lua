@@ -73,7 +73,7 @@ if vim.v.shell_error ~= 0 then
   utils.tbl_filter_inplace(servers, "shellharden")
 end
 
-M.ui = {
+M.base46 = {
   ------------------------------- base46 -------------------------------------
   -- hl_override = require("highlights.hlo").highlight,
   hl_add = require("highlights.hlo").highlight,

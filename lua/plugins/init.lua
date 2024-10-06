@@ -197,8 +197,7 @@ local plugins = {
   },
   -- copilot
   {
-    "tris203/copilot-cmp",
-    branch = "0.11_compat",
+    "zbirenbaum/copilot-cmp",
     enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
     config = function()

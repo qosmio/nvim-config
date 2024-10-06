@@ -62,6 +62,7 @@ M.config = {
     toml = { "taplo" },
     yaml = { "yamlfmt", "yamlfix" },
     c = { "clang_format" },
+    cpp = { "clang_format" },
     cmake = { "cmake_format" },
     -- Use the "*" filetype to run formatters on all filetypes.
     ["*"] = { "codespell" },
