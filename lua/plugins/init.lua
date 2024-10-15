@@ -7,7 +7,7 @@ local lang = function(mod)
 end
 
 local plugins = {
-  -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
+  { "lukas-reineke/indent-blankline.nvim", enabled = false },
   { "williamboman/mason.nvim",           opts = require(cfg "mason") },
   { "williamboman/mason-lspconfig.nvim", opts = require(cfg "mason_lspconfig") },
   { "hrsh7th/nvim-cmp",                  opts = require(cfg "cmp") },
@@ -20,6 +20,7 @@ local plugins = {
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
     dependencies = { "numToStr/Comment.nvim" },
+    -- event = { "VimEnter" },
     keys = { "gbc", "gcc" },
     config = function()
       require("Comment").setup {
@@ -199,9 +200,9 @@ local plugins = {
     "zbirenbaum/copilot-cmp",
     enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
-    config = function(_, opts)
+    config = function()
       local copilot_cmp = require("copilot_cmp")
-      copilot_cmp.setup(opts)
+      copilot_cmp.setup()
       require("plugins.lsp.utils").on_attach(function(client)
         if client.name == "copilot" then
           copilot_cmp._on_insert_enter()

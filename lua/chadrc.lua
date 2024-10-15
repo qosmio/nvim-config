@@ -73,9 +73,9 @@ if vim.v.shell_error ~= 0 then
   utils.tbl_filter_inplace(servers, "shellharden")
 end
 
-M.ui = {
+M.base46 = {
   ------------------------------- base46 -------------------------------------
-  hl_override = require("highlights.hlo").highlight,
+  -- hl_override = require("highlights.hlo").highlight,
   hl_add = require("highlights.hlo").highlight,
   theme_toggle = { "onedark-deep", "onedark-deep" },
   theme = "onedark-deep", -- default theme
