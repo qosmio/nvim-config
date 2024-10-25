@@ -7,12 +7,14 @@ local lang = function(mod)
 end
 
 local plugins = {
+  { "L3MON4D3/LuaSnip",                    build = "make install_jsregexp"},
   { "lukas-reineke/indent-blankline.nvim", enabled = false },
-  { "williamboman/mason.nvim",           opts = require(cfg "mason") },
-  { "williamboman/mason-lspconfig.nvim", opts = require(cfg "mason_lspconfig") },
-  { "hrsh7th/nvim-cmp",                  opts = require(cfg "cmp") },
-  { "NvChad/nvim-colorizer.lua",         opts = require(cfg "colorizer") },
-  { "lewis6991/gitsigns.nvim",           opts = require(cfg "gitsigns") },
+  { "neovim/nvim-lspconfig",               version = "v1.0.0" },
+  { "williamboman/mason.nvim",             opts = require(cfg "mason") },
+  { "williamboman/mason-lspconfig.nvim",   opts = require(cfg "mason_lspconfig") },
+  { "hrsh7th/nvim-cmp",                    opts = require(cfg "cmp") },
+  { "NvChad/nvim-colorizer.lua",           opts = require(cfg "colorizer") },
+  { "lewis6991/gitsigns.nvim",             opts = require(cfg "gitsigns") },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = require(cfg "treesitter"),
@@ -42,7 +44,7 @@ local plugins = {
       require "nvchad.configs.lspconfig"
       local sources = require "mason-registry.sources"
       require(lang "crossplane")
-      require(lang "pylance")
+      -- require(lang "pylance")
       require("cmp").setup.filetype("python", require(cfg "cmp.python"))
       require(lang "yamlfix")
       sources.set_registries { "lua:registry", "lua:mason-registry.index", "github:mason-org/mason-registry" }
@@ -122,13 +124,6 @@ local plugins = {
       end
     end,
   },
-  {
-    "anuvyklack/pretty-fold.nvim",
-    config = function()
-      require(cfg "pretty_fold")
-    end,
-  },
-  { "lukas-reineke/cmp-rg" },
   { "hrsh7th/cmp-cmdline" },
   { "hrsh7th/cmp-nvim-lua",                dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
   { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "nvimtools/none-ls.nvim" } },
@@ -147,7 +142,6 @@ local plugins = {
     end,
   },
   { "lvimuser/lsp-inlayhints.nvim" },
-  { "microsoft/python-type-stubs", ft = "python" },
   {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
@@ -200,78 +194,48 @@ local plugins = {
     "zbirenbaum/copilot-cmp",
     enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
-    config = function()
-      local copilot_cmp = require("copilot_cmp")
-      copilot_cmp.setup()
+    config = function(_, opts)
+      local copilot_cmp = require "copilot_cmp"
+      copilot_cmp.setup(opts)
       require("plugins.lsp.utils").on_attach(function(client)
         if client.name == "copilot" then
-          copilot_cmp._on_insert_enter()
+          copilot_cmp._on_insert_enter {}
         end
       end)
     end,
     dependencies = {
-      "zbirenbaum/copilot.lua",
+      "copilot.lua",
       cmd = "Copilot",
       build = ":Copilot auth",
       opts = require "plugins.config.copilot",
     },
   },
-  -- { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
-  -- { "jvirtanen/vim-hcl",   ft = { "hcl" } },
-  -- { "egberts/vim-nftables" },
   { "cmcaine/vim-uci", ft = { "uci" } },
-  -- {
-  --   url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-  --   config = function()
-  --     local lsp_lines = require "lsp_lines"
-  --     lsp_lines.setup()
-  --     vim.keymap.set("n", "g?", function()
-  --       local lines_enabled = not vim.diagnostic.config().virtual_lines
-  --       vim.diagnostic.config {
-  --         virtual_lines = lines_enabled,
-  --         virtual_text = not lines_enabled,
-  --       }
-  --     end, { noremap = true, silent = true })
-  --
-  --     vim.diagnostic.config {
-  --       virtual_text = true,
-  --       virtual_lines = false,
-  --     }
-  --   end,
-  -- },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    enabled = vim.env.COPILOT_ENABLE == "true",
+    event = { "BufReadPost", "BufNewFile" },
+    branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = {
+      debug = false, -- Enable debugging
+      -- See Configuration section for rest
+    },
+    -- See Commands section for default commands if you want to lazy load on them
+  },
   {
     "nvim-treesitter/nvim-treesitter-context",
-    -- lazy = false,
-    config = function()
-      require("treesitter-context").setup {
-        enable = true,
-        max_lines = 1,
-        trim_scope = "outer",
-        -- patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-        --   -- For all filetypes
-        --   -- Note that setting an entry here replaces all other patterns for this entry.
-        --   -- By setting the 'default' entry below, you can control which nodes you want to
-        --   -- appear in the context window.
-        --   default = {
-        --     "class",
-        --     "function",
-        --     "method",
-        --     "for", -- These won't appear in the context
-        --     "while",
-        --     "if",
-        --     "switch",
-        --     "case",
-        --     "element",
-        --     "call",
-        --   },
-        -- },
-        -- exact_patterns = {},
-        --
-        zindex = 20,     -- The Z-index of the context window
-        mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
-        separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
-      }
-    end,
+    event = "VeryLazy",
+    opts = {
+      enable = true,
+      max_lines = 1,
+      mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+      separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
+    },
   },
   {
     "stevearc/conform.nvim",

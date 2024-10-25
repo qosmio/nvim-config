@@ -220,6 +220,34 @@ M.copilot = {
   },
 }
 
+M.copilot_chat = {
+  -- lazy.nvim keys
+
+  -- Quick chat with Copilot
+  n = {
+    ["<leader>ccq"] = {
+      function()
+        local input = vim.fn.input "Quick Chat: "
+        if input ~= "" then
+          require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+        end
+      end,
+      desc = "CopilotChat - Quick chat",
+    },
+  },
+  v = {
+    ["<leader>ccq"] = {
+      function()
+        local input = vim.fn.input "Quick Chat: "
+        if input ~= "" then
+          require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+        end
+      end,
+      desc = "CopilotChat - Quick chat",
+    },
+  },
+}
+
 for _, section in pairs(M) do
   for mode, maps in pairs(section) do
     for key, val in pairs(maps) do
@@ -234,41 +262,3 @@ for _, section in pairs(M) do
     end
   end
 end
-
--- -- map("v", "<leader>'", "<cmd>lua", { desc = "toggle comment" })
--- -- map("n", "<leader>.", "<cmd>lua", { desc = "toggle blockcomment" })
--- map("n", "<C-t>", "<cmd>ToggleAlternate<cr>", { desc = "Toggle Alternate (true/false 0/1 etc)" })
--- map("n", "<leader>hR", "<cmd>Gitsigns reset_buffer <CR>", { desc = "" })
--- map("n", "<leader>hp", "<cmd>Gitsigns preview_hunk <CR>", { desc = "" })
--- map("n", "<leader>hb", "<cmd>Gitsigns blame_line(true) <CR>", { desc = "" })
--- map("n", "<leader>hr", "<cmd>Gitsigns reset_hunk <CR>", { desc = "" })
--- map("n", "]h", "&diff ? ']h' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'", { desc = "" })
--- map("n", "<leader>hs", "<cmd>Gitsigns stage_hunk <CR>", { desc = "" })
--- map("n", "[h", "&diff ? '[h' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'", { desc = "" })
--- map("n", "<leader>hU", "<cmd>Gitsigns reset_buffer_index <CR>", { desc = "" })
--- map("n", "<leader>hS", "<cmd>Gitsigns stage_buffer <CR>", { desc = "" })
--- map("n", "<leader>hu", "<cmd>Gitsigns undo_stage_hunk <CR>", { desc = "" })
--- map("v", "<leader>hr", '<cmd>Gitsigns reset_hunk({vim.fn.line("."), vim.fn.line("v")}) <CR>', { desc = "" })
--- map("v", "<leader>hs", '<cmd>Gitsigns stage_hunk({vim.fn.line("."), vim.fn.line("v")}) <CR>', { desc = "" })
--- -- map("v", "<leader>ll", "<cmd>lua", { desc = "Format Code Range" })
--- -- map("n", "<leader>lt", "<cmd>lua", { desc = "Type Definition" })
--- -- map("n", "<leader>lr", "<cmd>lua", { desc = "Rename" })
--- -- map("n", "<leader>lo", "<cmd>lua", { desc = "Loc List" })
--- -- map("n", "<leader>lw", "<cmd>lua", { desc = "Add Workspace" })
--- -- map("n", "<leader>lk", "<cmd>lua", { desc = "Fix Code" })
--- -- map("n", "<leader>lW", "<cmd>lua", { desc = "List Workspaces" })
--- -- map("n", "<leader>ll", "<cmd>lua", { desc = "Format Code" })
--- map("n", "<leader>kk", "<cmd>MasonUpdateAll<cr>", { desc = "Mason update all installed servers" })
--- map("n", "<leader>uu", "<cmd>NvChadUpdate<cr>", { desc = "Update NvChad" })
--- map("n", "<leader>ps", "<cmd>Lazy show<cr>", { desc = "Status" })
--- map("n", "<leader>pc", "<cmd>Lazy health<cr>", { desc = "Health" })
--- map("n", "<leader>pp", "<cmd>Lazy sync<cr>", { desc = "Sync" })
--- map("v", "x", '"_x', { desc = "" })
--- map("v", "d", '"_d', { desc = "" })
--- map("v", "c", '"_dP', { desc = "" })
--- -- map("n", "<C-x>", "<cmd>lua", { desc = "" })
--- map("n", "x", '"_x', { desc = "" })
--- map("n", "d", '"_d', { desc = "" })
--- map("n", "<C-o>", "<cmd>Inspect<CR>", { desc = " Show Highlight Group" })
--- -- map("i", "<C-j>", "<cmd>lua", { desc = "[copilot] accept suggestion" })
--- -- map("i", "<C-k>", "<cmd>lua", { desc = "[copilot] next suggestion" })

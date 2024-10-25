@@ -45,6 +45,28 @@ aucmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+aucmd({ "CursorHold" }, {
+  pattern = "*",
+  callback = function()
+    for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if vim.api.nvim_win_get_config(winid).zindex then
+        return
+      end
+    end
+    vim.diagnostic.open_float {
+      scope = "cursor",
+      focusable = false,
+      close_events = {
+        "CursorMoved",
+        "CursorMovedI",
+        "BufHidden",
+        "InsertCharPre",
+        "WinLeave",
+      },
+    }
+  end,
+})
+
 local function init_term()
   vim.wo.number = false
   vim.wo.relativenumber = false

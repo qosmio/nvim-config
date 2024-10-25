@@ -19,6 +19,7 @@ local ensure_installed = {
   "http",
   "sql",
   "regex",
+  "markdown",
 }
 
 return {

@@ -45,13 +45,11 @@ return {
       require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
     end,
   },
-  sources = cmp.config.sources({ name = "codeium" }, {
+  sources = cmp.config.sources({ name = "copilot", group_index = 1, priority = 100 }, {
     {
       name = "luasnip",
       keyword_length = 2,
-      -- trigger_characters = { "s", "n" },
-      -- Keyword_pattern = "sn",
-      priority = 1000,
+      priority = 901,
     },
     { name = "nvim_lua", priority = 900 },
     { name = "nvim_lsp", keyword_length = 0, priority = 800 },
@@ -61,7 +59,7 @@ return {
     { name = "rg", priority = 700 },
   }, {
     { name = "spell", priority = 600 },
-    { name = "rime", priority = 600 },
+    { name = "rhyme", priority = 600 },
   }),
   sorting = {
     priority_weight = 1,

@@ -24,7 +24,9 @@ caps.offsetEncoding = { "utf-16" }
 for _, item in ipairs(require("mason-registry").get_installed_package_names()) do
   local server = require("mason-lspconfig").get_mappings().mason_to_lspconfig[item] or nil
   if item == "pylance" then
-    server = item
+    server = nil
+    -- server = item
+    -- how do i do continue in lua?
   end
   if server ~= nil then
     ok, res = pcall(require, "plugins.lsp.servers." .. server)
