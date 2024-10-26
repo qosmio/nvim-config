@@ -1,6 +1,13 @@
 local M = {}
 
 local formatters = {
+  -- Javascript/CSS/JSON
+  biome = {
+    append_args = {
+      "--config-path",
+      vim.fn.stdpath "config" .. "/lua/plugins/config/.biome.json",
+    },
+  },
   -- SQL
   sqlfluff = {
     prepend_args = {
@@ -41,11 +48,9 @@ local formatters = {
 M.config = {
   -- Map of filetype to formatters
   formatters_by_ft = {
+    css = { "biome" },
     lua = { "stylua" },
-    -- Conform will run multiple formatters sequentially
-    -- go = { "goimports", "gofumpt" },
-    -- Use a sub-list to run only the first available formatter
-    javascript = { "prettierd", "prettier", stop_after_first = true },
+    javascript = { "biome" },
     -- You can use a function here to determine the formatters dynamically
     python = function(bufnr)
       if require("conform").get_formatter_info("ruff_format", bufnr).available then
@@ -58,7 +63,7 @@ M.config = {
     zsh = { "beautysh", "shfmt" },
     sh = { "beautysh", "shfmt" },
     sql = { "sqlfluff" },
-    json = { "jq" },
+    json = { "biome", "jq", stop_after_first = true },
     toml = { "taplo" },
     yaml = { "yamlfmt", "yamlfix" },
     c = { "clang_format" },
