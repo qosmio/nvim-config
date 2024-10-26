@@ -9,7 +9,6 @@ end
 local plugins = {
   { "L3MON4D3/LuaSnip",                    build = "make install_jsregexp"},
   { "lukas-reineke/indent-blankline.nvim", enabled = false },
-  { "neovim/nvim-lspconfig",               version = "v1.0.0" },
   { "williamboman/mason.nvim",             opts = require(cfg "mason") },
   { "williamboman/mason-lspconfig.nvim",   opts = require(cfg "mason_lspconfig") },
   { "hrsh7th/nvim-cmp",                    opts = require(cfg "cmp") },
