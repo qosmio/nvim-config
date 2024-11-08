@@ -10,15 +10,14 @@
   "formatter": {
     "formatWithErrors": true,
     "enabled": true,
-    "indentStyle": "tab",
-    "lineWidth": 100,
+    "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
     "attributePosition": "auto"
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "double"
     }
   },
   "organizeImports": {
@@ -60,18 +59,5 @@
         "useSemanticElements": "off"
       }
     }
-  },
-  "overrides": [
-    {
-      "include": [
-        "*.json",
-        ".*rc",
-        "*.yml"
-      ],
-      "formatter": {
-        "indentWidth": 2,
-        "indentStyle": "space"
-      }
-    }
-  ]
+  }
 }
