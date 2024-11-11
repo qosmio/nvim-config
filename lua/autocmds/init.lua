@@ -251,7 +251,7 @@ aucmd("FileType", {
 })
 aucmd("FileType", {
   group = group_name,
-  pattern = { "yaml", "json" },
+  pattern = { "yaml", "json", "javascript" },
   callback = function()
     vim.opt.tabstop = 2
     vim.opt.softtabstop = 2
