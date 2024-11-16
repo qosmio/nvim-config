@@ -1,7 +1,9 @@
 local M = {}
 local api = {
   set = vim.api.nvim_set_hl,
-  get = vim.api.nvim_get_hl_by_name,
+  get = function(name)
+    return vim.api.nvim_get_hl(0, { name = name })
+  end,
   defs = vim.api.nvim__get_hl_defs,
 }
 
@@ -18,7 +20,7 @@ M.clearEmptyTables = function(t)
 end
 
 M.get_hl = function(hl)
-  local hl_group = vim.api.nvim_get_hl_by_name(hl, true)
+  local hl_group = vim.api.nvim_get_hl(0, { name = hl })
   for k, color in pairs(hl_group) do
     if type(color) ~= "boolean" then
       hl_group[k] = string.format("#%06x", color)
@@ -76,7 +78,9 @@ end
 
 M._hex_to_rgb = function(hex)
   hex = hex:gsub("#", "")
-  return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+  return tonumber("0x" .. hex:sub(1, 2)),
+    tonumber("0x" .. hex:sub(3, 4)),
+    tonumber("0x" .. hex:sub(5, 6))
 end
 
 M._hex_to_8bit = function(color)
@@ -85,8 +89,8 @@ M._hex_to_8bit = function(color)
   -- local safe = math.floor(r * 6 / 256) * 36 + math.floor(g * 6 / 256) * 6 + math.floor(b * 6 / 256)
   -- local encodedData = bit.lshift(math.floor((r / 32)), 5) + bit.lshift(math.floor((g / 32)), 2) + math.floor((b / 64))
   local encodedData = bit.lshift(math.floor(r * 7 / 255), 5)
-      + bit.lshift(math.floor(g * 7 / 255), 2)
-      + math.floor((b * 3 / 255))
+    + bit.lshift(math.floor(g * 7 / 255), 2)
+    + math.floor((b * 3 / 255))
   return encodedData
 end
 
@@ -139,7 +143,9 @@ end
 
 M.hex_to_rgb = function(hex)
   hex = hex:gsub("#", "")
-  return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+  return tonumber("0x" .. hex:sub(1, 2)),
+    tonumber("0x" .. hex:sub(3, 4)),
+    tonumber("0x" .. hex:sub(5, 6))
 end
 
 -- convert table into string

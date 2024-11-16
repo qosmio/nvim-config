@@ -93,13 +93,20 @@ local func_lookup = {
 
 local function get_functions(bufnr, lang, query_string)
   local parser = vim.treesitter.get_parser(bufnr, lang)
+  if not parser then
+    error("Parser not found for: " .. lang)
+    return
+  end
   local syntax_tree = parser:parse()[1]
+  if not syntax_tree then
+    return
+  end
   local root = syntax_tree:root()
   local query = vim.treesitter.query.parse(lang, query_string)
   local func_list = {}
 
   for _, captures, metadata in query:iter_matches(root, bufnr) do
-    local row, col, _ = captures[1]:start()
+    local row, col, _ = captures[1]() -- undefined field 'start'
     local name = vim.treesitter.get_node_text(captures[1], bufnr)
     table.insert(func_list, { name, row, col, metadata[1].range })
   end
@@ -137,26 +144,26 @@ function M.goto_function(bufnr, lang)
   end
 
   pickers
-      .new(opts, {
-        prompt_title = "Function List",
-        finder = finders.new_table {
-          results = func_list,
-          entry_maker = function(entry)
-            return { value = entry, display = entry[1], ordinal = entry[1] }
-          end,
-        },
-        sorter = conf.generic_sorter(opts),
-        attach_mappings = function()
-          actions.select_default:replace(function(prompt_bufnr)
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            local row, col = selection.value[2] + 1, selection.value[3] + 2
-            vim.fn.setcharpos(".", { bufnr, row, col, 0 })
-          end)
-          return true
+    .new(opts, {
+      prompt_title = "Function List",
+      finder = finders.new_table {
+        results = func_list,
+        entry_maker = function(entry)
+          return { value = entry, display = entry[1], ordinal = entry[1] }
         end,
-      })
-      :find()
+      },
+      sorter = conf.generic_sorter(opts),
+      attach_mappings = function()
+        actions.select_default:replace(function(prompt_bufnr)
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          local row, col = selection.value[2] + 1, selection.value[3] + 2
+          vim.fn.setcharpos(".", { bufnr, row, col, 0 })
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
 M.imap = function(tbl)
@@ -219,7 +226,12 @@ M.execute = function()
   cmd = cmd:gsub("$dir", vim.fn.expand "%:p:h")
   cmd = cmd:gsub(
     "$moduleName",
-    vim.fn.substitute(vim.fn.substitute(vim.fn.fnamemodify(vim.fn.expand "%:r", ":~:."), "/", ".", "g"), "\\", ".", "g")
+    vim.fn.substitute(
+      vim.fn.substitute(vim.fn.fnamemodify(vim.fn.expand "%:r", ":~:."), "/", ".", "g"),
+      "\\",
+      ".",
+      "g"
+    )
   )
 
   vim.cmd "silent! make"

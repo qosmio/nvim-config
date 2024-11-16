@@ -1,0 +1,8 @@
+std = ".nvim"
+
+[lints]
+mixed_table = "allow"
+
+[config]
+base = "lua51"
+name = "nvim"

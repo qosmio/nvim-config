@@ -77,8 +77,8 @@ M.base46 = {
   ------------------------------- base46 -------------------------------------
   -- hl_override = require("highlights.hlo").highlight,
   hl_add = require("highlights.hlo").highlight,
-  theme_toggle = { "onedark-deep", "onedark-deep" },
-  theme = "onedark-deep", -- default theme
+  theme_toggle = { "flexoki", "flexoki" },
+  theme = "flexoki", -- default theme
   -- cmp themeing
   cmp = {
     icons = true,

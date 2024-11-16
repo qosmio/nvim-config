@@ -21,22 +21,18 @@ opt.completeopt = { "menu", "menuone", "noinsert", "noselect" } -- default is "m
 -- opt.breakindent = true -- indent lines after a break
 -- opt.linebreak = true -- break lines after a character
 -- opt.updatetime = 550 -- update the file info every `N` ms
-opt.timeoutlen = 800       -- timeout length for commands (ms) defaut 1000
+opt.timeoutlen = 200       -- timeout length for commands (ms) defaut 1000
 opt.textwidth = 120        -- text width for the editor
 opt.relativenumber = false -- true to show relative line numbers
 opt.cursorlineopt = "both" -- number the lines from the cursor
 
 --" Spaces & Tabs {{{
-opt.expandtab = false
-opt.softtabstop = 2 -- number of soft spaces in a tab
-opt.tabstop = 4     -- number of spaces in a tab
-opt.shiftwidth = 2  -- number of spaces to shift
+opt.expandtab = true
+opt.softtabstop = 4 -- number of soft spaces in a tab
+opt.tabstop = 2     -- number of spaces in a tab
+opt.shiftwidth = 4  -- number of spaces to shift
 opt.copyindent = true
-
-opt.tabstop = 2
-opt.softtabstop = 0
 -- opt.expandtab = false
-opt.shiftwidth = 2
 opt.shiftround = true
 opt.autoindent = true
 opt.copyindent = true
@@ -93,7 +89,8 @@ opt.joinspaces = false
 opt.listchars = {
   -- eol      = '¬',
   -- extends  = '❯',
-  tab = "»»»",
+  space = "⋅",
+  tab = "»·",
   extends = "━",
   precedes = "≪",
   nbsp = "∅",

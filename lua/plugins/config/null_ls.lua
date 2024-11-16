@@ -5,10 +5,10 @@ end
 -- local command_resolver = require "null-ls.helpers.command_resolver"
 -- local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
--- local code_actions = null_ls.builtins.code_actions
+local code_actions = null_ls.builtins.code_actions
 
 local sources = {
-  -- code_actions.refactoring,
+  code_actions.refactoring,
   -- SQL
   -- formatting.sqlfluff.with {
   --   extra_args = {
@@ -20,52 +20,11 @@ local sources = {
   -- },
 
   -- Javascript
-  -- diagnostics.eslint_d,
-  -- formatting.prettier.with {
-  --   filetypes = {
-  --     "javascript",
-  --     "javascriptreact",
-  --     "typescript",
-  --     "typescriptreact",
-  --     "vue",
-  --     "css",
-  --     "scss",
-  --     "less",
-  --     "html",
-  --     "json",
-  --     "jsonc",
-  --     "markdown",
-  --     "markdown.mdx",
-  --     "graphql",
-  --     "handlebars",
-  --   },
-  --   dynamic_command = command_resolver.from_node_modules(),
-  --   command = "prettier",
-  --   args = {
-  --     "--config-path",
-  --     vim.fn.stdpath "config" .. "/lua/plugins/config/.prettierrc.json",
-  --     "--stdin",
-  --     "$FILENAME",
-  --   },
-  -- },
-  --
-  -- Lua
-  -- wget https://github.com/JohnnyMorganz/StyLua/releases/download/v0.12.3/stylua-0.12.3-linux.zip
-  -- formatting.stylua.with {
-  --   extra_args = {
-  --     "--config-path",
-  --     vim.fn.stdpath "config" .. "/lua/plugins/config/.stylua.toml",
-  --   },
-  -- },
 
-  -- Python
-  -- pip install reorder-python-imports black yapf
-  -- require "plugins.lsp.diagnostics.pylance",
-  -- formatting.reorder_python_imports.with { extra_args = { "--py310-plus" } },
-  -- formatting.black,
-  -- formatting.ruff,
-  -- diagnostics.ruff,
-  -- formatting.usort,
+  -- Lua
+  diagnostics.selene.with {
+    extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
+  },
 
   -- Nginx
   -- npm -g i nginxbeautifier
@@ -129,18 +88,6 @@ local sources = {
   -- diagnostics.yamllint.with {
   --   extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamllint.yml" },
   -- },
-  -- -- Golang
-  -- formatting.gofumpt,
-  -- -- CMAKE
-  -- -- diagnostics.cmake_lint,
-  -- formatting.cmake_format,
-  -- -- XML
-  -- -- formatting.xmllint,
-  -- -- Ruby
-  -- -- diagnostics.rubocop,
-  -- formatting.rubocop,
-  -- HTML5
-  -- diagnostics.tidy,
 }
 
 null_ls.setup {

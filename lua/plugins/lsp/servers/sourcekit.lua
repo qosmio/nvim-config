@@ -13,8 +13,8 @@ Language server for Swift and C/C++/Objective-C.
   root_dir = function(fname)
     local general_root = { ".project.*", ".git/", "README.md" }
     return util.root_pattern(unpack(vim.tbl_deep_extend("force", swift_root, general_root)))(fname)
-        or util.find_git_ancestor(fname)
-        or util.path.dirname(fname)
+      or util.find_git_ancestor(fname)
+      or util.path.dirname(fname)
   end,
   settings = {
     inlayHints = {

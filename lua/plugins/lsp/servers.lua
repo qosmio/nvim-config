@@ -25,8 +25,6 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
   local server = require("mason-lspconfig").get_mappings().mason_to_lspconfig[item] or nil
   if item == "pylance" then
     server = nil
-    -- server = item
-    -- how do i do continue in lua?
   end
   if server ~= nil then
     ok, res = pcall(require, "plugins.lsp.servers." .. server)
@@ -36,7 +34,7 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
         if res.on_attach == nil then
           res.on_attach = require("plugins.lsp.settings").on_attach
         end
-        -- if server == "pylance" then
+        -- if server == "selene" then
         --   vim.print(res)
         -- end
         lspconfig[server].setup(res)

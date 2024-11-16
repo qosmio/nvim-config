@@ -43,6 +43,15 @@ local formatters = {
     timeout = 15000,
     prepend_args = { "-conf", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamlfmt.yml" },
   },
+
+  -- Python
+  ruff_format = {
+    append_args = {
+      "--config",
+      vim.fn.stdpath "config" .. "/lua/plugins/config/.ruff.toml",
+    },
+  },
+
 }
 
 M.config = {
@@ -54,9 +63,7 @@ M.config = {
     -- You can use a function here to determine the formatters dynamically
     python = function(bufnr)
       if require("conform").get_formatter_info("ruff_format", bufnr).available then
-        return { "ruff_format" }
-      else
-        return { "usort", "black" }
+        return { "ruff_format", "usort" }
       end
     end,
     bash = { "beautysh", "shfmt" },

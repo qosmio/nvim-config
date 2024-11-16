@@ -243,10 +243,15 @@ aucmd("FileType", {
   group = group_name,
   pattern = { "python" },
   callback = function()
-    vim.opt.autoindent = true
-    vim.opt.softtabstop = 4
-    vim.opt.shiftwidth = 4
-    vim.opt.expandtab = true
+    vim.opt.tabstop = 2 -- number of spaces a tab counts for
+    vim.opt.softtabstop = 2 -- number of spaces a tab counts for when editing
+    vim.opt.shiftwidth = 2 -- number of spaces to use for autoindent
+    vim.opt.expandtab = true -- use spaces instead of tabs
+    -- vim.opt.autoindent = true -- auto indents new lines
+    -- vim.opt.smartindent = true -- smart indents new lines
+    -- vim.opt.smarttab = true -- smartly use tabs for indenting
+    -- vim.opt.cindent = true -- c style indenting, (i.e. '{' on same line as if/for/while)
+    -- vim.opt.formatoptions = "croql" -- auto format comments, auto wrap lines, etc.
   end,
 })
 aucmd("FileType", {
@@ -330,7 +335,16 @@ aucmd({ "BufReadPost" }, {
     end
   end,
 })
+
 -- }}}
+group_name = augroup "leading_whitespace"
+aucmd({ "BufNewFile", "BufRead", "InsertLeave", "ColorScheme" }, {
+  group = group_name,
+  callback = function()
+    vim.api.nvim_set_hl(0, "WhiteSpaceMol", { blend = 0 })
+    vim.cmd [[match WhiteSpaceMol /[^ \t]\@<=\s\+/]]
+  end,
+})
 
 -- wrapping for txt {{{
 M.setupWrapping = function()
@@ -356,46 +370,6 @@ aucmd("BufEnter", {
   pattern = { "*.png", "*.jpg", "*.gif" },
   command = [[exec "!nsxiv ".expand("%") | :bw]],
 })
-
--- edit hex for bins - edit binary using xxd-format {{{
--- group_name = augroup "binary_files"
-
--- aucmd("BufReadPre", {
---   pattern = { "*.bin", "*.dat" },
---   command = "let &bin=1",
---   group = group_name,
--- })
--- aucmd("BufReadPost", {
---   pattern = { "*.bin", "*.dat" },
---   command = "if &bin | %!xxd",
---   group = group_name,
--- })
--- aucmd("BufReadPost", {
---   pattern = { "*.bin", "*.dat" },
---   command = "set ft=xxd | endif",
---   group = group_name,
--- })
--- aucmd("BufWritePre", {
---   pattern = { "*.bin", "*.dat" },
---   command = "if &bin | %!xxd -r",
---   group = group_name,
--- })
--- aucmd("BufWritePre", {
---   pattern = { "*.bin", "*.dat" },
---   command = "endif",
---   group = group_name,
--- })
--- aucmd("BufWritePost", {
---   pattern = { "*.bin", "*.dat" },
---   command = "if &bin | %!xxd",
---   group = group_name,
--- })
--- aucmd("BufWritePost", {
---   pattern = { "*.bin", "*.dat" },
---   command = "set nomod | endif",
---   group = group_name,
--- })
--- }}}
 
 -- Code Folding {{{
 -- function to create a list of commands and convert them to autocommands
