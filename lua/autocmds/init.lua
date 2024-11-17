@@ -243,13 +243,14 @@ aucmd("FileType", {
   group = group_name,
   pattern = { "python" },
   callback = function()
-    vim.opt.tabstop = 2 -- number of spaces a tab counts for
+    vim.opt.tabstop = 4 -- number of spaces a tab counts for
     vim.opt.softtabstop = 2 -- number of spaces a tab counts for when editing
-    vim.opt.shiftwidth = 2 -- number of spaces to use for autoindent
+    vim.opt.shiftwidth = 4 -- number of spaces to use for autoindent
     vim.opt.expandtab = true -- use spaces instead of tabs
-    -- vim.opt.autoindent = true -- auto indents new lines
-    -- vim.opt.smartindent = true -- smart indents new lines
-    -- vim.opt.smarttab = true -- smartly use tabs for indenting
+    vim.opt.textwidth = 0
+    vim.opt.autoindent = true -- auto indents new lines
+    vim.opt.smartindent = true -- smart indents new lines
+    vim.opt.smarttab = true -- smartly use tabs for indenting
     -- vim.opt.cindent = true -- c style indenting, (i.e. '{' on same line as if/for/while)
     -- vim.opt.formatoptions = "croql" -- auto format comments, auto wrap lines, etc.
   end,

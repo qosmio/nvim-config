@@ -51,7 +51,6 @@ local formatters = {
       vim.fn.stdpath "config" .. "/lua/plugins/config/.ruff.toml",
     },
   },
-
 }
 
 M.config = {
@@ -61,16 +60,12 @@ M.config = {
     lua = { "stylua" },
     javascript = { "biome" },
     -- You can use a function here to determine the formatters dynamically
-    python = function(bufnr)
-      if require("conform").get_formatter_info("ruff_format", bufnr).available then
-        return { "ruff_format", "usort" }
-      end
-    end,
+    python = { "ruff_format", "usort" },
     bash = { "beautysh", "shfmt" },
     zsh = { "beautysh", "shfmt" },
     sh = { "beautysh", "shfmt" },
     sql = { "sqlfluff" },
-    json = { "biome", "jq", stop_after_first = true },
+    json = { "biome" },
     toml = { "taplo" },
     yaml = { "yamlfmt", "yamlfix" },
     c = { "clang_format" },

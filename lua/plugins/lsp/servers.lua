@@ -1,13 +1,13 @@
 local lspconfig = require "lspconfig"
 local ok, res
-local cmp_nvim_lsp = require "cmp_nvim_lsp"
-local caps = vim.lsp.protocol.make_client_capabilities()
-caps = cmp_nvim_lsp.default_capabilities(caps)
+-- local cmp_nvim_lsp = require "cmp_nvim_lsp"
+-- local caps = vim.lsp.protocol.make_client_capabilities()
+-- caps = cmp_nvim_lsp.default_capabilities(caps)
 
-caps.textDocument.completion.completionItem.snippetSupport = true
-caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
+-- caps.textDocument.completion.completionItem.snippetSupport = true
+-- caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
 -- caps.workspace.didChangeWorkspaceFolders = false
-caps.offsetEncoding = { "utf-16" }
+-- caps.offsetEncoding = { "utf-16" }
 -- vim.print(require("mason-registry").get_installed_packages())
 -- vim.print(require("mason-lspconfig").get_mappings())
 -- for _, item in ipairs(require("mason-registry").get_installed_package_names()) do
@@ -30,14 +30,24 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
     ok, res = pcall(require, "plugins.lsp.servers." .. server)
     if res.exist == nil then
       if ok and res ~= true then
-        res.capabilities = caps
-        if res.on_attach == nil then
-          res.on_attach = require("plugins.lsp.settings").on_attach
-        end
-        -- if server == "selene" then
+        -- res.capabilities = caps
+        -- if res.on_attach == nil then
+        --   vim.print("No on_attach function for " .. server)
+        --   res.on_attach = require("plugins.lsp.settings").on_attach
+        -- end
+        -- if server == "basedpyright" then
+        --   -- this is the DEFAULT CONFIG NOT THE FINAL CONFIG!
+        --   vim.print(require "lspconfig.configs.basedpyright")
         --   vim.print(res)
         -- end
         lspconfig[server].setup(res)
+        -- show final config for basedpyright after being setup
+        -- if server == "basedpyright" then
+        --   -- vim.print(require "lspconfig.configs.basedpyright") -- THIS IS NOT WHAT I ASKED FOR AFTER THE SERVER IS
+        --   -- SETUP IT WILL OBVIOUSLY BE DIFFERENT FROM THE DEFAULT CONFIG
+        --   vim.print(lspconfig[server])
+        -- end
+
         -- if server == "clangd" then
         --   vim.print(lspconfig[server])
         --   local m = assert(io.open("/tmp/luac.out", "wb"))

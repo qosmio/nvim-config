@@ -30,7 +30,7 @@ function M.basename(str)
 end
 
 -----------------------------------------------------------
--- Contatenates given paths with correct separator.
+-- Concatenates given paths with correct separator.
 -- @param: var args of string paths to joon.
 -----------------------------------------------------------
 function M.join_paths(...)
@@ -90,7 +90,9 @@ end
 -- @param mod char: mapping mode (n, v, i, ..)
 -- @param buffer num: buffer id
 function M.dump(mod)
-  notify(vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf()))))
+  notify(
+    vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf())))
+  )
 end
 
 function M.matches(str, list)
@@ -237,7 +239,10 @@ function M.get_python3_host_prog(opts)
   local python3_executables = {}
   for _, dir in ipairs(path_dirs) do
     for _, file in ipairs(M.dirlist(dir)) do
-      if file:match "^python3%.%d+$" and (not opts.exclude or not file:match(opts.exclude)) then
+      if
+        file:match "^python3%.%d+$"
+        and (not opts or not opts.exclude or not file:match(opts.exclude))
+      then
         table.insert(python3_executables, vim.fn.fnamemodify(M.join_paths(dir, file), ":p"))
       end
     end
@@ -252,6 +257,28 @@ function M.get_python3_host_prog(opts)
   -- Set the "python3_host_prog" global variable to the path to the latest executable
   -- vim.g.python3_host_prog = python3_executables[1]
   return python3_executables[1]
+end
+
+--- Get python paths
+-- @return table
+function M.get_current_python_package_paths()
+  -- Unable to get virtual environment path
+  local python_bin = M.get_python3_host_prog()
+  if not python_bin then
+    return {}
+  end
+  local current_python_path =
+    vim.fn.system { python_bin, "-c", "import sys; print(':'.join(sys.path), end='')" }
+  local split_paths = vim.fn.split(current_python_path, ":")
+
+  -- Split string with colon
+  local paths = {}
+  for _, path in ipairs(split_paths) do
+    if not vim.tbl_contains(paths, path) and "" ~= path then
+      table.insert(paths, path)
+    end
+  end
+  return paths
 end
 
 --- Update a mason package

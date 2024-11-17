@@ -1,11 +1,7 @@
 {
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "node_modules",
-      "server",
-      "package.json"
-    ]
+    "ignore": ["node_modules", "server"]
   },
   "formatter": {
     "formatWithErrors": true,
@@ -15,9 +11,18 @@
     "lineEnding": "lf",
     "attributePosition": "auto"
   },
+  "css": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": { "enabled": true }
+  },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double"
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "all",
+      "jsxQuoteStyle": "double"
     }
   },
   "organizeImports": {
@@ -25,38 +30,18 @@
   },
   "linter": {
     "rules": {
-      "style": {
-        "useImportType": "off",
-        "useNumberNamespace": "off",
-        "useNodejsImportProtocol": "off",
-        "noNonNullAssertion": "off",
-        "noUnusedTemplateLiteral": "off"
-      },
+      "recommended": true,
       "complexity": {
-        "noUselessTypeConstraint": "off",
         "noForEach": "off"
       },
-      "correctness": {
-        "useExhaustiveDependencies": "off"
+      "a11y": {
+        "useKeyWithClickEvents": "off"
+      },
+      "style": {
+        "useNodejsImportProtocol": "off"
       },
       "suspicious": {
-        "noGlobalIsNan": "off",
-        "noGlobalIsFinite": "off",
-        "noExplicitAny": "off",
-        "noArrayIndexKey": "off",
-        "noConfusingVoidType": "off",
         "noThenProperty": "off"
-      },
-      "performance": {
-        "noDelete": "off",
-        "noAccumulatingSpread": "off"
-      },
-      "a11y": {
-        "noAriaHiddenOnFocusable": "off",
-        "noLabelWithoutControl": "off",
-        "useFocusableInteractive": "off",
-        "useKeyWithClickEvents": "off",
-        "useSemanticElements": "off"
       }
     }
   }
