@@ -161,7 +161,7 @@ function M.get_os_info()
   local os_name = jit and jit.os or "Linux"
   if os_name == "Windows" then
     os_info["os"] = "Windows"
-    os_info["version"] = "N/A"
+    os_info["version"] = io.popen("ver"):read("*all"):gsub("\n", "")
     os_info["name"] = "Windows"
     os_info["id"] = "Windows"
     os_info["pretty_name"] = "Windows"
@@ -172,7 +172,7 @@ function M.get_os_info()
     local file = io.open("/etc/os-release", "r")
     if not file then
       os_info["os"] = "Linux"
-      os_info["version"] = "N/A"
+      os_info["version"] = 0
       os_info["name"] = "Linux (unknown version)"
       os_info["id"] = "Linux (unknown version)"
       os_info["pretty_name"] = "Linux (unknown version)"
@@ -200,25 +200,26 @@ function M.get_os_info()
     file:close()
 
     os_info["os"] = "Linux"
-    local architecture = io.popen("uname -m"):read "*all"
+    local architecture = io.popen("uname -m"):read "*all" or "N/A"
     architecture = architecture:gsub("\n", "")
     os_info["architecture"] = architecture
-    local memory = io.popen("free -m"):read "*all"
+    local memory = io.popen("free -m"):read "*all" or "N/A"
     memory = memory:match "Mem:%s+(%d+)%s"
     os_info["memory"] = memory .. " MB"
-    local disk = io.popen("df -h / | awk 'NR==2 {printf '%s',$4}'"):read "*all"
+    local disk = io.popen("df -h / | awk 'NR==2 {print $4}'"):read("*all"):gsub("\n", "") or "N/A"
     os_info["disk"] = disk
   elseif os_name == "OSX" then
     os_info["os"] = vim.loop.os_uname().sysname
     os_info["version"] = vim.loop.os_uname().release
     os_info["name"] = "macOS"
     os_info["id"] = "macos"
-    local os_version = io.popen("sw_vers -productVersion"):read("*all"):gsub("\n", "")
+    local os_version = io.popen("sw_vers -productVersion"):read("*all"):gsub("\n", "") or "N/A"
     os_info["pretty_name"] = "macOS " .. os_version
     os_info["architecture"] = vim.loop.os_uname().machine
     local memsize = tonumber(io.popen("sysctl -n hw.memsize"):read("*all"):gsub("\n", "") or 0)
     os_info["memory"] = M.bytes_to_human(memsize)
     os_info["disk"] = io.popen("df -h / | awk 'NR==2 {print $4}'"):read("*all"):gsub("\n", "")
+      or "N/A"
   end
   return os_info
 end
@@ -246,6 +247,9 @@ function M.dirlist(dir)
   local items = {}
   if M.dir_exists(dir) then
     local handle = uv.fs_scandir(dir)
+    if not handle then
+      return items
+    end
     while true do
       local item = uv.fs_scandir_next(handle)
       if item ~= nil then

@@ -85,7 +85,9 @@ local sources = {
 }
 
 if vim.loop.os_uname().machine ~= "aarch64" then
-  if utils.get_os_info().id ~= "rhel" and utils.get_os_info().version:match "^8" then
+  local os_info = utils.get_os_info()
+  local version = tonumber(os_info.version) -- Ensure version is a number
+  if os_info.id ~= "rhel" and not (version < 9) then
     local non_aarch64_sources = {
       diagnostics.selene.with {
         extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
