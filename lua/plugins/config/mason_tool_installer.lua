@@ -14,8 +14,7 @@ local servers = {
 
 if vim.loop.os_uname().machine ~= "aarch64" then
   local os_info = utils.get_os_info()
-  local version = tonumber(os_info.version) -- Ensure version is a number
-  if os_info.id ~= "rhel" and not (version < 9) then
+  if (os_info.id == "rhel" and not tonumber(os_info.version) < 9) or os_info.id ~= "rhel" then
     table.insert(servers, "selene")
   end
 end
