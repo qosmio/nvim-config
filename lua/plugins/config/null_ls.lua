@@ -21,11 +21,6 @@ local sources = {
 
   -- Javascript
 
-  -- Lua
-  diagnostics.selene.with {
-    extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
-  },
-
   -- Nginx
   -- npm -g i nginxbeautifier
   -- formatting.nginx_beautifier.with { args = { "-s", 2, "-i", "-o", "$FILENAME" } },
@@ -72,8 +67,6 @@ local sources = {
   -- },
   -- -- formatting.shellharden.with { extra_filetypes = { "zsh", "bash", "sh" }, },
   --
-  -- -- JSON
-  -- formatting.jq,
   -- -- TOML
   -- formatting.taplo,
   -- -- Ansible
@@ -89,6 +82,14 @@ local sources = {
   --   extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamllint.yml" },
   -- },
 }
+if vim.loop.os_uname().machine ~= "aarch64" then
+  local non_aarch64_sources = {
+    diagnostics.selene.with {
+      extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
+    },
+  }
+  sources = vim.tbl_extend("force", sources, non_aarch64_sources)
+end
 
 null_ls.setup {
   debug = false,
