@@ -28,7 +28,7 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
   end
   if server ~= nil then
     ok, res = pcall(require, "plugins.lsp.servers." .. server)
-    if res.exist == nil then
+    if res then
       if ok and res ~= true then
         -- res.capabilities = caps
         -- if res.on_attach == nil then

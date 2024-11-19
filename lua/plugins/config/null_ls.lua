@@ -1,8 +1,9 @@
+local utils = require "utils"
 local status_ok, null_ls = pcall(require, "null-ls")
 if not status_ok then
   return
 end
--- local command_resolver = require "null-ls.helpers.command_resolver"
+
 -- local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
@@ -82,16 +83,19 @@ local sources = {
   --   extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamllint.yml" },
   -- },
 }
+
 if vim.loop.os_uname().machine ~= "aarch64" then
-  local non_aarch64_sources = {
-    diagnostics.selene.with {
-      extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
-    },
-  }
-  sources = vim.tbl_extend("force", sources, non_aarch64_sources)
+  if utils.get_os_info().id ~= "rhel" and utils.get_os_info().version:match "^8" then
+    local non_aarch64_sources = {
+      diagnostics.selene.with {
+        extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
+      },
+    }
+    sources = vim.tbl_extend("force", sources, non_aarch64_sources)
+  end
 end
 
-null_ls.setup {
+return {
   debug = false,
   sources = sources,
   log_level = "warn",

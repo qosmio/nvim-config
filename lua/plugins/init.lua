@@ -1,5 +1,5 @@
 local cfg = function(mod)
-  return "plugins.config." .. mod
+  return require("plugins.config." .. mod)
 end
 
 local lang = function(mod)
@@ -9,14 +9,14 @@ end
 local plugins = {
   { "L3MON4D3/LuaSnip",                    build = "make install_jsregexp"},
   { "lukas-reineke/indent-blankline.nvim", enabled = false },
-  { "williamboman/mason.nvim",             opts = require(cfg "mason") },
-  { "williamboman/mason-lspconfig.nvim",   opts = require(cfg "mason_lspconfig") },
-  { "hrsh7th/nvim-cmp",                    opts = require(cfg "cmp") },
-  { "NvChad/nvim-colorizer.lua",           opts = require(cfg "colorizer") },
-  { "lewis6991/gitsigns.nvim",             opts = require(cfg "gitsigns") },
+  { "williamboman/mason.nvim",             opts = cfg "mason" },
+  { "williamboman/mason-lspconfig.nvim",   opts = cfg "mason_lspconfig" },
+  { "hrsh7th/nvim-cmp",                    opts = cfg "cmp" },
+  { "NvChad/nvim-colorizer.lua",           opts = cfg "colorizer" },
+  { "lewis6991/gitsigns.nvim",             opts = cfg "gitsigns" },
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = require(cfg "treesitter"),
+    opts = cfg "treesitter",
   },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
@@ -30,29 +30,7 @@ local plugins = {
     end,
   },
   { "folke/which-key.nvim", enabled = true },
-  {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/nvim-cmp",
-      "hrsh7th/cmp-nvim-lsp-signature-help",
-    },
-    config = function()
-      require "nvchad.configs.lspconfig"
-      local sources = require "mason-registry.sources"
-      require(lang "crossplane")
-      -- require(lang "pylance")
-      require("cmp").setup.filetype("python", require(cfg "cmp.python"))
-      require(lang "yamlfix")
-      sources.set_registries { "lua:registry", "lua:mason-registry.index", "github:mason-org/mason-registry" }
-      require("mason-tool-installer").setup { require(cfg "mason_tool_installer") }
-      require "plugins.lsp.servers"
-      vim.lsp.set_log_level "warn"
-    end,
-  },
-  { "folke/neodev.nvim",    ft = { "lua" } },
+  { "folke/neodev.nvim", ft = { "lua" } },
   {
     "qosmio/alternate-toggler",
     branch = "fix-tbl_add_reverse_lookup",
@@ -65,7 +43,7 @@ local plugins = {
       }
     end,
   },
-  { "chr4/nginx.vim",           ft = "nginx" },
+  { "chr4/nginx.vim", ft = "nginx" },
   -- Native terminal copying using OCS52
   {
     "ojroques/nvim-osc52",
@@ -75,18 +53,33 @@ local plugins = {
   },
   {
     "nvimtools/none-ls.nvim",
-    lazy = false,
     dependencies = {
       "williamboman/mason.nvim",
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
       "nvim-lua/plenary.nvim",
-      "gbprod/none-ls-shellcheck.nvim"
+      "gbprod/none-ls-shellcheck.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
-      require(cfg "null_ls")
+      require "nvchad.configs.lspconfig"
+      local sources = require "mason-registry.sources"
+      require(lang "crossplane")
+      -- require(lang "pylance")
+      -- require("cmp").setup.filetype("python", cfg "cmp.python")
+      sources.set_registries {
+        "lua:registry",
+        "lua:mason-registry.index",
+        "github:mason-org/mason-registry",
+      }
+      local mason_tool_installer = require "mason-tool-installer"
+      mason_tool_installer.setup(cfg "mason_tool_installer")
+      mason_tool_installer.run_on_start()
+      require "plugins.lsp.servers"
+      vim.lsp.set_log_level "warn"
+      require("null-ls").setup(cfg "null_ls")
     end,
   },
-  { "lambdalisue/suda.vim",     event = { "VeryLazy" } },
+  { "lambdalisue/suda.vim", event = { "VeryLazy" } },
   -- Switch between single-line and multiline forms of code
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
@@ -124,8 +117,12 @@ local plugins = {
     end,
   },
   { "hrsh7th/cmp-cmdline" },
-  { "hrsh7th/cmp-nvim-lua",                dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" } },
-  { "hrsh7th/cmp-nvim-lsp-signature-help", dependencies = { "nvimtools/none-ls.nvim" } },
+  {
+    "hrsh7th/cmp-nvim-lua",
+    dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" },
+  },
+  { "hrsh7th/cmp-nvim-lsp-signature-help",
+    dependencies = { "nvimtools/none-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
     dependencies = {
@@ -133,7 +130,7 @@ local plugins = {
     },
     ft = { "zsh" },
     config = function()
-      require("cmp").setup.filetype("zsh", require(cfg "cmp.zsh"))
+      require("cmp").setup.filetype("zsh", cfg "cmp.zsh")
       require("cmp_zsh").setup {
         zshrc = false,
         filetypes = { "deoledit", "zsh" },
@@ -142,35 +139,9 @@ local plugins = {
   },
   { "lvimuser/lsp-inlayhints.nvim" },
   {
-    "jay-babu/mason-null-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "williamboman/mason.nvim",
-      "nvimtools/none-ls.nvim",
-    },
-    config = function()
-      local mason_null_ls = require "mason-null-ls"
-      mason_null_ls.setup {
-        automatic_installation = {
-          exclude = {
-            "zsh",
-            "refactoring",
-            "clangd",
-            "crossplane-ng",
-            "ansiblelint",
-            "jq",
-            "clang_format",
-          },
-        },
-        automatic_setup = true,
-      }
-    end,
-  },
-  {
     "gelguy/wilder.nvim",
     config = function()
       local wilder = require "wilder"
-      -- wilder.setup { modes = { ":", "/", "?" } }
 
       wilder.set_option("pipeline", {
         wilder.branch(wilder.cmdline_pipeline(), wilder.search_pipeline()),
@@ -221,7 +192,6 @@ local plugins = {
       debug = false, -- Enable debugging
       -- See Configuration section for rest
     },
-    -- See Commands section for default commands if you want to lazy load on them
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
@@ -235,11 +205,8 @@ local plugins = {
   },
   {
     "stevearc/conform.nvim",
-    --  for users those who want auto-save conform + lazyloading!
-    -- lazy = false,
-    event = { "VimEnter" },
     cmd = { "ConformInfo" },
-    opts = require "plugins.config.conform",
+    opts = cfg "conform",
   },
 }
 

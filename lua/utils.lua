@@ -1,5 +1,9 @@
 local M = {}
 local uv = vim.loop
+
+--- Notify function to handle messages in fast events.
+-- @param msg string: The message to display.
+-- @param level number: The level of the message.
 local function notify(msg, level)
   if vim.in_fast_event() then
     vim.schedule(function()
@@ -10,9 +14,8 @@ local function notify(msg, level)
   end
 end
 
------------------------------------------------------------
--- Checks if running under Windows.
------------------------------------------------------------
+--- Checks if running under Windows.
+-- @return boolean: True if running on Windows, false otherwise.
 function M.is_win()
   if uv.os_uname().version:match "Windows" then
     return true
@@ -21,18 +24,16 @@ function M.is_win()
   end
 end
 
------------------------------------------------------------
--- Function equivalent to basename in POSIX systems.
--- @param str the path string.
------------------------------------------------------------
+--- Function equivalent to basename in POSIX systems.
+-- @param str string: The path string.
+-- @return string: The basename of the path.
 function M.basename(str)
   return string.gsub(str, "(.*/)(.*)", "%2")
 end
 
------------------------------------------------------------
--- Concatenates given paths with correct separator.
--- @param: var args of string paths to joon.
------------------------------------------------------------
+--- Concatenates given paths with correct separator.
+-- @param ... string: Variable arguments of string paths to join.
+-- @return string: The concatenated path.
 function M.join_paths(...)
   local path_sep = M.is_win() and "\\" or "/"
   local result = table.concat({ ... }, path_sep)
@@ -41,28 +42,21 @@ end
 
 local _base_lua_path = M.join_paths(vim.fn.stdpath "config", "lua")
 
------------------------------------------------------------
--- Loads all modules from the given package.
--- @param package: name of the package in lua folder.
------------------------------------------------------------
+--- Loads all modules from the given package.
+-- @param package string: Name of the package in lua folder.
 function M.glob_require(package)
   local glob_path = M.join_paths(_base_lua_path, package, "*.lua")
 
   for _, path in pairs(vim.split(vim.fn.glob(glob_path), "\n")) do
-    -- convert absolute filename to relative
-    -- ~/.config/nvim/lua/<package>/<module>.lua => <package>/foo
     local relfilename = path:gsub(_base_lua_path, ""):gsub(".lua", "")
     local basename = M.basename(relfilename)
-    -- skip `init` and files starting with underscore.
     if basename ~= "init" and basename:sub(1, 1) ~= "_" then
       require(relfilename)
     end
   end
 end
 
------------------------------------------------------------
--- Strips trailing whitespaces.
------------------------------------------------------------
+--- Strips trailing whitespaces.
 function M.strip_trailing_whitespace()
   if vim.bo.modifiable then
     local line = vim.fn.line "."
@@ -73,9 +67,7 @@ function M.strip_trailing_whitespace()
   end
 end
 
------------------------------------------------------------
--- Toggles windows zoom.
------------------------------------------------------------
+--- Toggles windows zoom.
 function M.zoom_toggle()
   if vim.t.zoomed and vim.t.zoom_winrestcmd then
     vim.cmd(vim.t.zoom_winrestcmd)
@@ -87,32 +79,47 @@ function M.zoom_toggle()
   end
 end
 
--- @param mod char: mapping mode (n, v, i, ..)
--- @param buffer num: buffer id
+--- Dumps the current mappings.
+-- @param mod char: Mapping mode (n, v, i, ..)
 function M.dump(mod)
   notify(
     vim.inspect((require("which-key.keys").get_mappings(mod, "", vim.api.nvim_get_current_buf())))
   )
 end
 
+--- Checks if a string matches any item in a list.
+-- @param str string: The string to check.
+-- @param list table: The list of items to match against.
+-- @return boolean: True if a match is found, false otherwise.
 function M.matches(str, list)
   return #vim.tbl_filter(function(item)
     return item == str or string.match(str, item)
   end, list) > 0
 end
 
+--- Checks if a string does not match any item in a list.
+-- @param str string: The string to check.
+-- @param list table: The list of items to match against.
+-- @return boolean: True if no match is found, false otherwise.
 function M.not_matches(str, list)
   return #vim.tbl_filter(function(item)
     return item ~= str and not string.match(str, item)
   end, list) > 0
 end
 
+--- Removes a key from a table.
+-- @param table table: The table to remove the key from.
+-- @param key any: The key to remove.
+-- @return any: The removed element.
 function M.tbl_remove_key(table, key)
   local element = table[key]
   table[key] = nil
   return element
 end
 
+--- Filters a table in place.
+-- @param tbl table: The table to filter.
+-- @param filter any: The filter to apply.
 function M.tbl_filter_inplace(tbl, filter)
   local i = 1
   while i <= #tbl do
@@ -135,6 +142,20 @@ function M.tbl_filter_inplace(tbl, filter)
   end
 end
 
+--- Converts bytes to a human-readable format.
+-- @param size number: The size in bytes.
+-- @return string: The size in a human-readable format.
+function M.bytes_to_human(size)
+  local sizes = { "B", "KB", "MB", "GB", "TB" }
+  if size == 0 then
+    return "0B"
+  end
+  local i = math.floor(math.log(size) / math.log(1024))
+  return string.format("%.1f%s", size / math.pow(1024, i), sizes[i + 1])
+end
+
+--- Gets OS information.
+-- @return table: A table containing OS information.
 function M.get_os_info()
   local os_info = {}
   local os_name = jit and jit.os or "Linux"
@@ -185,32 +206,42 @@ function M.get_os_info()
     local memory = io.popen("free -m"):read "*all"
     memory = memory:match "Mem:%s+(%d+)%s"
     os_info["memory"] = memory .. " MB"
-    local disk = io.popen("df -h / | awk 'NR==2 {print $4}'"):read "*all"
-    disk = disk:gsub("\n", "")
+    local disk = io.popen("df -h / | awk 'NR==2 {printf '%s',$4}'"):read "*all"
     os_info["disk"] = disk
   elseif os_name == "OSX" then
-    os_info["os"] = "macOS"
-    os_info["version"] = "N/A"
+    os_info["os"] = vim.loop.os_uname().sysname
+    os_info["version"] = vim.loop.os_uname().release
     os_info["name"] = "macOS"
-    os_info["id"] = "macOS"
-    os_info["pretty_name"] = "macOS"
-    os_info["architecture"] = "N/A"
-    os_info["memory"] = "N/A"
-    os_info["disk"] = "N/A"
+    os_info["id"] = "macos"
+    local os_version = io.popen("sw_vers -productVersion"):read("*all"):gsub("\n", "")
+    os_info["pretty_name"] = "macOS " .. os_version
+    os_info["architecture"] = vim.loop.os_uname().machine
+    local memsize = tonumber(io.popen("sysctl -n hw.memsize"):read("*all"):gsub("\n", "") or 0)
+    os_info["memory"] = M.bytes_to_human(memsize)
+    os_info["disk"] = io.popen("df -h / | awk 'NR==2 {print $4}'"):read("*all"):gsub("\n", "")
   end
   return os_info
 end
 
+--- Checks if a file exists.
+-- @param file string: The file path.
+-- @return boolean: True if the file exists, false otherwise.
 function M.file_exists(file)
   local stat = uv.fs_stat(file)
   return stat ~= nil and stat.type == "file"
 end
 
+--- Checks if a directory exists.
+-- @param dir string: The directory path.
+-- @return boolean: True if the directory exists, false otherwise.
 function M.dir_exists(dir)
   local stat = uv.fs_stat(dir)
   return stat ~= nil and stat.type == "directory"
 end
 
+--- Lists the contents of a directory.
+-- @param dir string: The directory path.
+-- @return table: A table containing the directory contents.
 function M.dirlist(dir)
   local items = {}
   if M.dir_exists(dir) then
@@ -228,14 +259,12 @@ function M.dirlist(dir)
   return items
 end
 
+--- Gets the path to the Python 3 host program.
+-- @param opts table: Options to exclude certain paths.
+-- @return string: The path to the Python 3 host program.
 function M.get_python3_host_prog(opts)
-  -- Get the environment path
   local path = vim.env.PATH
-
-  -- Split the path into individual directories
   local path_dirs = vim.split(path, ":")
-
-  -- Find all python3.x executables in the path
   local python3_executables = {}
   for _, dir in ipairs(path_dirs) do
     for _, file in ipairs(M.dirlist(dir)) do
@@ -247,22 +276,17 @@ function M.get_python3_host_prog(opts)
       end
     end
   end
-  -- Sort the list of executables by version number (using a custom comparison function)
   table.sort(python3_executables, function(a, b)
     local a_version = a:match "python3%.(%d+)"
     local b_version = b:match "python3%.(%d+)"
     return tonumber(a_version) > tonumber(b_version)
   end)
-
-  -- Set the "python3_host_prog" global variable to the path to the latest executable
-  -- vim.g.python3_host_prog = python3_executables[1]
   return python3_executables[1]
 end
 
---- Get python paths
--- @return table
+--- Gets the current Python package paths.
+-- @return table: A table containing the current Python package paths.
 function M.get_current_python_package_paths()
-  -- Unable to get virtual environment path
   local python_bin = M.get_python3_host_prog()
   if not python_bin then
     return {}
@@ -270,8 +294,6 @@ function M.get_current_python_package_paths()
   local current_python_path =
     vim.fn.system { python_bin, "-c", "import sys; print(':'.join(sys.path), end='')" }
   local split_paths = vim.fn.split(current_python_path, ":")
-
-  -- Split string with colon
   local paths = {}
   for _, path in ipairs(split_paths) do
     if not vim.tbl_contains(paths, path) and "" ~= path then
@@ -281,9 +303,9 @@ function M.get_current_python_package_paths()
   return paths
 end
 
---- Update a mason package
--- @param pkg_name string of the name of the package as defined in Mason (Not mason-lspconfig or mason-null-ls)
--- @param auto_install boolean of whether or not to install a package that is not currently installed (default: True)
+--- Updates a Mason package.
+-- @param pkg_name string: The name of the package as defined in Mason.
+-- @param auto_install boolean: Whether to install a package that is not currently installed (default: true).
 M.mason = {}
 
 function M.mason.update(pkg_name, auto_install)
@@ -322,7 +344,7 @@ function M.mason.update(pkg_name, auto_install)
   end
 end
 
---- Update all packages in Mason
+--- Updates all packages in Mason.
 function M.mason.update_all()
   local registry_avail, registry = pcall(require, "mason-registry")
   if not registry_avail then

@@ -47,7 +47,7 @@ local ensure_installed = {
   "typescript",
   "vim",
   "xml",
-  "yaml"
+  "yaml",
 }
 
 return {

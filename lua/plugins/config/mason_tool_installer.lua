@@ -1,25 +1,22 @@
 local utils = require "utils"
 
 local servers = {
-  "pylance",
-  "ansiblelint",
-  "rubocop",
+  -- "pylance",
   "shellcheck",
   "yamllint",
-  "eslint_d",
-  "perlimports",
-  "sqlfluff",
-  "cmakelang",
   "yamlfmt",
   "usort",
   "taplo",
   "ruff",
-  "beautysh",
   "shfmt",
-  "black",
   "stylua",
-  "goimports",
 }
+
+if vim.loop.os_uname().machine ~= "aarch64" then
+  if utils.get_os_info().id ~= "rhel" and not utils.get_os_info().version:match "^8" then
+    table.insert(servers, "selene")
+  end
+end
 
 _ = vim.fn.system "which go"
 if vim.v.shell_error ~= 0 then
@@ -30,10 +27,12 @@ if vim.v.shell_error ~= 0 then
   utils.tbl_filter_inplace(servers, "shellharden")
 end
 
-return {
+local opts = {
   ensure_installed = servers,
   automatic_installation = true,
   auto_update = true,
   run_on_start = true,
   start_delay = 2,
 }
+
+return opts
