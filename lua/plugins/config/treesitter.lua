@@ -1,3 +1,8 @@
+pcall(function()
+  dofile(vim.g.base46_cache .. "syntax")
+  dofile(vim.g.base46_cache .. "treesitter")
+end)
+
 require "plugins.config.treesitter_parsers"
 local ensure_installed = {
   "awk",

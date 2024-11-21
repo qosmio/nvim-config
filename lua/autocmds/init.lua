@@ -73,34 +73,6 @@ local function init_term()
   vim.wo.signcolumn = "no"
 end
 
-local function process_yank()
-  vim.highlight.on_yank { timeout_ms = 2000, on_visual = false }
-  local ok, osc52, yank_data
-  ok, osc52 = pcall(require, "osc52")
-  if not ok then
-    return
-  end
-  if vim.v.event.operator ~= "y" then
-    return
-  else
-    ok, yank_data = pcall(vim.fn.getreg, "")
-    if ok then
-      if vim.fn.has "clipboard" == 1 then
-        pcall(vim.fn.setreg, "+", yank_data)
-      end
-      if vim.env.SSH_CONNECTION then
-        osc52.copy(yank_data)
-      end
-    end
-  end
-  if vim.tbl_contains({ "", "+", "*" }, vim.v.event.regname) then
-    osc52.copy_register ""
-  end
-  if vim.v.event.regname == "c" then
-    osc52.copy_register "c"
-  end
-end
-
 group_name = augroup "init"
 aucmd("FileType", {
   group = group_name,
@@ -109,18 +81,6 @@ aucmd("FileType", {
 aucmd("TermOpen", {
   group = group_name,
   callback = init_term,
-})
-
-aucmd("TextYankPost", {
-  desc = "[osc52] Copy to clipboard/OSC52",
-  group = group_name,
-  callback = process_yank,
-})
-
-aucmd({ "BufEnter" }, {
-  group = group_name,
-  pattern = { "*" },
-  command = [[lcd `=expand('%:p:h')`]],
 })
 
 aucmd("FileType", {
@@ -247,7 +207,6 @@ aucmd("FileType", {
     vim.opt.softtabstop = 2 -- number of spaces a tab counts for when editing
     vim.opt.shiftwidth = 4 -- number of spaces to use for autoindent
     vim.opt.expandtab = true -- use spaces instead of tabs
-    vim.opt.textwidth = 0
     vim.opt.autoindent = true -- auto indents new lines
     vim.opt.smartindent = true -- smart indents new lines
     vim.opt.smarttab = true -- smartly use tabs for indenting
@@ -405,21 +364,6 @@ aucmd("LspAttach", {
   end,
 })
 
--- Disable LSP on diff buffer (typically when using `git mergetool`)
--- aucmd("LspAttach", {
---   pattern = { "*" },
---   callback = function(t)
---     if vim.api.nvim_win_get_option(0, "diff") then
---       vim.api.nvim_exec(
---         [[
---         LspStop
---       ]],
---         false
---       )
---       vim.diagnostic.disable(t.buf)
---     end
---   end,
--- })
 -- check first and last 5 lines in current buffer for 'vim:.*ft=.*' and set filetype accordingly
 -- set filetypes function
 aucmd("BufWinEnter", {

@@ -35,16 +35,9 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
         --   vim.print("No on_attach function for " .. server)
         --   res.on_attach = require("plugins.lsp.settings").on_attach
         -- end
-        -- if server == "basedpyright" then
-        --   -- this is the DEFAULT CONFIG NOT THE FINAL CONFIG!
-        --   vim.print(require "lspconfig.configs.basedpyright")
-        --   vim.print(res)
-        -- end
         lspconfig[server].setup(res)
         -- show final config for basedpyright after being setup
         -- if server == "basedpyright" then
-        --   -- vim.print(require "lspconfig.configs.basedpyright") -- THIS IS NOT WHAT I ASKED FOR AFTER THE SERVER IS
-        --   -- SETUP IT WILL OBVIOUSLY BE DIFFERENT FROM THE DEFAULT CONFIG
         --   vim.print(lspconfig[server])
         -- end
 

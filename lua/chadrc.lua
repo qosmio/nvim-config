@@ -3,8 +3,8 @@ local M = {}
 
 M.base46 = {
   ------------------------------- base46 -------------------------------------
-  -- hl_override = require("highlights.hlo").highlight,
-  hl_add = require("highlights.hlo").highlight,
+  hl_override = require("highlights.hlo").theme.polish_hl,
+  -- hl_add = require("highlights.hlo").highlight,
   theme_toggle = { "flexoki", "flexoki" },
   theme = "flexoki", -- default theme
   -- cmp themeing

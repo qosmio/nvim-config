@@ -7,13 +7,14 @@ local lang = function(mod)
 end
 
 local plugins = {
-  { "L3MON4D3/LuaSnip",                    build = "make install_jsregexp"},
-  { "lukas-reineke/indent-blankline.nvim", enabled = false },
+  -- stylua: ignore start
+  -- { "L3MON4D3/LuaSnip",                    build = "make install_jsregexp"},
+  -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
   { "williamboman/mason.nvim",             opts = cfg "mason" },
   { "williamboman/mason-lspconfig.nvim",   opts = cfg "mason_lspconfig" },
-  { "hrsh7th/nvim-cmp",                    opts = cfg "cmp" },
   { "NvChad/nvim-colorizer.lua",           opts = cfg "colorizer" },
   { "lewis6991/gitsigns.nvim",             opts = cfg "gitsigns" },
+  -- stylua: ignore end
   {
     "nvim-treesitter/nvim-treesitter",
     opts = cfg "treesitter",
@@ -44,13 +45,6 @@ local plugins = {
     end,
   },
   { "chr4/nginx.vim", ft = "nginx" },
-  -- Native terminal copying using OCS52
-  {
-    "ojroques/nvim-osc52",
-    config = function()
-      require("osc52").setup { trim = false }
-    end,
-  },
   {
     "nvimtools/none-ls.nvim",
     dependencies = {
@@ -116,13 +110,6 @@ local plugins = {
       end
     end,
   },
-  { "hrsh7th/cmp-cmdline" },
-  {
-    "hrsh7th/cmp-nvim-lua",
-    dependencies = { "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" },
-  },
-  { "hrsh7th/cmp-nvim-lsp-signature-help",
-    dependencies = { "nvimtools/none-ls.nvim" } },
   {
     "tamago324/cmp-zsh",
     dependencies = {
@@ -190,7 +177,6 @@ local plugins = {
     build = "make tiktoken", -- Only on MacOS or Linux
     opts = {
       debug = false, -- Enable debugging
-      -- See Configuration section for rest
     },
   },
   {
@@ -207,6 +193,100 @@ local plugins = {
     "stevearc/conform.nvim",
     cmd = { "ConformInfo" },
     opts = cfg "conform",
+  },
+  {
+    "sindrets/diffview.nvim",
+    dependencies = "nvim-lua/plenary.nvim",
+    cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+    event = { "VeryLazy" },
+    config = function()
+      cfg("diffview").post()
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      -- autopairing of (){}[] etc
+      {
+        "windwp/nvim-autopairs",
+        opts = cfg "autopairs",
+        config = function(_, opts)
+          require("nvim-autopairs").setup(opts)
+          -- setup cmp for autopairs
+          local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+          require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        end,
+      },
+
+      -- cmp sources plugins
+      {
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-cmdline",
+        "hrsh7th/cmp-nvim-lsp-signature-help",
+      },
+    },
+    config = function(_, opts)
+      require("cmp").setup(opts)
+    end,
+    opts = function()
+      return cfg "cmp"
+    end,
+  },
+  {
+    "akinsho/git-conflict.nvim",
+    -- lazy = false,
+    event = "BufRead",
+    version = "*",
+    config = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "GitConflictDetected",
+        callback = function()
+          vim.notify("Conflict detected in " .. vim.fn.expand "<afile>")
+        end,
+      })
+      require("git-conflict").setup {
+        default_mappings = true, -- disable buffer local mapping created by this plugin
+        -- default_commands = true, -- disable commands created by this plugin
+        -- disable_diagnostics = true, -- This will disable the diagnostics in a buffer whilst it is conflicted
+        list_opener = "copen", -- command or function to open the conflicts list
+        highlights = {
+          current = "DiffAdd",
+          incoming = "DiffText",
+          -- ancestor = "GitConflictAncestor",
+        },
+      }
+      vim.api.nvim_set_hl(0, "GitConflictCurrent", {})
+      vim.api.nvim_set_hl(0, "GitConflictAncestor", {})
+      vim.api.nvim_set_hl(0, "GitConflictIncoming", {})
+    end,
+    keys = {
+      { "<Leader>gcb", "<cmd>GitConflictChooseBoth<CR>", desc = "choose both" },
+      { "<Leader>gcn", "<cmd>GitConflictNextConflict<CR>", desc = "move to next conflict" },
+      { "<Leader>gcc", "<cmd>GitConflictChooseOurs<CR>", desc = "choose current" },
+      { "<Leader>gcp", "<cmd>GitConflictPrevConflict<CR>", desc = "move to prev conflict" },
+      { "<Leader>gci", "<cmd>GitConflictChooseTheirs<CR>", desc = "choose incoming" },
+    },
+  },
+  {
+    "echasnovski/mini.align",
+    event = { "CursorHold", "CursorHoldI" },
+    config = function(_, opts)
+      require("mini.align").setup(opts)
+    end,
+    opts = {
+      mappings = {
+        start = "gb",
+        start_with_preview = "gB",
+      },
+    },
+    keys = {
+      { "gb", mode = { "n", "x" } },
+      { "gB", mode = { "n", "x" } },
+    },
   },
 }
 

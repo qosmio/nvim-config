@@ -1,7 +1,7 @@
 return {
   panel = {
     enabled = true,
-    auto_refresh = false,
+    auto_refresh = true,
     keymap = {
       jump_prev = "[[",
       jump_next = "]]",
@@ -29,9 +29,9 @@ return {
   },
   filetypes = {
     yaml = true,
-    markdown = false,
+    markdown = true,
     help = false,
-    gitcommit = false,
+    gitcommit = true,
     gitrebase = false,
     hgcommit = false,
     svn = false,

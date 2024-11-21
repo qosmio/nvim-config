@@ -177,6 +177,12 @@ M.nvchad = {
   },
 }
 
+M.diffview = {
+  n = {
+    ["<leader>gd"] = { "<cmd>DiffviewOpen<cr>", "Open DiffView" },
+  },
+}
+
 M.gitsigns = {
   -- Default keymap options
   v = {

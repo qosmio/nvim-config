@@ -2,7 +2,7 @@ local util = require "lspconfig.util"
 -- highlight self and cls as a builtin variables
 local function ts_highlight_self(args)
   local token = args.data.token
-  vim.print(token)
+  -- vim.print(token)
   if token.type ~= "parameter" then
     return
   end

@@ -6,12 +6,19 @@ function M.post()
     return
   end
   local cb = diffview.diffview_callback
+
   diffview.setup {
-    diff_binaries = false, -- Show diffs for binaries
+    enhanced_diff_hl = true, -- Show diffs for binaries
     file_panel = {
       win_config = {
         width = 50,
       },
+    },
+    -- disable file panel after opening
+    hooks = { -- See ':h diffview-config-hooks'
+      view_opened = function()
+        require("diffview.actions").toggle_files()
+      end,
     },
     key_bindings = {
       disable_defaults = false, -- Disable the default key bindings

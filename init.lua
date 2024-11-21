@@ -19,7 +19,7 @@ require("lazy").setup({
     "NvChad/NvChad",
     lazy = false,
     branch = "v2.5",
-    import = "nvchad.plugins",
+    import = "plugins.nvchad_plugins",
     config = function()
       require "nvchad.options"
       require "options"
@@ -37,7 +37,8 @@ require "nvchad.autocmds"
 require "autocmds"
 
 local u = require "utils"
-vim.g.python3_host_prog = u.get_python3_host_prog { exclude = "python3.9" } or vim.g.python3_host_prog
+vim.g.python3_host_prog = u.get_python3_host_prog { exclude = "python3.9" }
+  or vim.g.python3_host_prog
 -- print(vim.inspect(base46.table_to_str(require "highlights")))
 
 vim.schedule(function()
