@@ -281,67 +281,67 @@ local plugins = {
       }
     end,
   },
-  { -- optional blink completion source for require statements and module annotations
-    "saghen/blink.cmp",
-    enabled = false,
-    build = "cargo build --release",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      {
-        "saghen/blink.compat",
-        opts = {
-          -- some plugins lazily register their completion source when nvim-cmp is
-          -- loaded, so pretend that we are nvim-cmp, and that nvim-cmp is loaded.
-          -- most plugins don't do this, so this option should rarely be needed
-          -- NOTE: only has effect when using lazy.nvim plugin manager
-          impersonate_nvim_cmp = true,
-          -- some sources, like codeium.nvim, rely on nvim-cmp events to function properly
-          -- when enabled, emit those events
-          -- NOTE: somewhat hacky, may harm performance or break
-          -- enable_events = true,
-          -- print some debug information. Might be useful for troubleshooting
-          debug = false,
-        },
-      },
-      {
-        "giuxtaposition/blink-cmp-copilot",
-        enabled = vim.env.COPILOT_ENABLE == "true",
-        dependencies = {
-          {
-            "zbirenbaum/copilot.lua",
-            cmd = "Copilot",
-            build = ":Copilot auth",
-            opts = require "plugins.config.copilot",
-          },
-        },
-        specs = {
-          {
-            "blink.cmp",
-            optional = true,
-            opts = {
-              sources = {
-                providers = {
-                  copilot = { name = "copilot", module = "blink-cmp-copilot" },
-                },
-                completion = {
-                  enabled_providers = { "copilot" },
-                },
-                opts = {
-                  -- this table is passed directly to the proxied completion source
-                  -- as the `option` field in nvim-cmp's source config
+  -- { -- optional blink completion source for require statements and module annotations
+  --   "saghen/blink.cmp",
+  --   enabled = false,
+  --   build = "cargo build --release",
+  --   version = "*",
+  --   lazy = false,
+  --   dependencies = {
+  --     {
+  --       "saghen/blink.compat",
+  --       opts = {
+  --         -- some plugins lazily register their completion source when nvim-cmp is
+  --         -- loaded, so pretend that we are nvim-cmp, and that nvim-cmp is loaded.
+  --         -- most plugins don't do this, so this option should rarely be needed
+  --         -- NOTE: only has effect when using lazy.nvim plugin manager
+  --         impersonate_nvim_cmp = true,
+  --         -- some sources, like codeium.nvim, rely on nvim-cmp events to function properly
+  --         -- when enabled, emit those events
+  --         -- NOTE: somewhat hacky, may harm performance or break
+  --         -- enable_events = true,
+  --         -- print some debug information. Might be useful for troubleshooting
+  --         debug = false,
+  --       },
+  --     },
+  --     {
+  --       "giuxtaposition/blink-cmp-copilot",
+  --       enabled = vim.env.COPILOT_ENABLE == "true",
+  --       dependencies = {
+  --         {
+  --           "zbirenbaum/copilot.lua",
+  --           cmd = "Copilot",
+  --           build = ":Copilot auth",
+  --           opts = require "plugins.config.copilot",
+  --         },
+  --       },
+  --       specs = {
+  --         {
+  --           "blink.cmp",
+  --           optional = true,
+  --           opts = {
+  --             sources = {
+  --               providers = {
+  --                 copilot = { name = "copilot", module = "blink-cmp-copilot" },
+  --               },
+  --               completion = {
+  --                 enabled_providers = { "copilot" },
+  --               },
+  --               opts = {
+  --                 -- this table is passed directly to the proxied completion source
+  --                 -- as the `option` field in nvim-cmp's source config
 
-                  -- this is an option from cmp-digraphs
-                  cache_digraphs_on_start = true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    opts = cfg "blink",
-  },
+  --                 -- this is an option from cmp-digraphs
+  --                 cache_digraphs_on_start = true,
+  --               },
+  --             },
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  --   opts = cfg "blink",
+  -- },
   {
     "akinsho/git-conflict.nvim",
     -- lazy = false,
