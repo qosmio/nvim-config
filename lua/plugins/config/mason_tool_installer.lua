@@ -3,17 +3,21 @@ local utils = require "utils"
 local servers = {
   -- "pylance",
   "shellcheck",
-  "yamllint",
+  "shfmt",
+}
+
+local extra = {
+  "ruff",
   "yamlfmt",
+  "yamllint",
   "usort",
   "taplo",
-  "ruff",
-  "shfmt",
   "stylua",
 }
 
-if vim.loop.os_uname().machine ~= "aarch64" then
-  local os_info = utils.get_os_info()
+local os_info = utils.get_os_info()
+if os_info.id ~= "openwrt" then
+  vim.list_extend(servers, extra)
   if (os_info.id == "rhel" and not tonumber(os_info.version) < 9) or os_info.id ~= "rhel" then
     table.insert(servers, "selene")
   end

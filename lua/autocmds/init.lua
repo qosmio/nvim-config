@@ -218,7 +218,7 @@ aucmd("FileType", {
   group = group_name,
   pattern = { "yaml", "json", "javascript" },
   callback = function()
-    vim.opt.tabstop = 2
+    vim.opt.tabstop = 4
     vim.opt.softtabstop = 2
     vim.opt.shiftwidth = 2
     vim.opt.expandtab = true
@@ -227,7 +227,7 @@ aucmd("FileType", {
 aucmd("FileType", {
   desc = "smart indent for yaml",
   group = group_name,
-  pattern = { "lua", "sh", "zsh", "bash" },
+  pattern = { "lua", "sh", "zsh", "bash", "css" },
   callback = function()
     vim.opt.tabstop = 4
     vim.opt.softtabstop = 2

@@ -8,7 +8,6 @@ end
 
 local plugins = {
   -- stylua: ignore start
-  -- { "L3MON4D3/LuaSnip",                    build = "make install_jsregexp"},
   -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
   { "williamboman/mason.nvim",             opts = cfg "mason" },
   { "williamboman/mason-lspconfig.nvim",   opts = cfg "mason_lspconfig" },
@@ -17,21 +16,29 @@ local plugins = {
   -- stylua: ignore end
   {
     "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     opts = cfg "treesitter",
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
+    end,
   },
   {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    dependencies = { "numToStr/Comment.nvim" },
-    -- event = { "VimEnter" },
-    keys = { "gbc", "gcc" },
-    config = function()
-      require("Comment").setup {
-        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+    "numToStr/Comment.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+    },
+    opts = function(_, opts)
+      require("ts_context_commentstring").setup {
+        enable_autocmd = false,
       }
+      opts.ignore = "^$"
+      opts.pre_hook =
+        require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
     end,
   },
   { "folke/which-key.nvim", enabled = true },
-  { "folke/neodev.nvim", ft = { "lua" } },
   {
     "qosmio/alternate-toggler",
     branch = "fix-tbl_add_reverse_lookup",
@@ -55,7 +62,7 @@ local plugins = {
     },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      require "nvchad.configs.lspconfig"
+      -- require "nvchad.configs.lspconfig"
       local sources = require "mason-registry.sources"
       require(lang "crossplane")
       -- require(lang "pylance")
@@ -78,53 +85,21 @@ local plugins = {
   -- <ESC>gS to split a one-liner into multiple lines
   -- <ESC>gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
   { "AndrewRadev/splitjoin.vim" },
-  {
-    "reewr/vim-monokai-phoenix",
-    dependencies = {
-      "jacoborus/tender.vim",
-      "nielsmadan/harlequin",
-      "patstockwell/vim-monokai-tasty",
-    },
-    cond = function()
-      return vim.env.LC_TERMINAL == "shelly"
-    end,
-    event = { "VimEnter" },
-    config = function()
-      vim.opt.termguicolors = false
-      local timer = vim.loop.new_timer()
-      if timer ~= nil then
-        timer:start(
-          10,
-          0,
-          vim.schedule_wrap(function()
-            vim.cmd [[colo monokai-phoenix]]
-            vim.cmd [[hi Normal ctermbg=0]]
-            local highlight = require("highlights.hlo").highlight
-            local statusline = require("highlights.hlo").statusline
-            local cterm = require("highlights.utils").gui_syntax_to_cterm(highlight)
-            require("highlights.utils").nvim_set_hl(cterm)
-            require("highlights.utils").nvim_set_hl(statusline)
-            vim.cmd [[hi IndentBlankLineChar ctermfg=237]]
-          end)
-        )
-      end
-    end,
-  },
-  {
-    "tamago324/cmp-zsh",
-    dependencies = {
-      "Shougo/deol.nvim",
-    },
-    ft = { "zsh" },
-    config = function()
-      require("cmp").setup.filetype("zsh", cfg "cmp.zsh")
-      require("cmp_zsh").setup {
-        zshrc = false,
-        filetypes = { "deoledit", "zsh" },
-      }
-    end,
-  },
-  { "lvimuser/lsp-inlayhints.nvim" },
+  -- {
+  --   "tamago324/cmp-zsh",
+  --   dependencies = {
+  --     "Shougo/deol.nvim",
+  --   },
+  --   ft = { "zsh" },
+  --   config = function()
+  --     require("cmp").setup.filetype("zsh", cfg "cmp.zsh")
+  --     require("cmp_zsh").setup {
+  --       zshrc = false,
+  --       filetypes = { "deoledit", "zsh" },
+  --     }
+  --   end,
+  -- },
+  -- { "lvimuser/lsp-inlayhints.nvim" },
   {
     "gelguy/wilder.nvim",
     config = function()
@@ -204,10 +179,15 @@ local plugins = {
     end,
   },
   {
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    "iguanacucumber/magazine.nvim",
+    name = "nvim-cmp",
+    enabled = true,
+    -- event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      -- autopairing of (){}[] etc
+      { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
+      { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
+      { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
+      { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
       {
         "windwp/nvim-autopairs",
         opts = cfg "autopairs",
@@ -218,23 +198,149 @@ local plugins = {
           require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
         end,
       },
-
-      -- cmp sources plugins
+      "https://codeberg.org/FelipeLema/cmp-async-path",
+      "hrsh7th/cmp-nvim-lsp-document-symbol",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
+      "hrsh7th/cmp-calc",
+      "dmitmel/cmp-cmdline-history",
+      "ray-x/cmp-treesitter",
+      { "lukas-reineke/cmp-under-comparator" },
+      { "onsails/lspkind-nvim" },
       {
-        "hrsh7th/cmp-nvim-lua",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-signature-help",
+        "tamago324/cmp-zsh",
+        opts = {
+          zshrc = true,
+          filetypes = { "zsh" },
+        },
       },
     },
-    config = function(_, opts)
-      require("cmp").setup(opts)
+    -- opts = (cfg "cmp").opts,
+    config = function()
+      require("cmp").setup((cfg "cmp").opts)
+      require("plugins.config.cmp").setup()
     end,
-    opts = function()
-      return cfg "cmp"
+  },
+  -- {
+  --   "hrsh7th/nvim-cmp",
+  --   event = "InsertEnter",
+  --   dependencies = {
+  --     -- autopairing of (){}[] etc
+  --     {
+  --       "windwp/nvim-autopairs",
+  --       opts = cfg "autopairs",
+  --       config = function(_, opts)
+  --         require("nvim-autopairs").setup(opts)
+  --         -- setup cmp for autopairs
+  --         local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+  --         require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+  --       end,
+  --     },
+
+  --     -- cmp sources plugins
+  --     {
+  --       "hrsh7th/cmp-nvim-lua",
+  --       "hrsh7th/cmp-nvim-lsp",
+  --       "hrsh7th/cmp-buffer",
+  --       "hrsh7th/cmp-path",
+  --       "hrsh7th/cmp-cmdline",
+  --       "hrsh7th/cmp-nvim-lsp-signature-help",
+  --       "tamago324/cmp-zsh",
+  --     },
+  --   },
+  --   config = function(_, opts)
+  --     require("cmp").setup(opts)
+  --   end,
+  --   opts = function()
+  --     return cfg "cmp"
+  --   end,
+  -- },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   event = "User FilePost",
+  --   dependencies = { "saghen/blink.cmp" },
+  --   config = function(_, opts)
+  --     require("nvchad.configs.lspconfig").defaults()
+  --     local lspconfig = require "lspconfig"
+  --     for server, config in pairs(opts.servers or {}) do
+  --       config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+  --       lspconfig[server].setup(config)
+  --     end
+  --   end,
+  -- },
+  {
+    "tamago324/cmp-zsh",
+    dependencies = {
+      "Shougo/deol.nvim",
+    },
+    ft = { "zsh" },
+    config = function()
+      -- require("cmp").setup.filetype("zsh", cfg "cmp.zsh")
+      require("cmp_zsh").setup {
+        zshrc = false,
+        filetypes = { "deoledit", "zsh" },
+      }
     end,
+  },
+  { -- optional blink completion source for require statements and module annotations
+    "saghen/blink.cmp",
+    enabled = false,
+    build = "cargo build --release",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      {
+        "saghen/blink.compat",
+        opts = {
+          -- some plugins lazily register their completion source when nvim-cmp is
+          -- loaded, so pretend that we are nvim-cmp, and that nvim-cmp is loaded.
+          -- most plugins don't do this, so this option should rarely be needed
+          -- NOTE: only has effect when using lazy.nvim plugin manager
+          impersonate_nvim_cmp = true,
+          -- some sources, like codeium.nvim, rely on nvim-cmp events to function properly
+          -- when enabled, emit those events
+          -- NOTE: somewhat hacky, may harm performance or break
+          -- enable_events = true,
+          -- print some debug information. Might be useful for troubleshooting
+          debug = false,
+        },
+      },
+      {
+        "giuxtaposition/blink-cmp-copilot",
+        enabled = vim.env.COPILOT_ENABLE == "true",
+        dependencies = {
+          {
+            "zbirenbaum/copilot.lua",
+            cmd = "Copilot",
+            build = ":Copilot auth",
+            opts = require "plugins.config.copilot",
+          },
+        },
+        specs = {
+          {
+            "blink.cmp",
+            optional = true,
+            opts = {
+              sources = {
+                providers = {
+                  copilot = { name = "copilot", module = "blink-cmp-copilot" },
+                },
+                completion = {
+                  enabled_providers = { "copilot" },
+                },
+                opts = {
+                  -- this table is passed directly to the proxied completion source
+                  -- as the `option` field in nvim-cmp's source config
+
+                  -- this is an option from cmp-digraphs
+                  cache_digraphs_on_start = true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    opts = cfg "blink",
   },
   {
     "akinsho/git-conflict.nvim",
@@ -249,9 +355,9 @@ local plugins = {
         end,
       })
       require("git-conflict").setup {
+        disable_diagnostics = false,
+        debug = false,
         default_mappings = true, -- disable buffer local mapping created by this plugin
-        -- default_commands = true, -- disable commands created by this plugin
-        -- disable_diagnostics = true, -- This will disable the diagnostics in a buffer whilst it is conflicted
         list_opener = "copen", -- command or function to open the conflicts list
         highlights = {
           current = "DiffAdd",
@@ -287,6 +393,50 @@ local plugins = {
       { "gb", mode = { "n", "x" } },
       { "gB", mode = { "n", "x" } },
     },
+  },
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types",
+        -- See the configuration section for more details
+        { path = "/usr/share/lua/5.1", words = { "ngx" } },
+      },
+    },
+  },
+  {
+    "andymass/vim-matchup",
+    event = { "CursorHold", "CursorHoldI", "VeryLazy" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    keys = { "%", "[" }, -- {, '<Plug>(matchup-%)', '<Plug>(matchup-g%)' },
+    cmd = { "MatchupWhereAmI" }, --
+    init = function()
+      vim.g.matchup_matchparen_deferred = 1
+      vim.g.matchup_matchparen_hi_surround_always = 1
+      vim.g.matchup_matchparen_deferred_show_delay = 100
+      vim.g.matchup_matchparen_deferred_hide_delay = 1000
+    end,
+    config = function()
+      local fsize = vim.fn.getfsize(vim.fn.expand "%:p:f")
+      if fsize == nil or fsize < 0 then
+        fsize = 1
+      end
+      local enabled = 1
+      if fsize > 500000 then
+        enabled = 0
+      end
+      if not vim.tbl_contains({ "html" }, vim.bo.filetype) then
+        enabled = 0
+      end
+      vim.g.matchup_enabled = enabled
+      vim.g.matchup_surround_enabled = enabled
+      vim.g.matchup_transmute_enabled = 0
+      vim.g.matchup_matchparen_deferred = enabled
+      vim.g.matchup_matchparen_hi_surround_always = enabled
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+      vim.cmd [[nnoremap <c-s-k> :<c-u>MatchupWhereAmI?<cr>]]
+    end,
   },
 }
 

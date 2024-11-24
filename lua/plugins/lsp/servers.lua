@@ -1,31 +1,7 @@
 local lspconfig = require "lspconfig"
 local ok, res
--- local cmp_nvim_lsp = require "cmp_nvim_lsp"
--- local caps = vim.lsp.protocol.make_client_capabilities()
--- caps = cmp_nvim_lsp.default_capabilities(caps)
-
--- caps.textDocument.completion.completionItem.snippetSupport = true
--- caps.textDocument.onTypeFormatting = { dynamicRegistration = false }
--- caps.workspace.didChangeWorkspaceFolders = false
--- caps.offsetEncoding = { "utf-16" }
--- vim.print(require("mason-registry").get_installed_packages())
--- vim.print(require("mason-lspconfig").get_mappings())
--- for _, item in ipairs(require("mason-registry").get_installed_package_names()) do
---   local server = require("mason-lspconfig").get_mappings().mason_to_lspconfig[item] or item
---   vim.print(server)
--- end
-
--- local servers = vim.tbl_deep_extend(
---   "force",
---   require("mason-lspconfig").get_installed_servers(),
---   { "pylance", "clangd", "gopls", "ansiblels", "ruff_lsp" }
--- )
--- for _, server in ipairs(servers) do
 for _, item in ipairs(require("mason-registry").get_installed_package_names()) do
   local server = require("mason-lspconfig").get_mappings().mason_to_lspconfig[item] or nil
-  if item == "pylance" then
-    server = nil
-  end
   if server ~= nil then
     ok, res = pcall(require, "plugins.lsp.servers." .. server)
     if res then
@@ -36,11 +12,6 @@ for _, item in ipairs(require("mason-registry").get_installed_package_names()) d
         --   res.on_attach = require("plugins.lsp.settings").on_attach
         -- end
         lspconfig[server].setup(res)
-        -- show final config for basedpyright after being setup
-        -- if server == "basedpyright" then
-        --   vim.print(lspconfig[server])
-        -- end
-
         -- if server == "clangd" then
         --   vim.print(lspconfig[server])
         --   local m = assert(io.open("/tmp/luac.out", "wb"))

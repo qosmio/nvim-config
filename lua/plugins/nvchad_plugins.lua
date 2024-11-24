@@ -3,6 +3,7 @@ local M = {}
 local remove_plugins = {
   "lukas-reineke/indent-blankline.nvim",
   "hrsh7th/nvim-cmp",
+  "nvim-treesitter/nvim-treesitter",
 }
 
 M.nvchad_plugins = require "nvchad.plugins"

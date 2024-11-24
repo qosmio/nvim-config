@@ -1,11 +1,30 @@
 dofile(vim.g.base46_cache .. "cmp")
 
-local status_ok, compare = pcall(require, "cmp.config.compare")
-if not status_ok then
-  return
+local M = {}
+local cmp = require "cmp"
+local compare = require "cmp.config.compare"
+
+local function has_words_before()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0
+    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
 end
 
-local cmp = require "cmp"
+local function get_default_cmp_source()
+  return cmp.config.sources({
+    { name = "lazydev", group_index = 0 },
+    { name = "nvim_lsp" },
+    { name = "copilot" },
+    { name = "nvim_lsp_document_symbol" },
+  }, {
+    { name = "calc" },
+    { name = "buffer" },
+    { name = "path" },
+    {
+      name = "treesitter",
+    },
+  })
+end
 
 local function border(hl_name)
   return {
@@ -21,62 +40,40 @@ local function border(hl_name)
 end
 
 local options = {
-  -- enabled = vim.bo.filetype ~= "python" and true or false,
+  enabled = function()
+    return vim.api.nvim_get_option_value("buftype", { buf = 0 }) ~= "prompt"
+  end,
   window = {
     completion = {
-      -- side_padding = 1,
       border = border "FloatBorder",
-      -- winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
     },
     documentation = {
       border = border "FloatBorder",
       scrollbar = false,
-      -- winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
     },
   },
   performance = { max_view_entries = 20 },
   experimental = {
-    ghost_text = true,
+    ghost_text = false,
   },
-  -- matching = {
-  --   disallow_fuzzy_matching = false,
-  --   disallow_partial_fuzzy_matching = false,
-  --   disallow_partial_matching = false,
-  --   disallow_prefix_unmatching = true,
-  -- },
   snippet = {
     expand = function(args)
       vim.snippet.expand(args.body)
     end,
   },
-  sources = {
-    { name = "nvim_lsp", keyword_length = 0, max_item_count = 5 },
-    { name = "copilot", keyword_length = 1, max_item_count = 3 },
-    { name = "buffer", max_item_count = 5, keyword_length = 2 },
-    { name = "path", max_item_count = 5 },
-    { name = "nvim_lua" },
-  },
-  -- sources = require("cmp").config.sources({ name = "copilot", group_index = 1, priority = 902 }, {
-  --   {
-  --     name = "luasnip",
-  --     keyword_length = 2,
-  --     priority = 901,
-  --   },
-  --   { name = "nvim_lua", priority = 900 },
-  --   { name = "nvim_lsp", keyword_length = 0, priority = 800 },
-  --   { name = "path", priority = 700 },
-  -- }, {
-  --   { name = "buffer", priority = 800 },
-  -- }),
+  sources = get_default_cmp_source(),
   sorting = {
-    priority_weight = 1,
+    priority_weight = 2,
     comparators = {
+      -- require "cmp_fuzzy_path.compare",
+      -- require "cmp_fuzzy_buffer.compare",
       compare.offset,
       compare.exact,
       compare.score,
+      require("cmp-under-comparator").under,
       compare.recently_used,
-      compare.locality,
       compare.kind,
+      compare.sort_text,
       compare.length,
       compare.order,
     },
@@ -96,12 +93,15 @@ local options = {
       if cmp.visible() then
         cmp.select_next_item()
       elseif vim.snippet.active { direction = 1 } then
-        vim.snippet.jump(1)
+        vim.schedule(function()
+          vim.snippet.jump(1)
+        end)
+      elseif has_words_before() then
+        cmp.complete()
       else
         fallback()
       end
     end, { "i", "s" }),
-
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -114,6 +114,53 @@ local options = {
   },
 }
 
-local extend = vim.tbl_deep_extend("force", require "nvchad.cmp", options)
+M.opts = vim.tbl_deep_extend("force", require "nvchad.cmp", options)
 
-return extend
+M.setup = function()
+  cmp.setup.filetype("lua", {
+    sources = cmp.config.sources((function()
+      local sources = get_default_cmp_source()
+      sources[#sources + 1] = { name = "nvim_lua", group_index = 1 }
+      return sources
+    end)()),
+  })
+
+  cmp.setup.filetype("zsh", {
+    sources = cmp.config.sources((function()
+      local sources = get_default_cmp_source()
+      sources[#sources + 1] = { name = "zsh", group_index = 1 }
+      return sources
+    end)()),
+  })
+
+  cmp.setup.filetype("gitcommit", {
+    sources = cmp.config.sources({
+      { name = "cmp_git" },
+    }, {
+      { name = "buffer" },
+    }),
+  })
+
+  cmp.setup.cmdline({ "/", "?" }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = "nvim_lsp_document_symbol" },
+      { name = "cmdline_history" },
+      { name = "buffer" },
+      -- { name = "fuzzy_buffer" },
+    },
+  })
+
+  cmp.setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = "cmdline" },
+    }, {
+      { name = "cmdline_history" },
+      { name = "path" },
+      -- { name = "fuzzy_path", option = { fd_timeout_msec = 100 } },
+    }),
+  })
+end
+
+return M
