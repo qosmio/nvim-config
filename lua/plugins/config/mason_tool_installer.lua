@@ -18,9 +18,6 @@ local extra = {
 local os_info = utils.get_os_info()
 if os_info.id ~= "openwrt" then
   vim.list_extend(servers, extra)
-  if (os_info.id == "rhel" and not tonumber(os_info.version) < 9) or os_info.id ~= "rhel" then
-    table.insert(servers, "selene")
-  end
 end
 
 _ = vim.fn.system "which go"

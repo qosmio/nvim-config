@@ -1,4 +1,3 @@
-local utils = require "utils"
 local status_ok, null_ls = pcall(require, "null-ls")
 if not status_ok then
   return
@@ -83,18 +82,6 @@ local sources = {
   --   extra_args = { "-c", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamllint.yml" },
   -- },
 }
-
-if vim.loop.os_uname().machine ~= "aarch64" then
-  local os_info = utils.get_os_info()
-  if (os_info.id == "rhel" and not tonumber(os_info.version) < 9) or os_info.id ~= "rhel" then
-    local non_aarch64_sources = {
-      diagnostics.selene.with {
-        extra_args = { "--config", vim.fn.stdpath "config" .. "/lua/plugins/config/.selene.toml" },
-      },
-    }
-    sources = vim.tbl_extend("force", sources, non_aarch64_sources)
-  end
-end
 
 return {
   debug = false,
