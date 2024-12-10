@@ -51,6 +51,27 @@ local formatters = {
       vim.fn.stdpath "config" .. "/lua/plugins/config/.ruff.toml",
     },
   },
+  crossplane = {
+    command = "crossplane",
+    stdin = true,
+    args = {
+      "format",
+      "--align",
+      "--spacious",
+      "-i",
+      "2",
+      "-",
+    },
+  },
+  injected = {
+    options = {
+      ignore_errors = true,
+      lang_to_ext = {
+        json = "json",
+        yaml = "yaml",
+      },
+    },
+  },
 }
 
 M.config = {
@@ -71,6 +92,7 @@ M.config = {
     c = { "clang_format" },
     cpp = { "clang_format" },
     cmake = { "cmake_format" },
+    nginx = { "crossplane", "injected" },
     -- Use the "*" filetype to run formatters on all filetypes.
     -- ["*"] = { "codespell" },
     -- Use the "_" filetype to run formatters on filetypes that don't

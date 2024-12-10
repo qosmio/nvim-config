@@ -1,17 +1,20 @@
 ---@class ChadrcConfig
 local M = {}
-
 M.base46 = {
   ------------------------------- base46 -------------------------------------
-  hl_override = require("highlights.hlo").theme.polish_hl,
-  -- hl_add = require("highlights.hlo").highlight,
+  hl_add = require("highlights.hlo").theme.diff,
+  hl_override = vim.tbl_extend(
+    "keep",
+    require("highlights.hlo").theme.polish_hl,
+    require("highlights.hlo").theme.diff
+  ),
   theme_toggle = { "flexoki", "flexoki" },
   theme = "flexoki", -- default theme
   -- cmp themeing
   cmp = {
     icons = true,
     lspkind_text = true,
-    style = "default",             -- default/flat_light/flat_dark/atom/atom_colored
+    style = "default", -- default/flat_light/flat_dark/atom/atom_colored
     border_color = "darker_black", -- only applicable for "default" style, use color names from base30 variables
     -- selected_item_bg = "colored",  -- colored / simple
   },

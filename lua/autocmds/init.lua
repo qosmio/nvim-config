@@ -117,6 +117,8 @@ M.ft_aucmd({
   "*/etc/nginx/*",
   "*/usr/local/nginx/conf/*",
   "*/nginx/*.conf",
+  "*/angie/*.conf",
+  "*/angie/**/*.conf",
 }, "nginx")
 
 -- go template filetype
@@ -182,6 +184,13 @@ M.ft_aucmd({
 M.ft_aucmd({
   "*.patch",
 }, "diff")
+
+M.syn_aucmd({
+  "*.zsh",
+  "*.zshrc",
+  "*.zshenv",
+  "*.zsh-theme",
+}, "bash")
 
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"

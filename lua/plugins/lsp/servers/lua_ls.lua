@@ -1,8 +1,4 @@
 local M = {}
-local has_neodev, neodev_config = pcall(require, "neodev.config")
-if not has_neodev then
-  return
-end
 
 M.name = "lua_ls"
 M.settings = {
@@ -24,6 +20,7 @@ M.settings = {
         "use",
         "packer_plugins",
         "reload",
+        "ngx",
       },
     },
     completion = {
@@ -34,10 +31,10 @@ M.settings = {
       checkThirdParty = false,
       library = {
         vim.fn.expand "$VIMRUNTIME",
-        neodev_config.types(),
+        -- vim.fn.expand "$HOME" .. "/.local/share/nvim/lazy",
       },
-      preloadFileSize = 10000,
-      maxPreload = 5000,
+      -- preloadFileSize = 10,
+      -- maxPreload = 200,
     },
     telemetry = {
       enable = false,

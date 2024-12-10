@@ -14,15 +14,13 @@ local function get_default_cmp_source()
   return cmp.config.sources({
     { name = "lazydev", group_index = 0 },
     { name = "nvim_lsp" },
+    { name = "async_path" },
     { name = "copilot" },
     { name = "nvim_lsp_document_symbol" },
   }, {
     { name = "calc" },
     { name = "buffer" },
-    { name = "path" },
-    {
-      name = "treesitter",
-    },
+    { name = "treesitter" },
   })
 end
 
@@ -145,7 +143,7 @@ M.setup = function()
     mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "nvim_lsp_document_symbol" },
-      { name = "cmdline_history" },
+      -- { name = "cmdline_history" },
       { name = "buffer" },
       -- { name = "fuzzy_buffer" },
     },
@@ -157,7 +155,7 @@ M.setup = function()
       { name = "cmdline" },
     }, {
       { name = "cmdline_history" },
-      { name = "path" },
+      { name = "async_path" },
       -- { name = "fuzzy_path", option = { fd_timeout_msec = 100 } },
     }),
   })
