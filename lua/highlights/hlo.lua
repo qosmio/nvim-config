@@ -224,13 +224,13 @@ M.diff = {
 
   DevIconDiff =                          { fg = "#41535b" },
 
-  DiffAdd =                              { bg = c.diff_add, fg = "#D2EBBE" },
-  DiffAdded =                            { fg = c.vibrant_green },
-  DiffRemoved =                          { fg = c.red },
-  DiffChange =                           { fg = c.diff_change, underline = true, bold = true },
+  -- DiffAdd =                              { bg = c.diff_add, fg = "#D2EBBE" },
+  -- DiffAdded =                            { fg = c.vibrant_green },
+  -- DiffRemoved =                          { fg = c.red },
+  -- DiffChange =                           { fg = c.diff_change, underline = true, bold = true },
   GitSignsChange =                       { fg = c.yellow, underline = false, bold = true },
-  DiffDelete =                           { bg = c.diff_delete, fg = "#54292e" },
-  DiffText =                             { bg = c.diff_text, fg = "#8fbfdc" },
+  -- DiffDelete =                           { bg = c.diff_delete, fg = "#54292e" },
+  -- DiffText =                             { bg = c.diff_text, fg = "#8fbfdc" },
 
   -- DiffChange =                        { bg = "#102b40", },
   DiffFile =                             { fg = "#34bfd0" },

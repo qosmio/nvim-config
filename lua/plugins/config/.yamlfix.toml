@@ -1,9 +1,9 @@
+whitelines = 1
 allow_duplicate_keys = false
 comments_min_spaces_from_content = 2
 comments_require_starting_space = true
 comments_whitelines = 2
-section_whitelines = 1
-# config_path = None
+# section_whitelines = 1
 explicit_start = true
 indent_mapping = 2
 indent_offset = 2

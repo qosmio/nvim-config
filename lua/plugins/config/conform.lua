@@ -43,12 +43,17 @@ local formatters = {
     timeout = 15000,
     prepend_args = { "-conf", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamlfmt.yml" },
   },
+  yamlfix = {
+    timeout = 150,
+    append_args = { "-c", vim.fn.stdpath "config" .. "/lua/plugins/config/.yamlfix.toml" },
+  },
 
   -- Python
   ruff_format = {
     append_args = {
       "--config",
       vim.fn.stdpath "config" .. "/lua/plugins/config/.ruff.toml",
+      "--preview",
     },
   },
   crossplane = {

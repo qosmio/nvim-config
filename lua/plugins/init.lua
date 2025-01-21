@@ -144,6 +144,7 @@ local plugins = {
     "CopilotC-Nvim/CopilotChat.nvim",
     enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
+    branch = "main",
     dependencies = {
       { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
@@ -406,7 +407,7 @@ local plugins = {
   },
   {
     "andymass/vim-matchup",
-    -- event = { "CursorHold", "CursorHoldI", "VeryLazy" },
+    event = { "CursorHold", "CursorHoldI", "VeryLazy" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     keys = { "%", "[" }, -- {, '<Plug>(matchup-%)', '<Plug>(matchup-g%)' },
     cmd = { "MatchupWhereAmI" }, --

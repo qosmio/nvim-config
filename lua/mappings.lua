@@ -74,6 +74,87 @@ M.misc = {
   },
 }
 
+M.lsp_debug = {
+  n = {
+    ["ga"] = {
+      function()
+        vim.lsp.buf.code_action()
+      end,
+      "Code Action",
+    },
+    ["gD"] = {
+      function()
+        vim.lsp.buf.declaration()
+      end,
+      "Go to Declaration",
+    },
+    ["gd"] = {
+      function()
+        vim.lsp.buf.definition()
+      end,
+      "Go to Definition",
+    },
+    ["gi"] = {
+      function()
+        vim.lsp.buf.implementation()
+      end,
+      "Go to Implementation",
+    },
+    ["gt"] = {
+      function()
+        vim.lsp.buf.type_definition()
+      end,
+      "Type Definition",
+    },
+    ["K"] = {
+      function()
+        vim.lsp.buf.hover()
+      end,
+      "Hover Documentation",
+    },
+    ["gR"] = {
+      function()
+        vim.lsp.buf.references()
+      end,
+      "Show References",
+    },
+    ["<leader>li"] = { ":LspInfo<CR>", "LSP Info" },
+    ["<C-k>"] = {
+      function()
+        vim.lsp.buf.signature_help()
+      end,
+      "Signature Help",
+    },
+    ["<leader>wa"] = {
+      function()
+        vim.lsp.buf.add_workspace_folder()
+      end,
+      "Add Workspace Folder",
+    },
+    ["<leader>wr"] = {
+      function()
+        vim.lsp.buf.remove_workspace_folder()
+      end,
+      "Remove Workspace Folder",
+    },
+    ["<leader>wl"] = {
+      function()
+        vim.print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+      end,
+      "List Workspace Folders",
+    },
+    ["<leader>q"] = {
+      function()
+        vim.diagnostic.setloclist()
+      end,
+      "Set Location List",
+    },
+  },
+  v = {
+    ["ga"] = { ":lua vim.lsp.buf.range_code_action()<cr>", "Range Code Action" },
+  },
+}
+
 M.lsp = {
   n = {
     ["<leader>lw"] = {

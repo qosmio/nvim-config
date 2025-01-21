@@ -192,12 +192,17 @@ M.syn_aucmd({
   "*.zsh-theme",
 }, "bash")
 
+-- Diff/Patch
+M.ft_aucmd({
+  "*.j2",
+}, "jinja")
+
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"
 
 aucmd("FileType", {
   group = group_name,
-  pattern = { "cpp", "c" },
+  pattern = { "cpp", "c", "sshconfig" },
   callback = function()
     vim.opt.autoindent = true
     vim.opt.cindent = true
