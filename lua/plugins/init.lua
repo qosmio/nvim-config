@@ -63,19 +63,21 @@ local plugins = {
     event = { "BufReadPre", "BufNewFile" },
     config = function()
       -- require "nvchad.configs.lspconfig"
-      local sources = require "mason-registry.sources"
-      require(lang "crossplane")
+      -- local Registry = require "mason-registry"
+      -- require(lang "crossplane")
       -- require(lang "pylance")
       -- require("cmp").setup.filetype("python", cfg "cmp.python")
-      sources.set_registries {
-        "lua:registry",
-        "lua:mason-registry.index",
-        "github:mason-org/mason-registry",
+      -- vim.print("file:" .. vim.fs.joinpath(vim.fn.stdpath("config"), "registry"))
+      require("mason").setup {
+        registries = {
+          "file:" .. vim.fs.joinpath(vim.fn.stdpath "config", "lua", "registry"),
+        },
+        log_level = vim.log.levels.ERROR,
       }
       local mason_tool_installer = require "mason-tool-installer"
       mason_tool_installer.setup(cfg "mason_tool_installer")
       mason_tool_installer.run_on_start()
-      require "plugins.lsp.servers"
+      -- require "plugins.lsp.servers"
       vim.lsp.set_log_level "warn"
       require("null-ls").setup(cfg "null_ls")
     end,
@@ -120,7 +122,8 @@ local plugins = {
   },
   -- copilot
   {
-    "zbirenbaum/copilot-cmp",
+    "andrewwillette/copilot-cmp",
+    -- "zbirenbaum/copilot-cmp",
     enabled = vim.env.COPILOT_ENABLE == "true",
     event = { "BufReadPost", "BufNewFile" },
     config = function(_, opts)
@@ -343,10 +346,12 @@ local plugins = {
   --   opts = cfg "blink",
   -- },
   {
-    "akinsho/git-conflict.nvim",
+    -- "akinsho/git-conflict.nvim",
+    "NeilGirdhar/git-conflict.nvim",
     -- lazy = false,
     event = "BufRead",
-    version = "*",
+    -- version = "*",
+    branch = "patch-1",
     config = function()
       vim.api.nvim_create_autocmd("User", {
         pattern = "GitConflictDetected",

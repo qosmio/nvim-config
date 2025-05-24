@@ -20,7 +20,7 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "semicolons": "asNeeded",
+      "semicolons": "always",
       "trailingCommas": "all",
       "jsxQuoteStyle": "double"
     }

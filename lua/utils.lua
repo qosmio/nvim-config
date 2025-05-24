@@ -307,11 +307,35 @@ function M.get_current_python_package_paths()
   return paths
 end
 
+M.mason = {}
+
+--- Installs a Mason package.
+--- @param pkg Package
+--- @param is_update boolean: Whether the package is being updated.
+function M.install_package(pkg, is_update)
+  vim.notify(("Mason: %s '%s'"):format(is_update and "updating" or "installing", pkg.name))
+  pkg:once(
+    "install:success",
+    vim.schedule_wrap(function()
+      vim.notify(("Mason: %s '%s'"):format(is_update and "updated" or "installed", pkg.name))
+    end)
+  )
+  pkg:once(
+    "install:failed",
+    vim.schedule_wrap(function()
+      vim.notify(
+        ("Mason: failed to %s '%s'"):format(is_update and "update" or "install", pkg.name),
+        vim.log.levels.ERROR
+      )
+    end)
+  )
+
+  pkg:install()
+end
+
 --- Updates a Mason package.
 -- @param pkg_name string: The name of the package as defined in Mason.
 -- @param auto_install boolean: Whether to install a package that is not currently installed (default: true).
-M.mason = {}
-
 function M.mason.update(pkg_name, auto_install)
   if auto_install == nil then
     auto_install = true
@@ -334,16 +358,10 @@ function M.mason.update(pkg_name, auto_install)
         notify(("Mason: %s not installed"):format(pkg.name), "warn")
       end
     else
-      pkg:check_new_version(function(update_available, version)
-        if update_available then
-          notify(("Mason: Updating %s to %s"):format(pkg.name, version.latest_version))
-          pkg:install():on("closed", function()
-            notify(("Mason: Updated %s"):format(pkg.name))
-          end)
-        else
-          notify(("Mason: No updates available for %s"):format(pkg.name))
-        end
-      end)
+      local latest = pkg:get_latest_version()
+      if latest ~= pkg:get_installed_version() then
+        M.install_package(pkg_name, true)
+      end
     end
   end
 end
@@ -364,29 +382,11 @@ function M.mason.update_all()
   if no_pkgs then
     notify "Mason: No updates available"
   else
-    local updated = false
     for _, pkg in ipairs(installed_pkgs) do
-      pkg:check_new_version(function(update_available, version)
-        if update_available then
-          updated = true
-          notify(("Mason: Updating %s to %s"):format(pkg.name, version.latest_version))
-          pkg:install():on("closed", function()
-            running = running - 1
-            if running == 0 then
-              notify "Mason: Update Complete"
-            end
-          end)
-        else
-          running = running - 1
-          if running == 0 then
-            if updated then
-              notify "Mason: Update Complete"
-            else
-              notify "Mason: No updates available"
-            end
-          end
-        end
-      end)
+      local latest = pkg:get_latest_version()
+      if latest ~= pkg:get_installed_version() then
+        M.install_package(pkg, true)
+      end
     end
   end
 end

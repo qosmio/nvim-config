@@ -1,0 +1,15 @@
+---
+name: crossplane-ng
+description: Quick and reliable way to convert NGINX configurations into JSON and
+  back.
+homepage: https://github.com/qosmio/crossplane
+licenses:
+  - GPL-3.0
+languages:
+  - Nginx
+categories:
+  - Formatter
+source:
+  id: pkg:pypi/crossplane-ng@0.5.10
+bin:
+  crossplane: pypi:crossplane

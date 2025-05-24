@@ -85,12 +85,13 @@ M.config = {
     css = { "biome" },
     lua = { "stylua" },
     javascript = { "biome" },
+    typescript = { "biome" },
     -- You can use a function here to determine the formatters dynamically
     python = { "ruff_format", "usort" },
     bash = { "beautysh", "shfmt" },
     zsh = { "beautysh", "shfmt" },
     sh = { "beautysh", "shfmt" },
-    sql = { "sqlfluff" },
+    sql = { "sql_formatter", "sqlfluff" },
     json = { "biome" },
     toml = { "taplo" },
     yaml = { "yamlfmt", "yamlfix" },
@@ -98,6 +99,7 @@ M.config = {
     cpp = { "clang_format" },
     cmake = { "cmake_format" },
     nginx = { "crossplane", "injected" },
+    ["*"] = { "injected" }, -- enables injected-lang formatting for all filetypes
     -- Use the "*" filetype to run formatters on all filetypes.
     -- ["*"] = { "codespell" },
     -- Use the "_" filetype to run formatters on filetypes that don't

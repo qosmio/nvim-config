@@ -192,25 +192,30 @@ M.syn_aucmd({
   "*.zsh-theme",
 }, "bash")
 
--- Diff/Patch
+-- Jinja2
 M.ft_aucmd({
   "*.j2",
 }, "jinja")
+
+-- ucode
+M.ft_aucmd({
+  "*.uc",
+}, "typescript")
 
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"
 
 aucmd("FileType", {
   group = group_name,
-  pattern = { "cpp", "c", "sshconfig" },
+  pattern = { "cpp", "c", "sshconfig", "dts" },
   callback = function()
     vim.opt.autoindent = true
     vim.opt.cindent = true
     vim.opt.softtabstop = 4
     vim.opt.tabstop = 2
     vim.opt.shiftwidth = 2
-    vim.opt.expandtab = true
-    vim.opt.formatoptions = "croql"
+    vim.opt.expandtab = false
+    -- vim.opt.formatoptions = "croql"
   end,
 })
 aucmd("FileType", {
@@ -406,4 +411,40 @@ cmd("MasonUpdate", function(opts)
   require("utils").mason.update(opts.args)
 end, { nargs = 1, desc = "Update Mason Package" })
 
+-- after/autoload/openwrt
+-- Autocommand to set OpenWrt environment variables only for relevant files
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = "*/target-aarch64_cortex-a53_musl/*",
+--   callback = function()
+--     local openwrt = require "after.autoload.openwrt"
+--     -- openwrt.print_openwrt_vars()
+--     openwrt.set_openwrt_vars()
+--   end,
+-- })
+
+-- Detect ini files based on CONFIG_ or TARGET_ prefixes
+aucmd("BufReadPost", {
+  group = augroup "ini_detect",
+  pattern = { "*.config", "*.conf", ".config", "config" }, -- Only check likely config files
+  callback = function()
+    -- Skip if filetype is already set
+    if vim.bo.filetype ~= "" then
+      return
+    end
+
+    local bufnr = vim.api.nvim_get_current_buf()
+    local max_lines = 6 -- Check fewer lines
+    local line_count = math.min(max_lines, vim.api.nvim_buf_line_count(bufnr))
+    local lines = vim.api.nvim_buf_get_lines(bufnr, 0, line_count, false)
+
+    for _, line in ipairs(lines) do
+      if line:match "^CONFIG_" or line:match "^TARGET_" then
+        vim.bo.filetype = "dosini"
+        vim.bo.commentstring = "# %s"
+        break
+      end
+    end
+  end,
+  once = true,
+})
 -- }}}

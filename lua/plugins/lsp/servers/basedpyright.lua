@@ -104,7 +104,7 @@ local config = {
       "poetry.lock",
       "pyrightconfig.json",
     }
-    return util.root_pattern(patterns)(fname) or util.path.dirname(fname)
+    return util.root_pattern(patterns)(fname) or vim.fs.dirname(fname)
   end,
 }
 -- vim.print(config)

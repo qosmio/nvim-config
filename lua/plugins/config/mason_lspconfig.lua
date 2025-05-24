@@ -75,5 +75,8 @@ return {
   auto_update = true,
   run_on_start = true,
   ensure_installed = servers,
+  registries = {
+    "file:" .. vim.fs.joinpath(vim.fn.stdpath "config", "lua", "registry"),
+  },
   -- start_delay = 2,
 }

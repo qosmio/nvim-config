@@ -32,9 +32,9 @@ end
 local opts = {
   ensure_installed = servers,
   automatic_installation = true,
-  auto_update = true,
+  auto_update = false,
   run_on_start = true,
-  start_delay = 2,
+  -- start_delay = 2,
 }
 
 return opts
