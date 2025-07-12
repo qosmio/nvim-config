@@ -60,6 +60,7 @@ local config = {
           reportOptionalMemberAccess = false,
           reportOptionalIterable = false,
           reportOptionalCall = false,
+          reportAttributeAccessIssue = false,
         },
         -- inlayHints = {
         --   variableTypes = true,

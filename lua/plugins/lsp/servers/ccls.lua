@@ -43,6 +43,7 @@ local configs = {
     },
   },
   cmd = { "ccls", "--log-file=/tmp/ccls.log", "-v=3" },
+  filetypes = { "hpp", "cc", "cpp", "objc", "objcpp", "cuda", "proto" },
 }
 _ = vim.fn.system "which ccls"
 if vim.v.shell_error ~= 0 then

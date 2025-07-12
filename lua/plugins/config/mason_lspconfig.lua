@@ -7,7 +7,7 @@ local servers = {
   "bashls",
   -- "beautysh",
   -- "black",
-  "clangd",
+  -- "clangd",
   -- "clang-format",
   -- "cssls",
   "dockerls",
@@ -69,12 +69,15 @@ end
 
 return {
   log_level = vim.log.levels.WARN,
+  automatic_enable = {
+    exclude = { "clangd", "basedpyright" },
+  },
   automatic_installation = {
     exclude = { "clangd" },
   },
   auto_update = true,
   run_on_start = true,
-  ensure_installed = servers,
+  -- ensure_installed = servers,
   registries = {
     "file:" .. vim.fs.joinpath(vim.fn.stdpath "config", "lua", "registry"),
   },

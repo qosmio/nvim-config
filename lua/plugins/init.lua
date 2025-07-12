@@ -2,9 +2,9 @@ local cfg = function(mod)
   return require("plugins.config." .. mod)
 end
 
-local lang = function(mod)
-  return "registry." .. mod
-end
+-- local lang = function(mod)
+--   return "registry." .. mod
+-- end
 
 local plugins = {
   -- stylua: ignore start
@@ -46,7 +46,7 @@ local plugins = {
     config = function()
       require("alternate-toggler").setup {
         alternates = {
-          -- ["no"] = "yes",
+          ["no"] = "yes",
         },
       }
     end,
@@ -77,7 +77,7 @@ local plugins = {
       local mason_tool_installer = require "mason-tool-installer"
       mason_tool_installer.setup(cfg "mason_tool_installer")
       mason_tool_installer.run_on_start()
-      -- require "plugins.lsp.servers"
+      require "plugins.lsp.servers"
       vim.lsp.set_log_level "warn"
       require("null-ls").setup(cfg "null_ls")
     end,
@@ -257,19 +257,24 @@ local plugins = {
   --     return cfg "cmp"
   --   end,
   -- },
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   event = "User FilePost",
-  --   dependencies = { "saghen/blink.cmp" },
-  --   config = function(_, opts)
-  --     require("nvchad.configs.lspconfig").defaults()
-  --     local lspconfig = require "lspconfig"
-  --     for server, config in pairs(opts.servers or {}) do
-  --       config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-  --       lspconfig[server].setup(config)
-  --     end
-  --   end,
-  -- },
+  {
+    "RaafatTurki/hex.nvim",
+    event = { "VimEnter" },
+    config = function()
+      require("hex").setup()
+    end,
+  },
+  {
+    "neovim/nvim-lspconfig",
+    -- event = { "VimEnter" },
+    -- event = "User FilePost",
+    config = function()
+      require("nvchad.configs.lspconfig").defaults()
+      require("lspconfig").clangd.setup {
+        filetypes = { "h", "c" },
+      }
+    end,
+  },
   {
     "tamago324/cmp-zsh",
     dependencies = {

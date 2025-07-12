@@ -1,7 +1,7 @@
 local M = {
   cmd = {
     "clangd",
-    "--enable-config", -- load .clangd or ~/.config/clangd/config.yaml
+    -- "--enable-config", -- load .clangd or ~/.config/clangd/config.yaml
     "-j=" .. OPT("clangd_jobs", 8),
     "--background-index",
     "--clang-tidy",
@@ -15,6 +15,7 @@ local M = {
       "--header-insertion-decorators=true", -- true/false
     })),
   },
+  filetypes = { "c", "h", "objc", "objcpp", "cuda", "proto" },
   capabilities = {
     offsetEncoding = { "utf-16" },
   },

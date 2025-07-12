@@ -93,6 +93,14 @@ aucmd("FileType", {
   end,
 })
 
+-- Binary filetype
+M.ft_aucmd({
+  "*.bin",
+  "*.exe",
+  "*.dll",
+  "*.so",
+}, "xxd")
+
 -- Plist
 M.ft_aucmd({
   "*.xm",
@@ -207,7 +215,7 @@ group_name = augroup "filetype_indentation"
 
 aucmd("FileType", {
   group = group_name,
-  pattern = { "cpp", "c", "sshconfig", "dts" },
+  pattern = { "cpp", "c", "sshconfig", "dts", "kconfig" },
   callback = function()
     vim.opt.autoindent = true
     vim.opt.cindent = true
@@ -249,7 +257,7 @@ aucmd("FileType", {
   pattern = { "lua", "sh", "zsh", "bash", "css" },
   callback = function()
     vim.opt.tabstop = 4
-    vim.opt.softtabstop = 2
+    vim.opt.softtabstop = 4
     vim.opt.shiftwidth = 2
     vim.opt.expandtab = true
   end,
