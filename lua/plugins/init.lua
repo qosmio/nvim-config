@@ -258,13 +258,6 @@ local plugins = {
   --   end,
   -- },
   {
-    "RaafatTurki/hex.nvim",
-    event = { "VimEnter" },
-    config = function()
-      require("hex").setup()
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     -- event = { "VimEnter" },
     -- event = "User FilePost",
