@@ -2,11 +2,11 @@ local utils = require "utils"
 
 local servers = {
   -- "pylance",
-  "shellcheck",
   "shfmt",
 }
 
 local extra = {
+  "shellcheck",
   "ruff",
   "yamlfmt",
   "yamllint",
