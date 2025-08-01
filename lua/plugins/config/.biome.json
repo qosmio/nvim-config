@@ -1,7 +1,6 @@
 {
   "files": {
-    "ignoreUnknown": false,
-    "ignore": ["node_modules", "server"]
+    "ignoreUnknown": false
   },
   "formatter": {
     "formatWithErrors": true,
@@ -24,9 +23,6 @@
       "trailingCommas": "all",
       "jsxQuoteStyle": "double"
     }
-  },
-  "organizeImports": {
-    "enabled": true
   },
   "linter": {
     "rules": {

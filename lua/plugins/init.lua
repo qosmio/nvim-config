@@ -264,7 +264,7 @@ local plugins = {
     config = function()
       require("nvchad.configs.lspconfig").defaults()
       require("lspconfig").clangd.setup {
-        filetypes = { "h", "c" },
+        filetypes = { "h", "c", "cpp" },
       }
     end,
   },

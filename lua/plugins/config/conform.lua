@@ -35,7 +35,7 @@ local formatters = {
   },
   shfmt = {
     filetypes = { "bash", "csh", "ksh", "sh" },
-    prepend_args = { "--language-dialect", "bash", "-i", "2", "-bn", "-ci", "-sr" },
+    prepend_args = { "--language-dialect", "bash", "-i", "0", "-bn", "-ci", "-sr" },
   },
 
   -- YAML
@@ -99,7 +99,7 @@ M.config = {
     cpp = { "clang_format" },
     cmake = { "cmake_format" },
     nginx = { "crossplane", "injected" },
-    ["*"] = { "injected" }, -- enables injected-lang formatting for all filetypes
+    -- ["*"] = { "injected" }, -- enables injected-lang formatting for all filetypes
     -- Use the "*" filetype to run formatters on all filetypes.
     -- ["*"] = { "codespell" },
     -- Use the "_" filetype to run formatters on filetypes that don't
