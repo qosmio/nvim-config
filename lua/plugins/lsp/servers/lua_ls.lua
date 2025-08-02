@@ -34,7 +34,7 @@ M.settings = {
         -- vim.fn.expand "$HOME" .. "/.local/share/nvim/lazy",
       },
       -- preloadFileSize = 10,
-      -- maxPreload = 200,
+      maxPreload = 200,
     },
     telemetry = {
       enable = false,

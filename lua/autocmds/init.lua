@@ -258,8 +258,8 @@ aucmd("FileType", {
   callback = function()
     vim.opt.tabstop = 4
     vim.opt.softtabstop = 4
-    vim.opt.shiftwidth = 4
-    vim.opt.expandtab = false
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
   end,
 })
 -- aucmd("BufWritePre", {

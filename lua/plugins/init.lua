@@ -182,15 +182,14 @@ local plugins = {
     end,
   },
   {
-    "iguanacucumber/magazine.nvim",
-    name = "nvim-cmp",
+    "hrsh7th/nvim-cmp",
     enabled = true,
-    -- event = { "InsertEnter", "CmdlineEnter" },
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
-      { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
-      { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
-      { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
+      { "hrsh7th/cmp-nvim-lsp" },
+      { "hrsh7th/cmp-nvim-lua" },
+      { "hrsh7th/cmp-buffer" },
+      { "hrsh7th/cmp-cmdline" },
       {
         "windwp/nvim-autopairs",
         opts = cfg "autopairs",

@@ -59,10 +59,12 @@ L.setup_handlers = function()
     update_in_insert = false, -- update diagnostics insert mode
     severity_sort = false,
   })
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = L.popup_border })
-  vim.lsp.handlers["textDocument/signatureHelp"] =
-      vim.lsp.with(vim.lsp.handlers.signature_help, { border = L.popup_border })
+  vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx)
+    vim.lsp.handlers.hover(_, result, ctx, { border = L.popup_border })
+  end
+  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.buf.signature_help({ border = L.popup_border })
 end
+
 
 M.on_attach = function(client, bufnr)
   require("nvchad.configs.lspconfig").on_attach(client, bufnr)

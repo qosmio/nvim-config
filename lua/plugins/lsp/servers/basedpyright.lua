@@ -44,6 +44,7 @@ local config = {
           reportUnusedImport = "warning",
           reportUnusedFunction = "information",
           reportUnusedVariable = "information",
+          reportUnusedParameter = false,
           reportGeneralTypeIssues = "information",
           reportUnboundVariable = false,
           reportUndefinedVariable = "error",
@@ -108,5 +109,7 @@ local config = {
     return util.root_pattern(patterns)(fname) or vim.fs.dirname(fname)
   end,
 }
+-- local json = require "utils.json"
+-- vim.print(json:pretty_print(config.settings.basedpyright))
 -- vim.print(config)
 return config
