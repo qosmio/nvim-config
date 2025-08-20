@@ -9,6 +9,7 @@ end
 local plugins = {
   -- stylua: ignore start
   -- { "lukas-reineke/indent-blankline.nvim", enabled = false },
+  { "windwp/nvim-autopairs",               enabled = false },
   { "williamboman/mason.nvim",             opts = cfg "mason" },
   { "williamboman/mason-lspconfig.nvim",   opts = cfg "mason_lspconfig" },
   { "NvChad/nvim-colorizer.lua",           opts = cfg "colorizer" },
@@ -68,6 +69,7 @@ local plugins = {
       -- require(lang "pylance")
       -- require("cmp").setup.filetype("python", cfg "cmp.python")
       -- vim.print("file:" .. vim.fs.joinpath(vim.fn.stdpath("config"), "registry"))
+      require "plugins.lsp.servers"
       require("mason").setup {
         registries = {
           "file:" .. vim.fs.joinpath(vim.fn.stdpath "config", "lua", "registry"),

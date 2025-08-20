@@ -99,9 +99,8 @@ M.config = {
     cpp = { "clang_format" },
     cmake = { "cmake_format" },
     nginx = { "crossplane", "injected" },
-    -- ["*"] = { "injected" }, -- enables injected-lang formatting for all filetypes
-    -- Use the "*" filetype to run formatters on all filetypes.
-    -- ["*"] = { "codespell" },
+    rust = { "rustfmt" },
+    -- ["*"] = { "injected", "codespell" }, -- enables injected-lang formatting for all filetypes
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
     ["_"] = { "trim_whitespace" },

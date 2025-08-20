@@ -1,5 +1,6 @@
 {
   "files": {
+    "maxSize": 52428800,
     "ignoreUnknown": false
   },
   "formatter": {
@@ -34,14 +35,15 @@
         "useKeyWithClickEvents": "off"
       },
       "style": {
-        "useNodejsImportProtocol": "off"
+        "useNodejsImportProtocol": "off",
+        "noDescendingSpecificity": "off"
       },
       "suspicious": {
         "noThenProperty": "off"
       },
       "correctness": {
         "noUnusedVariables": {
-          "level": "warn",
+          "level": "off",
           "fix": "safe"
         },
         "noUnusedImports": {
