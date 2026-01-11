@@ -153,3 +153,7 @@ local osc52 = {
   },
 }
 vim.g.clipboard = osc52
+
+-- Modelines
+opt.modeline = true
+opt.modelines = 5

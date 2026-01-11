@@ -3,7 +3,7 @@ pcall(function()
   dofile(vim.g.base46_cache .. "treesitter")
 end)
 
-require "plugins.config.treesitter_parsers"
+-- require "plugins.config.treesitter_parsers"
 local ensure_installed = {
   -- "awk",
   "bash",
@@ -35,7 +35,7 @@ local ensure_installed = {
   "lua",
   -- "luadoc",
   "make",
-  "nginx",
+  -- "nginx",
   -- "passwd",
   -- "perl",
   -- "php",
@@ -54,30 +54,33 @@ local ensure_installed = {
   -- "xml",
   "yaml",
 }
+
 local utils = require "utils"
-local opts = {
-  auto_install = (function()
-    local os_info = utils.get_os_info() or nil
-    if os_info then
-      if os_info.id ~= "openwrt" then
-        return true
-      else
-        return false
-      end
-    end
-  end)(),
-  (function()
-    _ = vim.fn.system "which gcc"
+
+-- Check GCC and tree-sitter first
+local auto_install_enabled = (function()
+  local os_info = utils.get_os_info() or nil
+  if os_info and os_info.id == "openwrt" then
+    return false
+  end
+  return true
+end)()
+
+local ensure_installed_config = {}
+if auto_install_enabled then
+  _ = vim.fn.system "which gcc"
+  if vim.v.shell_error == 0 then
+    _ = vim.fn.system "which tree-sitter"
     if vim.v.shell_error ~= 0 then
-      return
-    else
-      _ = vim.fn.system "which tree-sitter"
-      if vim.v.shell_error ~= 0 then
-        require("utils").tbl_filter_inplace(ensure_installed, "sql")
-      end
-      return { ensure_installed = ensure_installed } -- only install if gcc is installed
+      require("utils").tbl_filter_inplace(ensure_installed, "sql")
     end
-  end)(),
+    ensure_installed_config = { ensure_installed = ensure_installed }
+  end
+end
+
+local opts = vim.tbl_extend("force", {
+  parser_install_dir = vim.fn.stdpath "data" .. "/site",
+  auto_install = false,
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = true,
@@ -98,6 +101,6 @@ local opts = {
     disable_virtual_text = false,
     include_match_words = true,
   },
-}
+}, ensure_installed_config)
 
 return opts

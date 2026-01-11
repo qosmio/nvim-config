@@ -20,8 +20,11 @@ local plugins = {
     event = { "BufReadPost", "BufNewFile" },
     cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     opts = cfg "treesitter",
+    build = ":TSUpdate",
+    branch = "master",
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+      vim.opt.runtimepath:append(opts.parser_install_dir)
     end,
   },
   {
