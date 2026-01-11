@@ -77,6 +77,11 @@ local formatters = {
       },
     },
   },
+  npm_groovy_lint = {
+    command = "npm-groovy-lint",
+    args = { "--format", "-" },
+    stdin = true,
+  },
 }
 
 M.config = {
@@ -92,6 +97,7 @@ M.config = {
     zsh = { "beautysh", "shfmt" },
     sh = { "shfmt", "beautysh" },
     sql = { "sql_formatter", "sqlfluff" },
+    groovy = { "npm_groovy_lint" },
     json = { "biome" },
     toml = { "taplo" },
     yaml = { "yamlfmt", "yamlfix" },

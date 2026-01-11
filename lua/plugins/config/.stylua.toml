@@ -1,13 +1,47 @@
+# Disambiguate the style of Lua syntax being formatted.
+# Default: All
+# Possible options: All, Lua51, Lua52, Lua53, Lua54, LuaJIT, Luau, CfxLua
+syntax = "All"
+
+# Approximate line length for printing.
+# Default: 120
+# Used as a guide for line wrapping - this is not a hard requirement: lines may fall under or over the limit.
+# Current value: 100
+column_width = 100
+
+# Line endings type.
+# Default: Unix (LF)
+# Possible options: Unix, Windows
+line_endings = "Unix"
+
+# Indent type.
+# Default: Tabs
+# Possible options: Tabs, Spaces
+# Current value: Spaces
+indent_type = "Spaces"
+
+# Character size of single indentation.
+# Default: 4
+# If `indent_type` is set to `Tabs`, this option is used as a heuristic to determine column width only.
+# Current value: 2
+indent_width = 2
+
 # Quote style for string literals.
-# Possible options:
-# AutoPreferDouble, AutoPreferSingle, ForceDouble, ForceSingle. AutoPrefer
-# styles will prefer the specified quote style, but fall back to the alternative if it has fewer string escapes. Force styles always use the specified style regardless of escapes.
+# Default: AutoPreferDouble
+# Possible options: AutoPreferDouble, AutoPreferSingle, ForceDouble, ForceSingle
+# `AutoPrefer` styles will prefer the specified quote style, but fall back to the alternative if it has fewer string escapes.
+# `Force` styles always use the specified style regardless of escapes.
 quote_style = "AutoPreferDouble"
 
-column_width = 100
-line_endings = "Unix"
-indent_type = "Spaces"
-indent_width = 2
+# Specify whether to add a space between the function name and parentheses.
+# Default: Never
+# Possible options: Never, Definitions, Calls, Always
+space_after_function_names = "Never"
+
+# Specify whether to preserve leading and trailing newline gaps for blocks.
+# Default: Never
+# Possible options: Never, Preserve
+block_newline_gaps = "Never"
 
 # Whether parentheses should be applied on function calls with a single string/table argument.
 # Possible options: Always, NoSingleString, NoSingleTable, None, Input.
@@ -22,8 +56,13 @@ indent_width = 2
 #
 # Input removes all automation and preserves parentheses only if they were present
 # in input code: consistency is not enforced.
-call_parentheses = "NoSingleTable"
+call_parentheses = "None"
 
 # Specify whether to collapse simple statements.
 # Possible options: Never, FunctionOnly, ConditionalOnly, or Always
-collapse_simple_statement = "FunctionOnly"
+collapse_simple_statement = "Never"
+
+[sort_requires]
+# Specify whether to sort require statements.
+# Default: false
+enabled = true
