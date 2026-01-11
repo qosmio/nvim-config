@@ -12,7 +12,7 @@ local extra = {
   "yamllint",
   "usort",
   "taplo",
-  "stylua",
+  "stylua-ng",
 }
 
 local os_info = utils.get_os_info()
