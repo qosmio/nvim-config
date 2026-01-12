@@ -83,7 +83,7 @@ local plugins = {
       mason_tool_installer.setup(cfg "mason_tool_installer")
       mason_tool_installer.run_on_start()
       require "plugins.lsp.servers"
-      vim.lsp.set_log_level "warn"
+      vim.lsp.log.set_level "warn"
       require("null-ls").setup(cfg "null_ls")
     end,
   },
@@ -127,6 +127,15 @@ local plugins = {
   },
   -- copilot
   {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    config = function(_, opts)
+      require("copilot").setup(opts)
+    end,
+    opts = require "plugins.config.copilot",
+  },
+  {
     "andrewwillette/copilot-cmp",
     -- "zbirenbaum/copilot-cmp",
     enabled = vim.env.COPILOT_ENABLE == "true",
@@ -141,27 +150,24 @@ local plugins = {
       end)
     end,
     dependencies = {
-      "copilot.lua",
-      cmd = "Copilot",
-      build = ":Copilot auth",
-      opts = require "plugins.config.copilot",
+      "zbirenbaum/copilot.lua",
     },
   },
   { "cmcaine/vim-uci", ft = { "uci" } },
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    enabled = vim.env.COPILOT_ENABLE == "true",
-    event = { "BufReadPost", "BufNewFile" },
-    branch = "main",
-    dependencies = {
-      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-    },
-    build = "make tiktoken", -- Only on MacOS or Linux
-    opts = {
-      debug = false, -- Enable debugging
-    },
-  },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   enabled = vim.env.COPILOT_ENABLE == "true",
+  --   event = { "BufReadPost", "BufNewFile" },
+  --   branch = "main",
+  --   dependencies = {
+  --     { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+  --     { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+  --   },
+  --   build = "make tiktoken", -- Only on MacOS or Linux
+  --   opts = {
+  --     debug = false, -- Enable debugging
+  --   },
+  -- },
   {
     "nvim-treesitter/nvim-treesitter-context",
     event = "VeryLazy",
