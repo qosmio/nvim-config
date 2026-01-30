@@ -29,7 +29,7 @@ end
 aucmd("VimEnter", {
   group = augroup "set_syntax",
   callback = function()
-    local custom_after_path = vim.api.nvim_get_runtime_file("lua/after", false)[1]
+    local custom_after_path = vim.api.nvim_get_runtime_file("after", false)[1]
     vim.opt.runtimepath:append(custom_after_path)
   end,
   once = false,
@@ -148,11 +148,6 @@ M.ft_aucmd({
   "*.audit",
 }, "audit")
 
--- Most .ini files are dosini like
-M.ft_aucmd({
-  "*.cnf",
-}, "dosini")
-
 -- nftables filetype
 M.ft_aucmd({
   "*nft*.conf",
@@ -209,6 +204,14 @@ M.ft_aucmd({
 M.ft_aucmd({
   "*.uc",
 }, "typescript")
+
+-- Most .ini files are dosini like
+M.ft_aucmd({
+  "*etc/php/*",
+  "php*conf",
+  "*.cnf",
+  "*.cnf.j2",
+}, "dosini.jinja")
 
 --{{ FileType Indentation
 group_name = augroup "filetype_indentation"

@@ -1,0 +1,10 @@
+{
+  "message": {
+    "timestamp": 0,
+    "machineId": "YOUR_MACHINE_ID",
+    "licenceKey": "YOUR_LICENCE_KEY",
+    "expiryTimestamp": 99999999999,
+    "resultCode": 1
+  },
+  "signature": "THE_CALCULATED_SIGNATURE"
+}
