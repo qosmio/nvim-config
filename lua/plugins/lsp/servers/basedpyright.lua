@@ -1,27 +1,27 @@
 local util = require "lspconfig.util"
 -- highlight self and cls as a builtin variables
-local function ts_highlight_self(args)
-  local token = args.data.token
-  -- vim.print(token)
-  if token.type ~= "parameter" then
-    return
-  end
+-- local function ts_highlight_self(args)
+--   local token = args.data.token
+--   -- vim.print(token)
+--   if token.type ~= "parameter" then
+--     return
+--   end
 
-  -- TODO: check performance impact of getting text so frequently
-  local text = vim.api.nvim_buf_get_text(
-    args.buf,
-    token.line,
-    token.start_col,
-    token.line,
-    token.end_col,
-    {}
-  )[1]
+--   -- TODO: check performance impact of getting text so frequently
+--   local text = vim.api.nvim_buf_get_text(
+--     args.buf,
+--     token.line,
+--     token.start_col,
+--     token.line,
+--     token.end_col,
+--     {}
+--   )[1]
 
-  if text ~= "self" and text ~= "cls" then
-    return
-  end
-  vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, "@variable.builtin")
-end
+--   if text ~= "self" and text ~= "cls" then
+--     return
+--   end
+--   vim.lsp.semantic_tokens.highlight_token(token, args.buf, args.data.client_id, "@variable.builtin")
+-- end
 
 -- vim.api.nvim_create_autocmd("LspTokenUpdate", {
 --   callback = ts_highlight_self,

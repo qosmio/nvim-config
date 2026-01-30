@@ -4,7 +4,7 @@ return {
   -- should_attach = require("copilot.config.should_attach").default,
   -- auth_provider_url = nil,
   -- workspace_folders = {},
-  copilot_model = "gpt-4o-copilot",
+  -- copilot_model = "gpt-4o-copilot",
   panel = {
     enabled = true,
     auto_refresh = true,
@@ -45,5 +45,11 @@ return {
     ["."] = true,
   },
   copilot_node_command = "node", -- Node.js version must be > 18.x
-  -- server_opts_overrides = {},
+  server_opts_overrides = {
+    settings = {
+      telemetry = {
+        telemetryLevel = "off",
+      },
+    },
+  },
 }
