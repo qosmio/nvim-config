@@ -243,12 +243,15 @@ aucmd("FileType", {
 })
 aucmd("FileType", {
   group = group_name,
-  pattern = { "yaml", "json", "javascript" },
+  pattern = { "yaml", "json", "javascript", "typescript" },
   callback = function()
-    vim.opt.tabstop = 4
-    vim.opt.softtabstop = 2
+    vim.opt.tabstop = 2
+    vim.opt.softtabstop = 4
     vim.opt.shiftwidth = 2
-    vim.opt.expandtab = true
+    vim.opt.expandtab = false -- use spaces instead of tabs
+    vim.opt.autoindent = true -- auto indents new lines
+    vim.opt.smartindent = true -- smart indents new lines
+    vim.opt.smarttab = true -- smartly use tabs for indenting
   end,
 })
 aucmd("FileType", {
@@ -257,9 +260,12 @@ aucmd("FileType", {
   pattern = { "lua", "sh", "zsh", "bash", "css" },
   callback = function()
     vim.opt.tabstop = 4
-    vim.opt.softtabstop = 4
-    vim.opt.shiftwidth = 2
-    vim.opt.expandtab = true
+    vim.opt.softtabstop = 2
+    vim.opt.shiftwidth = 4
+    vim.opt.expandtab = false -- use spaces instead of tabs
+    vim.opt.autoindent = true -- auto indents new lines
+    vim.opt.smartindent = true -- smart indents new lines
+    vim.opt.smarttab = true -- smartly use tabs for indenting
   end,
 })
 -- aucmd("BufWritePre", {

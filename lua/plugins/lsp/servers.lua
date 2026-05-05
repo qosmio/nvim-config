@@ -5,7 +5,7 @@ local ok, res
 
 local cfg = {
   -- "ansiblels",
-  "basedpyright",
+  -- "basedpyright",
   -- "bashls",
   "biome",
   -- "ccls",

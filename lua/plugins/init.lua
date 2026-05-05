@@ -72,7 +72,7 @@ local plugins = {
       -- require(lang "pylance")
       -- require("cmp").setup.filetype("python", cfg "cmp.python")
       -- vim.print("file:" .. vim.fs.joinpath(vim.fn.stdpath("config"), "registry"))
-      require "plugins.lsp.servers"
+      -- require "plugins.lsp.servers"
       require("mason").setup {
         registries = {
           "file:" .. vim.fs.joinpath(vim.fn.stdpath "config", "lua", "registry"),
@@ -273,9 +273,23 @@ local plugins = {
     -- event = "User FilePost",
     config = function()
       require("nvchad.configs.lspconfig").defaults()
-      require("lspconfig").clangd.setup {
+
+      vim.lsp.enable('ruff', false)
+      vim.lsp.enable('basedpyright', false)
+      vim.lsp.config("clangd", {
         filetypes = { "h", "c", "cpp" },
-      }
+      })
+
+      vim.lsp.config("ty", {
+        settings = {
+          ty = {
+            inlayHints = {
+              variableTypes = true,
+              callArgumentNames = true,
+            },
+          },
+        },
+      })
     end,
   },
   {
