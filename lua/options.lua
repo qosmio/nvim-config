@@ -34,7 +34,6 @@ opt.shiftwidth = 2  -- number of spaces to shift
 opt.copyindent = true
 opt.shiftround = true
 opt.autoindent = true
-opt.copyindent = true
 -- opt.smartindent = true
 -- opt.autoindent = true
 --" }}} Spaces & Tabs
@@ -129,12 +128,6 @@ if os.getenv "LC_TERMINAL" == "iTerm2" then
   let &t_te.="\<Esc>]1337;HighlightCursorLine=false\x7"
 ]]
 end
-
--- Cleanup shadafile
-vim.schedule(function()
-  opt.shadafile = vim.fn.expand "$HOME" .. "/.local/share/nvim/shada/main.shada"
-  vim.cmd [[ silent! rsh ]]
-end)
 
 vim.g.loaded_perl_provider = 1
 vim.g.loaded_node_provider = 1

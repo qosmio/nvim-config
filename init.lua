@@ -4,7 +4,7 @@ vim.g.mapleader = " "
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local repo = "https://github.com/folke/lazy.nvim.git"
   vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
 end
@@ -72,11 +72,6 @@ dofile(vim.g.base46_cache .. "statusline")
 require "nvchad.autocmds"
 require "autocmds"
 
-vim.deprecate = function() end
-
-local u = require "utils"
-vim.g.python3_host_prog = u.get_python3_host_prog { exclude = "python3.9" }
-  or vim.g.python3_host_prog
 -- print(vim.inspect(base46.table_to_str(require "highlights")))
 
 vim.schedule(function()

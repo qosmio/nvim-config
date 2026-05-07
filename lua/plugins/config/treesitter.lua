@@ -55,10 +55,17 @@ local ensure_installed = {
   "yaml",
 }
 
+local perf = require "plugins.config.perf"
 local utils = require "utils"
+
+local slow_host = perf.is_slow_host()
 
 -- Check GCC and tree-sitter first
 local auto_install_enabled = (function()
+  if slow_host then
+    return false
+  end
+
   local os_info = utils.get_os_info() or nil
   if os_info and os_info.id == "openwrt" then
     return false
@@ -82,22 +89,24 @@ local opts = vim.tbl_extend("force", {
   parser_install_dir = vim.fn.stdpath "data" .. "/site",
   auto_install = false,
   highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = true,
-    use_languagetree = true,
+    enable = not slow_host,
+    disable = perf.disable_treesitter,
+    additional_vim_regex_highlighting = false,
+    use_languagetree = not slow_host,
   },
-  textobjects = { select = { enable = true } },
-  rainbow = { enable = true, extended_mode = true, max_file_lines = 1000 },
+  textobjects = { select = { enable = not slow_host } },
+  rainbow = { enable = not slow_host, extended_mode = true, max_file_lines = 1000 },
   playground = {
     enable = false,
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
   },
-  indent = { enable = true },
-  context = { enable = true, throttle = true },
+  indent = { enable = not slow_host, disable = perf.disable_treesitter },
+  context = { enable = not slow_host, throttle = true },
   matchup = {
-    enable = true,
+    enable = not slow_host,
+    disable = perf.disable_treesitter,
     disable_virtual_text = false,
     include_match_words = true,
   },

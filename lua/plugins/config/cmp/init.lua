@@ -3,6 +3,7 @@ dofile(vim.g.base46_cache .. "cmp")
 local M = {}
 local cmp = require "cmp"
 local compare = require "cmp.config.compare"
+local perf = require "plugins.config.perf"
 
 local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -10,18 +11,44 @@ local function has_words_before()
     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
 end
 
-local function get_default_cmp_source()
-  return cmp.config.sources({
-    { name = "lazydev", group_index = 0 },
+local function buffer_source()
+  return {
+    name = "buffer",
+    keyword_length = 4,
+    option = {
+      get_bufnrs = function()
+        if perf.is_guarded_buffer(0) then
+          return {}
+        end
+        return { vim.api.nvim_get_current_buf() }
+      end,
+    },
+  }
+end
+
+local function get_default_cmp_source(opts)
+  opts = opts or {}
+  local secondary = {
+    { name = "calc" },
+    buffer_source(),
+  }
+
+  if opts.treesitter ~= false and not perf.is_slow_host() then
+    secondary[#secondary + 1] = { name = "treesitter" }
+  end
+
+  local primary = {
     { name = "nvim_lsp" },
     { name = "async_path" },
     { name = "copilot" },
     { name = "nvim_lsp_document_symbol" },
-  }, {
-    { name = "calc" },
-    { name = "buffer" },
-    { name = "treesitter" },
-  })
+  }
+
+  if perf.lua_dev_enabled() then
+    table.insert(primary, 1, { name = "lazydev", group_index = 0 })
+  end
+
+  return cmp.config.sources(primary, secondary)
 end
 
 local function border(hl_name)
@@ -115,6 +142,19 @@ local options = {
 M.opts = vim.tbl_deep_extend("force", require "nvchad.cmp", options)
 
 M.setup = function()
+  require("plugins.config.zsh_syntax_source").register_cmp()
+
+  for _, ft in ipairs {
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+  } do
+    cmp.setup.filetype(ft, {
+      sources = get_default_cmp_source { treesitter = false },
+    })
+  end
+
   cmp.setup.filetype("lua", {
     sources = cmp.config.sources((function()
       local sources = get_default_cmp_source()
@@ -126,6 +166,7 @@ M.setup = function()
   cmp.setup.filetype("zsh", {
     sources = cmp.config.sources((function()
       local sources = get_default_cmp_source()
+      sources[#sources + 1] = { name = "zsh_syntax", group_index = 1 }
       sources[#sources + 1] = { name = "zsh", group_index = 1 }
       return sources
     end)()),
@@ -135,7 +176,7 @@ M.setup = function()
     sources = cmp.config.sources({
       { name = "cmp_git" },
     }, {
-      { name = "buffer" },
+      buffer_source(),
     }),
   })
 

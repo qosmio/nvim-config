@@ -1,5 +1,3 @@
--- YAML
 return {
-  name = "bashls",
-  filetypes = { "sh", "bash", "zsh" },
+	filetypes = { "bash", "sh", "zsh" },
 }

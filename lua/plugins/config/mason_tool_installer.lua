@@ -1,8 +1,11 @@
 local utils = require "utils"
 
 local servers = {
+  "bash-language-server",
+  "basedpyright",
   -- "pylance",
   "shfmt",
+  "typescript-language-server",
 }
 
 local extra = {
@@ -18,15 +21,6 @@ local extra = {
 local os_info = utils.get_os_info()
 if os_info.id ~= "openwrt" then
   vim.list_extend(servers, extra)
-end
-
-_ = vim.fn.system "which go"
-if vim.v.shell_error ~= 0 then
-  utils.tbl_filter_inplace(servers, "gopls")
-end
-_ = vim.fn.system "which cargo"
-if vim.v.shell_error ~= 0 then
-  utils.tbl_filter_inplace(servers, "shellharden")
 end
 
 local opts = {

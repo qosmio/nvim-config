@@ -86,7 +86,7 @@ describe('{}', () => {{
       {
         d(1, function(_, snip)
           local filename, _ = (snip.env.TM_DIRECTORY .. "/" .. snip.env.TM_FILENAME_BASE):gsub(
-            vim.pesc(vim.loop.cwd() .. "/"),
+            vim.pesc(vim.uv.cwd() .. "/"),
             ""
           )
           local filename_without_junk, _ =

@@ -1,3 +1,5 @@
+local completion = require "plugins.config.completion"
+
 return {
   -- server = require("copilot.config.server").default,
   -- root_dir = require("copilot.config.root_dir").default,
@@ -44,7 +46,7 @@ return {
     cvs = true,
     ["."] = true,
   },
-  copilot_node_command = "node", -- Node.js version must be > 18.x
+  copilot_node_command = completion.copilot_node_command() or "node",
   server_opts_overrides = {
     settings = {
       telemetry = {

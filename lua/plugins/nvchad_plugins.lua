@@ -1,20 +1,19 @@
-local M = {}
-
 local remove_plugins = {
   "lukas-reineke/indent-blankline.nvim",
   "hrsh7th/nvim-cmp",
   "nvim-treesitter/nvim-treesitter",
 }
 
-M.nvchad_plugins = require "nvchad.plugins"
+local removed = {}
+for _, name in ipairs(remove_plugins) do
+  removed[name] = true
+end
 
-for i, plugin in pairs(M.nvchad_plugins) do
-  -- if any of the plugins in remove_plugins are found, remove them
-  for _, remove_plugin in pairs(remove_plugins) do
-    if plugin[1] == remove_plugin then
-      table.remove(M.nvchad_plugins, i)
-    end
+local plugins = {}
+for _, plugin in ipairs(require "nvchad.plugins") do
+  if not removed[plugin[1]] then
+    table.insert(plugins, plugin)
   end
 end
 
-return M.nvchad_plugins
+return plugins

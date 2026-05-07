@@ -188,7 +188,12 @@ M.lsp_debug = {
     },
   },
   v = {
-    ["ga"] = { ":lua vim.lsp.buf.range_code_action()<cr>", "Range Code Action" },
+    ["ga"] = {
+      function()
+        vim.lsp.buf.code_action()
+      end,
+      "Range Code Action",
+    },
   },
 }
 
@@ -220,7 +225,7 @@ M.lsp = {
     },
     ["<leader>lo"] = {
       function()
-        vim.lsp.diagnostic.setloclist {}
+        vim.diagnostic.setloclist()
       end,
       "Loc List",
     },
@@ -232,7 +237,7 @@ M.lsp = {
     },
     ["<leader>ll"] = {
       function()
-        require("conform").format { async = true, lsp_fallback = true }
+        require("conform").format { async = true, lsp_format = "fallback" }
       end,
       "Format Code",
     },
@@ -240,7 +245,7 @@ M.lsp = {
   v = {
     ["<leader>ll"] = {
       function()
-        require("conform").format { async = true, lsp_fallback = true }
+        require("conform").format { async = true, lsp_format = "fallback" }
       end,
       "Format Code Range",
     },
@@ -280,18 +285,6 @@ M.comment = {
       end,
       "toggle comment",
     },
-  },
-}
-
-M.mason = {
-  n = {
-    ["<leader>kk"] = { "<cmd>MasonUpdateAll<cr>", "Mason update all installed servers" },
-  },
-}
-
-M.nvchad = {
-  n = {
-    ["<leader>uu"] = { "<cmd>NvChadUpdate<cr>", "Update NvChad" },
   },
 }
 
@@ -340,34 +333,6 @@ M.copilot = {
         require("copilot.suggestion").next()
       end,
       "[copilot] next suggestion",
-    },
-  },
-}
-
-M.copilot_chat = {
-  -- lazy.nvim keys
-
-  -- Quick chat with Copilot
-  n = {
-    ["<leader>ccq"] = {
-      function()
-        local input = vim.fn.input "Quick Chat: "
-        if input ~= "" then
-          require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
-        end
-      end,
-      desc = "CopilotChat - Quick chat",
-    },
-  },
-  v = {
-    ["<leader>ccq"] = {
-      function()
-        local input = vim.fn.input "Quick Chat: "
-        if input ~= "" then
-          require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
-        end
-      end,
-      desc = "CopilotChat - Quick chat",
     },
   },
 }
