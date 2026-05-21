@@ -18,6 +18,15 @@ local M = {
   filetypes = { "c", "h", "objc", "objcpp", "cuda", "proto" },
   capabilities = {
     offsetEncoding = { "utf-16" },
+    textDocument = {
+      codeAction = {
+        codeActionLiteralSupport = {
+          codeActionKind = {
+            valueSet = { "quickfix", "refactor", "source.fixAll" },
+          },
+        },
+      },
+    },
   },
   -- on_attach = function(client, bufnr)
   --     -- require("clangd_extensions.inlay_hints").setup_autocmd()
@@ -26,7 +35,7 @@ local M = {
   init_options = {
     -- compilationDatabasePath = OPT("clangd_db_path", ".vscode"),
     fallbackFlags = {
-      "-std=c++17",
+      "-std=gnu17",
     },
     usePlaceholders = true,
     completeUnimported = true,

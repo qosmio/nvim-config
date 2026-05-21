@@ -48,8 +48,8 @@ aucmd({ "CursorHold" }, {
 			scope = "cursor",
 			focusable = false,
 			close_events = {
-				"CursorMoved",
-				"CursorMovedI",
+				-- "CursorMoved",
+				-- "CursorMovedI",
 				"BufHidden",
 				"InsertCharPre",
 				"WinLeave",

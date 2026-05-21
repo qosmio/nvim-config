@@ -2,10 +2,7 @@ local utils = require "utils"
 
 local servers = {
   "bash-language-server",
-  "basedpyright",
-  -- "pylance",
-  "shfmt",
-  "typescript-language-server",
+  "shfmt"
 }
 
 local extra = {
@@ -16,6 +13,9 @@ local extra = {
   "usort",
   "taplo",
   "stylua-ng",
+  "typescript-language-server",
+  "basedpyright",
+  "pyrefly",
 }
 
 local os_info = utils.get_os_info()

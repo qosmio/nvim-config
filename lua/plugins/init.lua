@@ -2,8 +2,8 @@ local cfg = function(mod)
 	return require("plugins.config." .. mod)
 end
 
-local completion = require("plugins.config.completion")
-local perf = require("plugins.config.perf")
+local completion = require "plugins.config.completion"
+local perf = require "plugins.config.perf"
 
 -- local lang = function(mod)
 --   return "registry." .. mod
@@ -20,7 +20,7 @@ local plugins = {
 		"nvim-treesitter/nvim-treesitter",
 		event = { "BufReadPost", "BufNewFile" },
 		cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-		opts = cfg("treesitter"),
+		opts = cfg "treesitter",
 		build = ":TSUpdate",
 		branch = "master",
 		config = function(_, opts)
@@ -35,11 +35,12 @@ local plugins = {
 			"JoosepAlviste/nvim-ts-context-commentstring",
 		},
 		opts = function(_, opts)
-			require("ts_context_commentstring").setup({
+			require("ts_context_commentstring").setup {
 				enable_autocmd = false,
-			})
+			}
 			opts.ignore = "^$"
-			opts.pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+			opts.pre_hook =
+				require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
 		end,
 	},
 	{ "folke/which-key.nvim", enabled = true },
@@ -48,11 +49,11 @@ local plugins = {
 		branch = "fix-tbl_add_reverse_lookup",
 		event = { "VimEnter" },
 		config = function()
-			require("alternate-toggler").setup({
+			require("alternate-toggler").setup {
 				alternates = {
 					["no"] = "yes",
 				},
-			})
+			}
 		end,
 	},
 	{ "chr4/nginx.vim", ft = "nginx" },
@@ -64,7 +65,7 @@ local plugins = {
 		},
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
-			require("null-ls").setup(cfg("null_ls"))
+			require("null-ls").setup(cfg "null_ls")
 		end,
 	},
 	{ "lambdalisue/suda.vim", event = { "VeryLazy" } },
@@ -77,21 +78,22 @@ local plugins = {
 		config = function(_, opts)
 			require("copilot").setup(opts)
 		end,
-		opts = require("plugins.config.copilot"),
+		opts = require "plugins.config.copilot",
 	},
 	{
 		"andrewwillette/copilot-cmp",
 		-- "zbirenbaum/copilot-cmp",
-		enabled = (completion.is("cmp") or completion.is("blink")) and completion.copilot_completion_enabled(),
+		enabled = (completion.is "cmp" or completion.is "blink")
+			and completion.copilot_completion_enabled(),
 		event = { "BufReadPost", "BufNewFile", "InsertEnter" },
 		config = function(_, opts)
-			local copilot_cmp = require("copilot_cmp")
+			local copilot_cmp = require "copilot_cmp"
 			copilot_cmp.setup(opts)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local client = vim.lsp.get_client_by_id(args.data.client_id)
 					if client and client.name == "copilot" then
-						copilot_cmp._on_insert_enter({})
+						copilot_cmp._on_insert_enter {}
 					end
 				end,
 			})
@@ -116,14 +118,14 @@ local plugins = {
 	{
 		"stevearc/conform.nvim",
 		cmd = { "ConformInfo" },
-		opts = cfg("conform"),
+		opts = cfg "conform",
 	},
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		dependencies = { "mason-org/mason.nvim" },
 		enabled = not perf.is_slow_host(),
 		event = "VeryLazy",
-		opts = cfg("mason_tool_installer"),
+		opts = cfg "mason_tool_installer",
 	},
 	{
 		"sindrets/diffview.nvim",
@@ -136,7 +138,7 @@ local plugins = {
 	},
 	{
 		"saghen/blink.compat",
-		enabled = completion.is("blink"),
+		enabled = completion.is "blink",
 		version = "2.*",
 		lazy = true,
 		opts = {
@@ -145,7 +147,7 @@ local plugins = {
 	},
 	{
 		"saghen/blink.cmp",
-		enabled = completion.is("blink"),
+		enabled = completion.is "blink",
 		version = "1.*",
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
@@ -155,14 +157,14 @@ local plugins = {
 			{
 				"tamago324/cmp-zsh",
 				config = function()
-					require("cmp_zsh").setup({
+					require("cmp_zsh").setup {
 						zshrc = false,
 						filetypes = { "deoledit", "zsh" },
-					})
+					}
 				end,
 			},
 		},
-		opts = cfg("blink"),
+		opts = cfg "blink",
 		config = function(_, opts)
 			require("blink.cmp").setup(opts)
 			require("plugins.config.blink_highlights").apply()
@@ -170,7 +172,7 @@ local plugins = {
 	},
 	{
 		"hrsh7th/nvim-cmp",
-		enabled = completion.is("cmp"),
+		enabled = completion.is "cmp",
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
 			{ "hrsh7th/cmp-nvim-lsp" },
@@ -179,11 +181,11 @@ local plugins = {
 			{ "hrsh7th/cmp-cmdline" },
 			{
 				"windwp/nvim-autopairs",
-				opts = cfg("autopairs"),
+				opts = cfg "autopairs",
 				config = function(_, opts)
 					require("nvim-autopairs").setup(opts)
 					-- setup cmp for autopairs
-					local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+					local cmp_autopairs = require "nvim-autopairs.completion.cmp"
 					require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
 				end,
 			},
@@ -198,15 +200,15 @@ local plugins = {
 			{
 				"tamago324/cmp-zsh",
 				config = function()
-					require("cmp_zsh").setup({
+					require("cmp_zsh").setup {
 						zshrc = false,
 						filetypes = { "deoledit", "zsh" },
-					})
+					}
 				end,
 			},
 		},
 		config = function()
-			require("cmp").setup((cfg("cmp")).opts)
+			require("cmp").setup((cfg "cmp").opts)
 			require("plugins.config.cmp").setup()
 		end,
 	},
@@ -229,10 +231,10 @@ local plugins = {
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "GitConflictDetected",
 				callback = function()
-					vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
+					vim.notify("Conflict detected in " .. vim.fn.expand "<afile>")
 				end,
 			})
-			require("git-conflict").setup({
+			require("git-conflict").setup {
 				disable_diagnostics = false,
 				debug = false,
 				default_mappings = true, -- disable buffer local mapping created by this plugin
@@ -242,7 +244,7 @@ local plugins = {
 					incoming = "DiffText",
 					-- ancestor = "GitConflictAncestor",
 				},
-			})
+			}
 			vim.api.nvim_set_hl(0, "GitConflictCurrent", {})
 			vim.api.nvim_set_hl(0, "GitConflictAncestor", {})
 			vim.api.nvim_set_hl(0, "GitConflictIncoming", {})
@@ -281,7 +283,7 @@ local plugins = {
 				return perf.should_enable_lua_dev(root)
 			end,
 			library = {
-				vim.fn.stdpath("data") .. "/lazy/ui/nvchad_types",
+				vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types",
 				-- See the configuration section for more details
 				{ path = "/usr/share/lua/5.1", words = { "ngx" } },
 			},
@@ -292,33 +294,45 @@ local plugins = {
 		enabled = not perf.is_slow_host(),
 		event = { "CursorHold", "CursorHoldI", "VeryLazy" },
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		keys = { "%", "[" }, -- {, '<Plug>(matchup-%)', '<Plug>(matchup-g%)' },
-		cmd = { "MatchupWhereAmI" }, --
+		keys = { "%", "[" },
+		cmd = { "MatchupWhereAmI" },
 		init = function()
 			vim.g.matchup_matchparen_deferred = 1
 			vim.g.matchup_matchparen_hi_surround_always = 1
 			vim.g.matchup_matchparen_deferred_show_delay = 100
 			vim.g.matchup_matchparen_deferred_hide_delay = 1000
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+			vim.g.matchup_transmute_enabled = 0
 		end,
 		config = function()
-			local fsize = vim.fn.getfsize(vim.fn.expand("%:p:f"))
-			if fsize == nil or fsize < 0 then
-				fsize = 1
-			end
-			local enabled = 1
-			if fsize > 500000 then
-				enabled = 0
-			end
-			if not vim.tbl_contains({ "html" }, vim.bo.filetype) then
-				enabled = 0
-			end
-			vim.g.matchup_enabled = enabled
-			vim.g.matchup_surround_enabled = enabled
-			vim.g.matchup_transmute_enabled = 0
-			vim.g.matchup_matchparen_deferred = enabled
-			vim.g.matchup_matchparen_hi_surround_always = enabled
-			vim.g.matchup_matchparen_offscreen = { method = "popup" }
-			vim.cmd([[nnoremap <c-s-k> :<c-u>MatchupWhereAmI?<cr>]])
+			vim.cmd [[nnoremap <c-s-k> :<c-u>MatchupWhereAmI?<cr>]]
+			vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufEnter" }, {
+				group = vim.api.nvim_create_augroup("MatchupBufferLimits", { clear = true }),
+				callback = function(args)
+					local buf = args.buf
+					if not vim.api.nvim_buf_is_valid(buf) then
+						return
+					end
+					local filetype = vim.bo[buf].filetype
+					local fsize = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
+					if fsize > 500000 or filetype ~= "html" then
+						vim.b[buf].matchup_matchparen_enabled = 0
+						vim.b[buf].matchup_enabled = 0
+					else
+						vim.b[buf].matchup_matchparen_enabled = 1
+						vim.b[buf].matchup_enabled = 1
+					end
+				end,
+			})
+		end,
+	},
+	{
+		"mfussenegger/nvim-ansible",
+		init = function()
+			cfg "ansible"
+		end,
+		config = function()
+			require "ansible"
 		end,
 	},
 }

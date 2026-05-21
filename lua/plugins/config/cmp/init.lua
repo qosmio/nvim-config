@@ -14,7 +14,7 @@ end
 local function buffer_source()
   return {
     name = "buffer",
-    keyword_length = 4,
+    keyword_length = 1,
     option = {
       get_bufnrs = function()
         if perf.is_guarded_buffer(0) then

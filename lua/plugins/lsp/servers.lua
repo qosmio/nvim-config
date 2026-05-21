@@ -3,6 +3,7 @@ local M = {}
 local servers = {
 	"bashls",
 	"basedpyright",
+	"pyrefly",
 	"biome",
 	"clangd",
 	"lua_ls",
@@ -22,6 +23,8 @@ function M.setup()
 				vim.lsp.config(server, config)
 				vim.lsp.enable(server)
 			end
+    else
+      vim.notify("Failed to load LSP config for " .. server .. ": " .. config, vim.log.levels.ERROR)
 		end
 	end
 end

@@ -69,31 +69,70 @@ local function zsh_syntax_completion_context()
   return prefix and require("plugins.config.zsh_syntax_source").has_prefix(prefix)
 end
 
-local function select_first()
+local function select_item(index, auto_insert)
   require("blink.cmp.completion.list").select(
-    1,
-    { auto_insert = false, is_explicit_selection = true }
+    index,
+    { auto_insert = auto_insert, is_explicit_selection = true }
   )
 end
 
-local function select_last()
+local function select_first(auto_insert)
+  select_item(1, auto_insert)
+end
+
+local function select_last(auto_insert)
   local list = require "blink.cmp.completion.list"
-  list.select(#list.items, { auto_insert = false, is_explicit_selection = true })
+  select_item(#list.items, auto_insert)
+end
+
+local function show_with_preview(cmp, opts)
+  opts = opts or {}
+  opts.initial_selected_item_idx = opts.initial_selected_item_idx or 1
+  local callback = opts.callback
+  opts.callback = function()
+    select_item(opts.initial_selected_item_idx, true)
+    if callback then
+      callback()
+    end
+  end
+  return cmp.show(opts)
+end
+
+local function select_next_with_preview(cmp)
+  local list = require "blink.cmp.completion.list"
+  if #list.items == 0 then
+    return
+  end
+
+  if list.selected_item_idx == #list.items then
+    vim.schedule(function()
+      select_first(true)
+    end)
+    return true
+  end
+
+  return cmp.select_next { auto_insert = true }
+end
+
+local function select_prev_with_preview(cmp)
+  local list = require "blink.cmp.completion.list"
+  if #list.items == 0 then
+    return
+  end
+
+  if list.selected_item_idx == nil or list.selected_item_idx == 1 then
+    vim.schedule(function()
+      select_last(true)
+    end)
+    return true
+  end
+
+  return cmp.select_prev { auto_insert = true }
 end
 
 local function tab_select_next(cmp)
   if cmp.is_visible() then
-    local list = require "blink.cmp.completion.list"
-    if #list.items == 0 then
-      return
-    end
-
-    if list.selected_item_idx == #list.items then
-      vim.schedule(select_first)
-      return true
-    end
-
-    return cmp.select_next { auto_insert = false }
+    return select_next_with_preview(cmp)
   end
 
   if cmp.snippet_active { direction = 1 } then
@@ -101,40 +140,46 @@ local function tab_select_next(cmp)
   end
 
   if has_shell_completion_context() then
-    return cmp.show { providers = { "zsh" }, initial_selected_item_idx = 1 }
+    return show_with_preview(cmp, { providers = { "zsh" } })
   end
 
   if zsh_syntax_completion_context() then
-    return cmp.show { providers = { "zsh_syntax" }, initial_selected_item_idx = 1 }
+    return show_with_preview(cmp, { providers = { "zsh_syntax" } })
   end
 
   if vim.bo.filetype == "zsh" and has_words_before() then
-    return cmp.show { providers = { "zsh" }, initial_selected_item_idx = 1 }
+    return show_with_preview(cmp, { providers = { "zsh" } })
   end
 
   if has_words_before() then
-    return cmp.show { initial_selected_item_idx = 1 }
+    return show_with_preview(cmp)
   end
 end
 
 local function tab_select_prev(cmp)
   if cmp.is_visible() then
-    local list = require "blink.cmp.completion.list"
-    if #list.items == 0 then
-      return
-    end
-
-    if list.selected_item_idx == nil or list.selected_item_idx == 1 then
-      vim.schedule(select_last)
-      return true
-    end
-
-    return cmp.select_prev { auto_insert = false }
+    return select_prev_with_preview(cmp)
   end
 
   if cmp.snippet_active { direction = -1 } then
     return
   end
+end
+
+local function cmdline_tab_select_next(cmp)
+  if cmp.is_visible() then
+    return select_next_with_preview(cmp)
+  end
+
+  return show_with_preview(cmp)
+end
+
+local function cmdline_tab_select_prev(cmp)
+  if cmp.is_visible() then
+    return select_prev_with_preview(cmp)
+  end
+
+  return show_with_preview(cmp, { initial_selected_item_idx = -1 })
 end
 
 return {
@@ -173,10 +218,48 @@ return {
     menu = {
       border = "rounded",
       draw = {
-        treesitter = { "lsp" },
+        treesitter = {},
         columns = {
-          { "kind_icon", "label", "label_description", gap = 1 },
-          { "kind", "source_name", gap = 1 },
+          { "label" },
+          { "kind_icon", "kind_without_snippet", gap = 1 },
+        },
+        components = {
+          label = {
+            width = { max = 36 },
+            text = function(ctx)
+              return ctx.label .. ctx.label_detail
+            end,
+            highlight = function(ctx)
+              local label = ctx.label
+              local highlights = {
+                {
+                  0,
+                  #label,
+                  group = ctx.deprecated and "BlinkCmpLabelDeprecated" or "BlinkCmpLabel",
+                },
+              }
+              if ctx.label_detail then
+                table.insert(
+                  highlights,
+                  { #label, #label + #ctx.label_detail, group = "BlinkCmpLabelDetail" }
+                )
+              end
+              for _, idx in ipairs(ctx.label_matched_indices) do
+                table.insert(highlights, { idx, idx + 1, group = "BlinkCmpLabelMatch" })
+              end
+              return highlights
+            end,
+          },
+          kind_without_snippet = {
+            ellipsis = false,
+            width = { max = 12 },
+            text = function(ctx)
+              return ctx.kind == "Snippet" and "" or ctx.kind
+            end,
+            highlight = function(ctx)
+              return ctx.kind_hl
+            end,
+          },
         },
       },
     },
@@ -230,8 +313,19 @@ return {
   },
   cmdline = {
     enabled = true,
-    keymap = { preset = "cmdline" },
+    keymap = {
+      preset = "cmdline",
+      ["<Tab>"] = { cmdline_tab_select_next, "fallback" },
+      ["<S-Tab>"] = { cmdline_tab_select_prev, "fallback" },
+      ["<CR>"] = { "accept_and_enter", "fallback" },
+      ["<C-y>"] = false,
+    },
     completion = {
+      list = {
+        selection = {
+          preselect = false,
+        },
+      },
       menu = {
         auto_show = true,
       },

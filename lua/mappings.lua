@@ -4,29 +4,11 @@ local map = vim.keymap.set
 
 local M = {}
 
-local pos_equal = function(p1, p2)
-  local r1, c1 = unpack(p1)
-  local r2, c2 = unpack(p2)
-  return r1 == r2 and c1 == c2
-end
-
--- `direction` can be "next" or "prev", defaults to "next"
--- be able to call vim.diagnostic.get_prev  or vim.diagnostic.get_next dynamically
--- don't duplicate the code
-local goto_error_then_hint = function(direction)
-  local pos = vim.api.nvim_win_get_cursor(0)
-  local opts = { severity = vim.diagnostic.severity.ERROR, wrap = true, count = 1 }
-
-  if direction == "prev" then
-    opts.count = -1
-  end
-
-  vim.diagnostic.jump(opts)
-
-  local pos2 = vim.api.nvim_win_get_cursor(0)
-  if pos_equal(pos, pos2) then
-    vim.diagnostic.jump { wrap = true, count = opts.count }
-  end
+local goto_diagnostic = function(direction)
+  vim.diagnostic.jump {
+    wrap = true,
+    count = direction == "prev" and -1 or 1,
+  }
 end
 
 local keymaps_table = {}
@@ -103,13 +85,13 @@ M.lsp_debug = {
   n = {
     ["]d"] = {
       function()
-        goto_error_then_hint "next"
+        goto_diagnostic "next"
       end,
       "Next Diagnostic",
     },
     ["[d"] = {
       function()
-        goto_error_then_hint "prev"
+        goto_diagnostic "prev"
       end,
       "Previous Diagnostic",
     },

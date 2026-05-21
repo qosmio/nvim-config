@@ -4,46 +4,20 @@ end)
 
 local M = {}
 
-local function get_hl(group)
-  local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
-  if ok then
-    return hl
-  end
-  return {}
-end
-
-local function hl_with_bg(group, bg, fallback)
-  local hl = get_hl(group)
-  if next(hl) == nil then
-    hl = fallback or {}
-  else
-    hl = vim.deepcopy(hl)
-  end
-
-  hl.bg = bg or "NONE"
-  return hl
-end
-
 function M.apply()
-  local normal = get_hl "Normal"
-  local normal_bg = normal.bg
-  local normal_fg = normal.fg
-  local pmenu = get_hl "Pmenu"
-  local border = get_hl "FloatBorder"
-  local match = get_hl "CmpItemAbbrMatch"
+  local palette = {
+    bg = "#050505",
+    border = "#5f555a",
+    deprecated = "#747b86",
+    detail = "#b7bdc8",
+    fg = "#d7d7d7",
+    kind = "#d7af00",
+    match = "#268bd2",
+    selection = "#3a3f45",
+    selection_fg = "#ffffff",
+  }
 
   local links = {
-    BlinkCmpKind = "CmpItemKindText",
-    BlinkCmpKindClass = "CmpItemKindClass",
-    BlinkCmpKindConstructor = "CmpItemKindConstructor",
-    BlinkCmpKindFunction = "CmpItemKindFunction",
-    BlinkCmpKindInterface = "CmpItemKindInterface",
-    BlinkCmpKindKeyword = "CmpItemKindKeyword",
-    BlinkCmpKindMethod = "CmpItemKindMethod",
-    BlinkCmpKindSnippet = "CmpItemKindSnippet",
-    BlinkCmpKindText = "CmpItemKindText",
-    BlinkCmpKindVariable = "CmpItemKindVariable",
-    BlinkCmpMenuSelection = "PmenuSel",
     BlinkCmpScrollBarGutter = "PmenuSbar",
     BlinkCmpScrollBarThumb = "PmenuThumb",
   }
@@ -53,38 +27,74 @@ function M.apply()
   end
 
   vim.api.nvim_set_hl(0, "BlinkCmpMenu", {
-    bg = normal_bg or "NONE",
-    fg = pmenu.fg or normal_fg,
+    bg = palette.bg,
+    fg = palette.fg,
   })
   vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", {
-    bg = normal_bg or "NONE",
-    fg = border.fg or pmenu.fg or normal_fg,
+    bg = palette.bg,
+    fg = palette.border,
+  })
+  vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", {
+    bg = palette.selection,
+    fg = palette.selection_fg,
+    bold = true,
   })
   vim.api.nvim_set_hl(0, "BlinkCmpDoc", {
-    bg = normal_bg or "NONE",
-    fg = normal_fg,
+    bg = palette.bg,
+    fg = palette.fg,
   })
   vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", {
-    bg = normal_bg or "NONE",
-    fg = border.fg or normal_fg,
+    bg = palette.bg,
+    fg = palette.border,
   })
   vim.api.nvim_set_hl(0, "BlinkCmpDocSeparator", {
-    bg = normal_bg or "NONE",
-    fg = border.fg or normal_fg,
+    bg = palette.bg,
+    fg = palette.border,
   })
-  vim.api.nvim_set_hl(0, "BlinkCmpLabel", hl_with_bg("CmpItemAbbr", "NONE", { fg = normal_fg }))
-  vim.api.nvim_set_hl(
-    0,
-    "BlinkCmpLabelDescription",
-    hl_with_bg("CmpItemMenu", "NONE", { fg = normal_fg })
-  )
-  vim.api.nvim_set_hl(
-    0,
-    "BlinkCmpLabelDetail",
-    hl_with_bg("CmpItemMenu", "NONE", { fg = normal_fg })
-  )
-  vim.api.nvim_set_hl(0, "BlinkCmpLabelMatch", hl_with_bg("CmpItemAbbrMatch", "NONE", match))
-  vim.api.nvim_set_hl(0, "BlinkCmpSource", hl_with_bg("CmpItemMenu", "NONE", { fg = normal_fg }))
+  vim.api.nvim_set_hl(0, "BlinkCmpLabel", { bg = "NONE", fg = palette.fg, bold = true })
+  vim.api.nvim_set_hl(0, "BlinkCmpLabelDeprecated", {
+    bg = "NONE",
+    fg = palette.deprecated,
+    strikethrough = true,
+  })
+  vim.api.nvim_set_hl(0, "BlinkCmpLabelDescription", { bg = "NONE", fg = palette.detail })
+  vim.api.nvim_set_hl(0, "BlinkCmpLabelDetail", { bg = "NONE", fg = palette.detail })
+  vim.api.nvim_set_hl(0, "BlinkCmpLabelMatch", { bg = "NONE", fg = palette.match, bold = true })
+  vim.api.nvim_set_hl(0, "BlinkCmpSource", { bg = "NONE", fg = palette.detail })
+
+  local kind_groups = {
+    BlinkCmpKind = { fg = palette.kind, bold = true },
+    BlinkCmpKindClass = { fg = palette.kind, bold = true },
+    BlinkCmpKindColor = { fg = palette.kind, bold = true },
+    BlinkCmpKindConstant = { fg = palette.kind, bold = true },
+    BlinkCmpKindConstructor = { fg = palette.kind, bold = true },
+    BlinkCmpKindEnum = { fg = palette.kind, bold = true },
+    BlinkCmpKindEnumMember = { fg = palette.kind, bold = true },
+    BlinkCmpKindEvent = { fg = palette.kind, bold = true },
+    BlinkCmpKindField = { fg = palette.kind, bold = true },
+    BlinkCmpKindFile = { fg = palette.kind, bold = true },
+    BlinkCmpKindFolder = { fg = palette.kind, bold = true },
+    BlinkCmpKindFunction = { fg = palette.kind, bold = true },
+    BlinkCmpKindInterface = { fg = palette.kind, bold = true },
+    BlinkCmpKindKeyword = { fg = palette.kind, bold = true },
+    BlinkCmpKindMethod = { fg = palette.kind, bold = true },
+    BlinkCmpKindModule = { fg = palette.kind, bold = true },
+    BlinkCmpKindOperator = { fg = palette.kind, bold = true },
+    BlinkCmpKindProperty = { fg = palette.kind, bold = true },
+    BlinkCmpKindReference = { fg = palette.kind, bold = true },
+    BlinkCmpKindSnippet = { fg = palette.kind, bold = true },
+    BlinkCmpKindStruct = { fg = palette.kind, bold = true },
+    BlinkCmpKindText = { fg = palette.kind, bold = true },
+    BlinkCmpKindTypeParameter = { fg = palette.kind, bold = true },
+    BlinkCmpKindUnit = { fg = palette.kind, bold = true },
+    BlinkCmpKindValue = { fg = palette.kind, bold = true },
+    BlinkCmpKindVariable = { fg = palette.kind, bold = true },
+  }
+
+  for group, hl in pairs(kind_groups) do
+    hl.bg = "NONE"
+    vim.api.nvim_set_hl(0, group, hl)
+  end
 end
 
 function M.setup()
