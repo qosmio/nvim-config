@@ -217,12 +217,8 @@ local plugins = {
 		end,
 	},
 	{
-		-- "akinsho/git-conflict.nvim",
-		"NeilGirdhar/git-conflict.nvim",
-		-- lazy = false,
+				"konradmalik/git-conflict.nvim",
 		event = "BufRead",
-		-- version = "*",
-		branch = "patch-1",
 		config = function()
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "GitConflictDetected",
