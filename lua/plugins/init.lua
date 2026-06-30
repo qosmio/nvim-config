@@ -4,6 +4,7 @@ end
 
 local completion = require "plugins.config.completion"
 local perf = require "plugins.config.perf"
+local treesitter = cfg "treesitter"
 
 -- local lang = function(mod)
 --   return "registry." .. mod
@@ -18,15 +19,10 @@ local plugins = {
 	-- stylua: ignore end
 	{
 		"nvim-treesitter/nvim-treesitter",
-		event = { "BufReadPost", "BufNewFile" },
-		cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-		opts = cfg "treesitter",
+		lazy = false,
+		opts = treesitter.opts,
 		build = ":TSUpdate",
-		branch = "master",
-		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
-			vim.opt.runtimepath:append(opts.parser_install_dir)
-		end,
+		config = treesitter.setup,
 	},
 	{
 		"numToStr/Comment.nvim",
