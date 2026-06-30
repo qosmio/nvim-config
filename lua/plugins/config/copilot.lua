@@ -1,7 +1,9 @@
 local completion = require "plugins.config.completion"
 
 return {
-  -- server = require("copilot.config.server").default,
+  server = {
+    type = "binary",
+  },
   -- root_dir = require("copilot.config.root_dir").default,
   -- should_attach = require("copilot.config.should_attach").default,
   -- auth_provider_url = nil,
