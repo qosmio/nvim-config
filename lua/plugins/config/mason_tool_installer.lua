@@ -2,7 +2,7 @@ local utils = require "utils"
 
 local servers = {
   "bash-language-server",
-  "shfmt"
+  "shfmt",
 }
 
 local extra = {

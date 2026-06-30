@@ -53,7 +53,7 @@ ls.add_snippets("typescriptreact", {
 {}const {} = ({{{}}}: {}Props) => {{
   {}
 }}
-]]     ,
+]],
       {
         -- Import React if it's not yet imported
         f(function()
@@ -61,7 +61,8 @@ ls.add_snippets("typescriptreact", {
           local parser = vim.treesitter.get_parser(bufnr, "tsx")
           local tree = parser:parse()[1]
 
-          local query = vim.treesitter.query.parse_query("tsx", '((identifier) @hello (#eq? @hello "React"))')
+          local query =
+            vim.treesitter.query.parse_query("tsx", '((identifier) @hello (#eq? @hello "React"))')
           local has_match = false
           for _, _ in query:iter_matches(tree:root(), bufnr) do
             has_match = true
@@ -87,7 +88,10 @@ ls.add_snippets("typescriptreact", {
           local parser = vim.treesitter.get_parser(0, "tsx")
           local tstree = parser:parse()
 
-          local node = tstree[1]:root():named_descendant_for_range(pos_begin[1], pos_begin[2], pos_end[1], pos_end[2])
+          local node =
+            tstree[1]
+              :root()
+              :named_descendant_for_range(pos_begin[1], pos_begin[2], pos_end[1], pos_end[2])
 
           while node ~= nil and node:type() ~= "type_alias_declaration" do
             node = node:parent()

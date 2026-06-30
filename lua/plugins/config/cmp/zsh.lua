@@ -3,11 +3,11 @@ ok_cmp, cmp = pcall(require, "cmp")
 if ok_cmp then
   return {
     sources = cmp.config.sources({
-      { name = "luasnip",  priority = 1000 },
-      { name = "zsh",      priority = 900 },
+      { name = "luasnip", priority = 1000 },
+      { name = "zsh", priority = 900 },
       { name = "nvim_lsp", priority = 850 },
-      { name = "path",     priority = 800 },
-      { name = "buffer",   priority = 700 },
+      { name = "path", priority = 800 },
+      { name = "buffer", priority = 700 },
     }, {
       { name = "rg", priority = 600 },
     }),
